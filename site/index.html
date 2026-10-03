@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIM Open Notebook</title>
+<meta name="description" content="A lab notebook for building models: ask in plain language, keep every answer as evidence you can recheck.">
+<link rel="icon" type="image/svg+xml" href="app/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@600;700&family=Public+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Tokens from docs/BRANDING.md in bim-open-toolkit: the notebook accent and the family neutrals. */
+  :root {
+    --accent: #5a47c7;
+    --accent-soft: #ece8fb;
+    --text: #171a1f;
+    --dim: #5a606c;
+    --surface: #ffffff;
+    --bg: #f4f5f7;
+    --border: #e3e6ea;
+    --edge: #cfd4db;
+    --font-brand: "Instrument Sans", "Public Sans", "Segoe UI", system-ui, sans-serif;
+    --font-ui: "Public Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "Fira Code", "Cascadia Mono", Consolas, ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 400 15px/1.55 var(--font-ui); }
+  a { color: var(--accent); }
+  .page { max-width: 880px; margin: 0 auto; padding: 40px 16px 64px; }
+  .lockup { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .lockup svg { width: 48px; height: 48px; flex: none; }
+  .wordmark { font: 700 28px/1 var(--font-brand); letter-spacing: -0.01em; }
+  .wordmark .family { font-weight: 600; color: var(--dim); margin-right: 8px; }
+  .pitch { font: 600 20px/1.35 var(--font-brand); margin: 0 0 16px; max-width: 34em; }
+  .idea { max-width: 68ch; margin: 0 0 12px; }
+  .note { max-width: 68ch; color: var(--dim); font-size: 13.5px; margin: 0 0 32px; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0 0 36px; font-weight: 500; }
+  h2 { font: 600 18px/1.3 var(--font-brand); margin: 0 0 12px; }
+  .samples { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .card { display: flex; flex-direction: column; gap: 8px; height: 100%; padding: 14px 16px; background: var(--surface);
+          border: 1px solid var(--border); border-radius: 8px; color: inherit; text-decoration: none; overflow-wrap: anywhere; }
+  .card:hover, .card:focus-visible { border-color: var(--accent); background: var(--accent-soft); outline: none; }
+  .card-title { font: 600 15px/1.3 var(--font-brand); color: var(--text); }
+  .card-request { font-size: 13.5px; color: var(--text); margin: 0; }
+  .card-request::before { content: "\201C"; }
+  .card-request::after { content: "\201D"; }
+  .card-meta { margin-top: auto; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font: 400 11.5px/1.4 var(--font-mono); color: var(--dim); }
+  .tag { white-space: nowrap; padding: 1px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font: 500 11px/1.5 var(--font-ui); }
+  .problem { color: var(--dim); }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--dim); font-size: 13px; }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="lockup">
+    <!-- The notebook mark, Flow to Page (docs/brand/notebook-mark.svg in bim-open-toolkit). -->
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#5a47c7" d="M1.8 12a3.2 3.2 0 1 1 6.4 0a3.2 3.2 0 1 1-6.4 0ZM8 11h4.5v2H8ZM12 2h2v20h-2ZM15.5 3h4.5v2.2h-4.5ZM15.5 7h6.5v4h-6.5ZM15.5 13h4.5v2.2h-4.5ZM15.5 17h6.5v4h-6.5Z"/></svg>
+    <h1 class="wordmark"><span class="family">BIM Open</span>Notebook</h1>
+  </div>
+
+  <p class="pitch">A lab notebook for building models: ask in plain language, keep every answer as evidence you can recheck.</p>
+  <p class="idea">
+    A notebook records a session with an AI agent about a building model. Each turn is a request written in
+    plain language and the agent's reply: its text, the tools it called, and the results it produced, such as a
+    number, a table, a chart, the dataflow graph that computed them, or a 3D view. There are no code cells.
+    Every result keeps a snapshot, so a notebook opens with no server; a result backed by a graph can be
+    re-evaluated against a running host, which says whether it changed.
+  </p>
+  <p class="note">
+    This site is a static copy: it shows each notebook as it was saved. Asking new questions, Re-evaluate, and the
+    live 3D view need the host from BIM Open Toolkit. None of these samples is a recording of a live agent run yet:
+    the three NRC notebooks were generated from written outlines against a running host, and the other nine are
+    sessions an agent played out; in all of them the host computed every number shown in a table, value, or chart.
+  </p>
+  <div class="links">
+    <a href="app/notebook.html">Open an empty notebook</a>
+    <a href="https://github.com/ara3d/bim-open-notebook">README and status</a>
+    <a href="https://github.com/ara3d/bim-open-toolkit">BIM Open Toolkit, where the code lives today</a>
+  </div>
+
+  <h2>Sample notebooks</h2>
+  <ul class="samples" id="samples"><li class="problem">Loading the list of samples…</li></ul>
+  <noscript><p>The list needs JavaScript. The samples are under <a href="app/notebooks/">app/notebooks/</a>.</p></noscript>
+
+  <footer>
+    BIM Open Notebook is part of BIM Open Toolkit by Ara 3D. The samples use the NRC Duplex test model, the
+    Snowdon Towers model, and the analytics data of the NRC IFC test kit.
+  </footer>
+</main>
+<script>
+  // Lists the samples from app/notebooks/catalog.json, which the static build writes
+  // (vite.pages.config.ts in bim-open-toolkit): one entry per notebook, in reading order.
+  (async () => {
+    const list = document.getElementById("samples");
+    const item = (child) => { const li = document.createElement("li"); li.append(child); return li; };
+    const text = (tag, cls, value) => { const el = document.createElement(tag); el.className = cls; el.textContent = value; return el; };
+    try {
+      const response = await fetch("app/notebooks/catalog.json");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const entries = await response.json();
+      list.replaceChildren(...entries.map((entry) => {
+        const card = document.createElement("a");
+        card.className = "card";
+        card.href = `app/notebook.html?notebook=${encodeURIComponent(entry.name)}`;
+        card.append(text("span", "card-title", entry.title));
+        if (entry.firstRequest) card.append(text("p", "card-request", entry.firstRequest));
+        const meta = text("span", "card-meta", `${entry.turns} turn${entry.turns === 1 ? "" : "s"} · ${entry.profile ?? "any"} profile`);
+        if (entry.reconstructed) meta.append(text("span", "tag", "played by an agent"));
+        card.append(meta);
+        return item(card);
+      }));
+    } catch (e) {
+      list.replaceChildren(item(text("span", "problem", `The sample list could not be read (${e.message}). The files are under app/notebooks/.`)));
+    }
+  })();
+</script>
+</body>
+</html>

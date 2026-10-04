@@ -14,15 +14,8 @@ import type { EmbedRegistry } from "../embeds/contract";
 import { defaultRenderers, withRenderers } from "../embeds/registry";
 import { mountNotebook, renderProblems } from "./notebookView";
 import { HOSTLESS, hostlessNote } from "./site";
+import { hostlessApi } from "./staticApi";
 import { renderView3d } from "./view3dEmbed";
-
-/** The API of a page with no host: every call fails at once with a plain reason, and nothing is fetched. */
-function hostlessApi(): ApiClient {
-  const fetchFn = (async () => {
-    throw new Error("This copy has no host.");
-  }) as typeof fetch;
-  return new ApiClient({ baseUrl: "", fetch: fetchFn });
-}
 
 /** GET /api/ask/model's answer, the part this page reads. */
 interface AskModelInfo {

@@ -451,7 +451,20 @@ describe("mountNotebook", () => {
     expect(root.querySelector(".nb-refresh")).toBeNull();
     expect(q<HTMLElement>(".nb-ask-note").textContent).toBe(note);
     expect(q<HTMLTextAreaElement>(".nb-ask-input").disabled).toBe(true);
-    expect(fake.contexts.every((c) => c.hostless === true && c.catalog === undefined)).toBe(true);
+    expect(fake.contexts.every((c) => c.hostless === true && c.catalog !== undefined)).toBe(true);
+  });
+
+  it("a hostless page still hands its graph cells the node catalog, from the api the static site serves it with", async () => {
+    const descriptor = { kind: "table.filter", version: 1, capability: "Pure", inputs: [], outputs: [], params: [] };
+    const getNodeCatalog = vi.fn(() => Promise.resolve({ nodes: [descriptor] }));
+    const catalogApi = new Proxy({ getNodeCatalog } as unknown as NotebookApi, {
+      get: (target, name) => (name in target ? Reflect.get(target, name) : () => Promise.reject(new Error(`unexpected api.${String(name)}`))),
+    });
+    const { fake } = mount({ initial: sample(), hostless: "No host behind this copy.", api: catalogApi });
+    const catalogs = await Promise.all(fake.contexts.map((c) => c.catalog!()));
+    expect(catalogs.every((c) => c.get("table.filter")?.kind === "table.filter")).toBe(true);
+    // One request per page, shared by every cell.
+    expect(getNodeCatalog).toHaveBeenCalledTimes(1);
   });
 
   it("destroy removes the page and every embed", () => {

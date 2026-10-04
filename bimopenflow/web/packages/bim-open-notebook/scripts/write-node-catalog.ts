@@ -20,7 +20,7 @@ import type { NodeCatalog } from "@bimopenflow/contracts";
 import { parseDocument } from "@bimopenflow/state";
 import { NOTEBOOK_EXTENSION } from "../src/document/format";
 import { parseNotebook } from "../src/document/io";
-import { STATIC_NODE_CATALOG } from "../src/page/staticApi";
+import { STATIC_NODE_CATALOG } from "../src/page/sitePaths";
 
 function option(name: string): string | undefined {
   const i = process.argv.indexOf(name);

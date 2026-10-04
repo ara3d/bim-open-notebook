@@ -16,7 +16,7 @@ import { NOTEBOOK_EXTENSION } from "../src/document/format";
 import { parseNotebook } from "../src/document/io";
 import { MODELS_FOLDER, modelFileName, modelFiles } from "../src/document/paths";
 import { notebookEntry, orderNotebooks, type NotebookEntry } from "../src/page/catalog";
-import { STATIC_CATALOG, STATIC_INDEX, STATIC_SAMPLES } from "../src/page/sitePaths";
+import { STATIC_CATALOG, STATIC_INDEX, STATIC_NODE_CATALOG, STATIC_SAMPLES } from "../src/page/sitePaths";
 
 export const NOTEBOOK_SUFFIX = NOTEBOOK_EXTENSION;
 
@@ -92,8 +92,11 @@ export function sampleNotebooks(dir: string, options: SampleOptions = {}): Plugi
  * Emits every notebook in `dir` under notebooks/ (sitePaths.ts), with
  * index.json (the file names), catalog.json (one NotebookEntry each, the
  * `lead` names first), and under notebooks/models/ each model file a 3D view
- * names, read from `options.models`. A notebook that does not parse, a model
- * path of another shape, or a named model file that is missing fails the build.
+ * names, read from `options.models`, and node-catalog.json (the host's node
+ * catalog, scripts/write-node-catalog.ts) when `dir` has one. A notebook that
+ * does not parse, a model path of another shape, or a named model file that is
+ * missing fails the build; a missing node catalog only warns, and the page's
+ * graph cells then draw no wires.
  */
 export function bundleSamples(dir: string, lead: readonly string[] = [], options: SampleOptions = {}): Plugin {
   return {
@@ -117,6 +120,10 @@ export function bundleSamples(dir: string, lead: readonly string[] = [], options
         else this.emitFile({ type: "asset", fileName: `${STATIC_SAMPLES}${MODELS_FOLDER}${file}`, source: readFileSync(source) });
       }
       const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
+      // The node catalog the graph cells place their ports from: without it a hostless page draws no wires (TKT-159).
+      const nodeCatalog = resolve(dir, STATIC_NODE_CATALOG);
+      if (existsSync(nodeCatalog)) this.emitFile({ type: "asset", fileName: `${STATIC_SAMPLES}${STATIC_NODE_CATALOG}`, source: readFileSync(nodeCatalog, "utf8") });
+      else this.warn(`${dir} has no ${STATIC_NODE_CATALOG}; the page's graph cells will draw no wires`);
       this.emitFile({ type: "asset", fileName: `${STATIC_SAMPLES}${STATIC_INDEX}`, source: json(names) });
       this.emitFile({ type: "asset", fileName: `${STATIC_SAMPLES}${STATIC_CATALOG}`, source: json(orderNotebooks(entries, lead)) });
     },

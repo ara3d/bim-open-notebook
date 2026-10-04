@@ -120,6 +120,11 @@ async function main() {
     if (shots) await page.screenshot({ path: join(shots, "landing.png"), fullPage: true });
     console.log(`landing: ${cards.length} notebooks listed, ${noticeLinks.length} NOTICE.md links`);
     for (const message of landingErrors) failures.push(`landing: ${message}`);
+    // The node catalog the graph cells place their ports from (TKT-159): shipped, parseable, and not empty.
+    const catalogResponse = await page.request.get(`${origin}/app/notebooks/node-catalog.json`);
+    const nodeKinds = catalogResponse.ok() ? (await catalogResponse.json()).nodes?.length ?? 0 : 0;
+    if (nodeKinds === 0) failures.push(`node catalog: app/notebooks/node-catalog.json ${catalogResponse.ok() ? "has no nodes" : `answered ${catalogResponse.status()}`}`);
+    else console.log(`ok   node catalog: ${nodeKinds} kinds`);
     await page.close();
     if (catalog.length < 3) failures.push(`catalog: ${catalog.length} notebooks, expected at least 3`);
 

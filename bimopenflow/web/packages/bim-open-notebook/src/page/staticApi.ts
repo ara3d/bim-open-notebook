@@ -7,10 +7,7 @@
 // shows every graph as unconnected boxes (TKT-159).
 
 import { ApiClient } from "@bimopenflow/api-client";
-import { STATIC_SAMPLES } from "./sitePaths";
-
-/** The node catalog file in the sample folder: the host's GET /api/catalog/nodes, written by scripts/write-node-catalog.ts. */
-export const STATIC_NODE_CATALOG = "node-catalog.json";
+import { STATIC_NODE_CATALOG, STATIC_SAMPLES } from "./sitePaths";
 
 /** The one API route the static site answers, from the file above. */
 export const NODE_CATALOG_ROUTE = "/api/catalog/nodes";

@@ -8,5 +8,8 @@ export const STATIC_SAMPLES = "notebooks/";
 export const STATIC_INDEX = "index.json";
 /** One NotebookEntry (catalog.ts) per sample, in reading order, for a landing page. */
 export const STATIC_CATALOG = "catalog.json";
+/** The host's node catalog (GET /api/catalog/nodes), written beside the samples by scripts/write-node-catalog.ts;
+ *  the static page places ports and draws wires from it (staticApi.ts). */
+export const STATIC_NODE_CATALOG = "node-catalog.json";
 /** The sample buildings' licences, copied from the repository's NOTICE.md beside notebook.html. */
 export const NOTICE_FILE = "NOTICE.md";

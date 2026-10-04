@@ -112,9 +112,8 @@ export function mountNotebook(root: HTMLElement, options: NotebookViewOptions): 
     get base() {
       return base;
     },
-    catalog: hostless
-      ? undefined
-      : () => (catalog ??= options.api.getNodeCatalog().then((c) => new Map(c.nodes.map((n) => [n.kind, n])))),
+    // A hostless page's api (staticApi.ts) answers this one route from the shipped file, so its graph cells draw wires too.
+    catalog: () => (catalog ??= options.api.getNodeCatalog().then((c) => new Map(c.nodes.map((n) => [n.kind, n])))),
     hostless,
   };
   const turnContext: TurnContext = {

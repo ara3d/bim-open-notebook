@@ -1,13 +1,5 @@
 [
-  "nrc-door-check.notebook.json",
-  "nrc-eight-questions.notebook.json",
-  "nrc-test-kit.notebook.json",
-  "s01-first-look.notebook.json",
-  "s05-write-back.notebook.json",
-  "s06-paper-figures.notebook.json",
-  "s07-own-data.notebook.json",
-  "s08-thermal-zones.notebook.json",
-  "s09-ids-check.notebook.json",
-  "s11-editing-history.notebook.json",
-  "s13-handover.notebook.json"
+  "p01-schependomlaan.notebook.json",
+  "p02-digitalhub-heating.notebook.json",
+  "p03-duplex-doors.notebook.json"
 ]

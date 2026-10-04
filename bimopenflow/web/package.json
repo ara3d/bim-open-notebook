@@ -14,7 +14,8 @@
     "@bimopenflow/graph": "file:../../deps/bim-open-flow/bimopenflow/web/packages/graph",
     "@bimopenflow/panes": "file:../../deps/bim-open-flow/bimopenflow/web/packages/panes",
     "@bimopenflow/state": "file:../../deps/bim-open-flow/bimopenflow/web/packages/state",
-    "@bimopenflow/viz": "file:../../deps/bim-open-flow/bimopenflow/web/packages/viz"
+    "@bimopenflow/viz": "file:../../deps/bim-open-flow/bimopenflow/web/packages/viz",
+    "playwright-core": "^1.63.0"
   },
   "overrides": {
     "@bimopenflow/api-client": "$@bimopenflow/api-client",

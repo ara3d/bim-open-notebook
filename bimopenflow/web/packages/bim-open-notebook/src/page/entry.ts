@@ -13,7 +13,7 @@ import { fetchSample } from "./files";
 import type { EmbedRegistry } from "../embeds/contract";
 import { defaultRenderers, withRenderers } from "../embeds/registry";
 import { mountNotebook, renderProblems } from "./notebookView";
-import { HOSTLESS, HOSTLESS_NOTE } from "./site";
+import { HOSTLESS, hostlessNote } from "./site";
 import { renderView3d } from "./view3dEmbed";
 
 /** The API of a page with no host: every call fails at once with a plain reason, and nothing is fetched. */
@@ -86,7 +86,7 @@ export async function startNotebookPage(options: NotebookPageOptions = {}): Prom
   mountNotebook(root, {
     api: connected?.api ?? hostlessApi(),
     ask,
-    hostless: HOSTLESS ? HOSTLESS_NOTE : undefined,
+    hostless: HOSTLESS ? hostlessNote(document) : undefined,
     initial: opened.notebook,
     renderers: options.renderers ?? withRenderers(defaultRenderers, { view3d: renderView3d }),
   });

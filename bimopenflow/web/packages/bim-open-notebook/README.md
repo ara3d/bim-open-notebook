@@ -36,17 +36,19 @@ exports.
 ## Static site
 
 ```bash
-npm run build:pages -w @bimopenflow/bim-open-notebook --prefix bimopenflow/web -- --outDir <folder> --emptyOutDir
+npm run build:pages -w @bimopenflow/bim-open-notebook --prefix bimopenflow/web
 ```
 
-builds `notebook.html` with every sample notebook copied into `notebooks/`,
-plus `notebooks/index.json` (the file names) and `notebooks/catalog.json` (title,
-turn count, and first request of each, for a landing page). The base is
-relative and no host stands behind it (`vite.pages.config.ts`, `src/page/site.ts`):
-the page shows every answer as recorded, leaves out Re-evaluate, and says in
-the request box that asking needs a host. Without `--outDir` it writes
-`dist/pages`. The public copy is the `site/app` folder of
-[ara3d/bim-open-notebook](https://github.com/ara3d/bim-open-notebook).
+builds `notebook.html` into the repository's `site/app` (git-ignored), with
+every sample notebook copied into `notebooks/`, plus `notebooks/index.json`
+(the file names), `notebooks/catalog.json` (title, turn count, and first
+request of each, for the landing page `site/index.html`), and `NOTICE.md`,
+the sample buildings' licences. The base is relative and no host stands
+behind it (`vite.pages.config.ts`, `src/page/site.ts`): the page shows every
+answer as recorded, leaves out Re-evaluate, and says in the request box that
+asking needs a host, with a link to `NOTICE.md`. `--outDir <folder>` writes
+elsewhere. `node gates/pages-smoke.mjs` opens the built site in headless Edge;
+`.github/workflows/pages.yml` builds, checks, and publishes it.
 
 ## Layout
 

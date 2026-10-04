@@ -1,90 +1,26 @@
 [
   {
-    "name": "nrc-eight-questions",
-    "title": "The NRC paper's eight questions",
+    "name": "p01-schependomlaan",
+    "title": "Schependomlaan: a first look",
     "profile": "tables",
-    "turns": 9,
-    "firstRequest": "What is the total operational carbon for the building?",
-    "reconstructed": false
-  },
-  {
-    "name": "nrc-test-kit",
-    "title": "The NRC IFC test kit, steps 1 to 5",
-    "profile": "bim",
-    "turns": 6,
-    "firstRequest": "Load duplex.ifc and connect analytics_dataset_with_levels.csv to it using GlobalId.",
-    "reconstructed": false
-  },
-  {
-    "name": "nrc-door-check",
-    "title": "Door compliance: DC-W1",
-    "profile": "bim",
-    "turns": 2,
-    "firstRequest": "Check every door against DC-W1: door leaf width at least 850 mm.",
-    "reconstructed": false
-  },
-  {
-    "name": "s01-first-look",
-    "title": "First look at an unfamiliar model",
-    "profile": "bim",
-    "turns": 5,
-    "firstRequest": "Open samples/nrc/duplex-enriched.ifc.",
-    "reconstructed": true
-  },
-  {
-    "name": "s05-write-back",
-    "title": "Writing the analytics back into the IFC",
-    "profile": "bim",
-    "turns": 5,
-    "firstRequest": "Put the analytics values into a copy of duplex-base.ifc as property sets.",
-    "reconstructed": true
-  },
-  {
-    "name": "s06-paper-figures",
-    "title": "Paper figures on request",
-    "profile": "bim",
     "turns": 4,
-    "firstRequest": "Make Figure 5: the Duplex coloured by operational carbon.",
+    "firstRequest": "Open schependomlaan.duckdb. What storeys does it have?",
     "reconstructed": true
   },
   {
-    "name": "s07-own-data",
-    "title": "Bringing your own data",
-    "profile": "bim",
-    "turns": 6,
-    "firstRequest": "The mechanical consultant sent over analytics_dataset_with_levels.csv — carbon and energy numbers for the Duplex, keyed by GlobalId. Can you open it and tell me what's in it?",
-    "reconstructed": true
-  },
-  {
-    "name": "s08-thermal-zones",
-    "title": "Thermal zones (proposal P2)",
-    "profile": "bim",
+    "name": "p02-digitalhub-heating",
+    "title": "DigitalHub: the heating model",
+    "profile": "tables",
     "turns": 5,
-    "firstRequest": "List the spaces in the Duplex model with their storey.",
+    "firstRequest": "Open digitalhub-hzg.duckdb, the heating model. Which systems does it define?",
     "reconstructed": true
   },
   {
-    "name": "s09-ids-check",
-    "title": "IDS: say what the file must contain, then check it",
-    "profile": "bim",
-    "turns": 5,
-    "firstRequest": "Write an IDS that requires every analysed element to have Pset_NRCOperationalCarbon.OperationalCarbon_kgCO2e_per_year as a number.",
-    "reconstructed": true
-  },
-  {
-    "name": "s11-editing-history",
-    "title": "Editing, saving, and loading the notebook",
-    "profile": "bim",
-    "turns": 5,
-    "firstRequest": "Which ten elements have the highest operational carbon?",
-    "reconstructed": true
-  },
-  {
-    "name": "s13-handover",
-    "title": "Handover to an NRC reviewer",
-    "profile": "bim",
-    "turns": 4,
-    "firstRequest": "Show me how the total operational carbon was computed.",
+    "name": "p03-duplex-doors",
+    "title": "Duplex: door widths",
+    "profile": "tables",
+    "turns": 3,
+    "firstRequest": "Open duplex.duckdb and list the doors with their widths.",
     "reconstructed": true
   }
 ]

@@ -1,11 +1,11 @@
-# Publishes site/ to GitHub Pages. site/ is committed: the page in site/app is
-# built in bim-open-toolkit (see the README, "Rebuilding the site").
+# Builds the static site from source and publishes site/ to GitHub Pages: site/index.html is
+# committed, site/app (the notebook page, the sample notebooks, and NOTICE.md) is built here by
+# the notebook package's vite.pages.config.ts and checked by gates/pages-smoke.mjs first.
 name: Pages
 
 on:
   push:
     branches: [main]
-    paths: ["site/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -18,16 +18,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: bimopenflow/web/package-lock.json
+      # The same preparation as build.yml: deps/, then the viewer's built dist/.
+      - run: node deps.mjs
+      - run: npm ci
+        working-directory: deps/bim-open-viewer
+      - run: npm run build
+        working-directory: deps/bim-open-viewer
+      - run: npm ci
+        working-directory: bimopenflow/web
+      - run: npm run build:pages -w @bimopenflow/bim-open-notebook
+        working-directory: bimopenflow/web
+      # Google Chrome is installed on the runner; locally the smoke uses Edge.
+      - run: node gates/pages-smoke.mjs
+        env:
+          PAGES_BROWSER_CHANNEL: chrome
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
       - id: deployment
         uses: actions/deploy-pages@v4

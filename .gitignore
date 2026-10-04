@@ -151,3 +151,5 @@ vite.config.ts.timestamp-*
 # Dependencies resolved by deps.mjs (deps.json), and build output
 deps/
 dist/
+# The static site's notebook page, built by vite.pages.config.ts in CI (.github/workflows/pages.yml)
+site/app/

@@ -54,7 +54,7 @@
 <body>
 <main class="page">
   <div class="lockup">
-    <!-- The notebook mark, Flow to Page (docs/brand/notebook-mark.svg in bim-open-toolkit). -->
+    <!-- The notebook mark, Flow to Page (docs/brand/notebook-mark.svg). -->
     <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#5a47c7" d="M1.8 12a3.2 3.2 0 1 1 6.4 0a3.2 3.2 0 1 1-6.4 0ZM8 11h4.5v2H8ZM12 2h2v20h-2ZM15.5 3h4.5v2.2h-4.5ZM15.5 7h6.5v4h-6.5ZM15.5 13h4.5v2.2h-4.5ZM15.5 17h6.5v4h-6.5Z"/></svg>
     <h1 class="wordmark"><span class="family">BIM Open</span>Notebook</h1>
   </div>
@@ -69,29 +69,30 @@
   </p>
   <p class="note">
     This site is a static copy: it shows each notebook as it was saved. Asking new questions, Re-evaluate, and the
-    live 3D view need the host from BIM Open Toolkit. None of these samples is a recording of a live agent run yet:
-    the three NRC notebooks were generated from written outlines against a running host, and the other nine are
-    sessions an agent played out; in all of them the host computed every number shown in a table, value, or chart.
+    live 3D view need a running host. The three samples below are sessions an agent played out over openly licensed
+    buildings, not recordings of a live run; a host computed every number shown in a table, value, or chart.
   </p>
   <div class="links">
     <a href="app/notebook.html">Open an empty notebook</a>
-    <a href="https://github.com/ara3d/bim-open-notebook">README and status</a>
-    <a href="https://github.com/ara3d/bim-open-toolkit">BIM Open Toolkit, where the code lives today</a>
+    <a href="https://github.com/ara3d/bim-open-notebook">Source, README, and status</a>
+    <a href="app/NOTICE.md">Building licences (NOTICE.md)</a>
   </div>
 
-  <h2>Sample notebooks</h2>
+  <h2>Three public buildings</h2>
   <ul class="samples" id="samples"><li class="problem">Loading the list of samples…</li></ul>
   <noscript><p>The list needs JavaScript. The samples are under <a href="app/notebooks/">app/notebooks/</a>.</p></noscript>
 
   <footer>
-    BIM Open Notebook is part of BIM Open Toolkit by Ara 3D. The samples use the NRC Duplex test model, the
-    Snowdon Towers model, and the analytics data of the NRC IFC test kit. The models are stored as
-    <a href="https://ara3d.github.io/bim-open-schema/">BIM Open Schema</a> tables.
+    BIM Open Notebook is by Ara 3D, MIT licensed. The samples use the Schependomlaan dataset (CC BY 4.0), the
+    DigitalHub models of RWTH Aachen University's E3D institute (MIT), and buildingSMART's Duplex Apartment test
+    files (CC BY 4.0), converted to <a href="https://ara3d.github.io/bim-open-schema/">BIM Open Schema</a> tables by
+    Ara 3D and taken from <a href="https://github.com/ara3d/bim-open-data">BIM Open Data</a>. Sources, attributions,
+    and changes are in <a href="app/NOTICE.md">NOTICE.md</a>.
   </footer>
 </main>
 <script>
   // Lists the samples from app/notebooks/catalog.json, which the static build writes
-  // (vite.pages.config.ts in bim-open-toolkit): one entry per notebook, in reading order.
+  // (vite.pages.config.ts in the notebook package): one entry per notebook, in reading order.
   (async () => {
     const list = document.getElementById("samples");
     const item = (child) => { const li = document.createElement("li"); li.append(child); return li; };

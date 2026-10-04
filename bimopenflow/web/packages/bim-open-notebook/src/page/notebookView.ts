@@ -35,11 +35,11 @@ export interface NotebookViewOptions {
   /** Absent when the host has no /api/ask; the request box is then disabled with a note. */
   readonly ask?: AskTransport;
   /**
-   * Set when no host stands behind the page (the static site): the text shown
-   * in place of the request box's note. Re-evaluate is then hidden and the
+   * Set when no host stands behind the page (the static site): the text, or
+   * the node (for a note with links), shown in place of the request box's note. Re-evaluate is then hidden and the
    * embeds draw their snapshots only.
    */
-  readonly hostless?: string;
+  readonly hostless?: string | Node;
   readonly renderers?: EmbedRegistry;
   readonly initial?: Notebook;
   /** The clock, for request timestamps; injectable for tests. */
@@ -386,7 +386,11 @@ export function mountNotebook(root: HTMLElement, options: NotebookViewOptions): 
     sendButton.type = "submit";
     const stop = button(doc, "nb-stop", "Stop", () => running?.abort(new Error("Stopped by the user.")));
     const row = el(doc, "div", "nb-ask-row");
-    if (!ask) row.append(el(doc, "span", "nb-ask-note", options.hostless ?? NO_ASK_NOTE));
+    if (!ask) {
+      const note = el(doc, "span", "nb-ask-note");
+      note.append(options.hostless ?? NO_ASK_NOTE);
+      row.append(note);
+    }
     row.append(stop, sendButton);
     form.append(input, row);
     form.addEventListener("submit", (event) => {

@@ -6,14 +6,16 @@
 export const shellCss = `
 .nb-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .nb-brand {
-  display: flex; align-items: center; gap: 6px; flex: none;
-  padding: 4px 16px; min-height: 20px; background: var(--nb-bg); border-bottom: 1px solid var(--nb-border);
-  font-size: 11px; line-height: 1.4; color: var(--nb-dim); overflow: hidden; white-space: nowrap;
+  display: flex; align-items: center; gap: 8px; flex: none;
+  padding: 6px 16px; min-height: 22px; background: var(--nb-surface); border-bottom: 1px solid var(--nb-border);
+  font-size: 12px; line-height: 1.4; color: var(--nb-dim); overflow: hidden; white-space: nowrap;
 }
 .nb-brand-mark { flex: none; fill: var(--nb-accent); }
 .nb-brand-name {
-  font-weight: 700; letter-spacing: 0.02em; color: var(--nb-text); overflow: hidden; text-overflow: ellipsis;
+  display: inline-flex; gap: 4px; font: 700 15px/1 var(--nb-font-brand); letter-spacing: -0.01em;
+  color: var(--nb-text); overflow: hidden; text-overflow: ellipsis;
 }
+.nb-brand-family { font-weight: 600; color: var(--nb-dim); }
 .nb-brand-link { flex: none; margin-left: auto; color: var(--nb-dim); text-decoration: none; }
 .nb-brand-link:hover, .nb-brand-link:focus { color: var(--nb-accent); text-decoration: underline; }
 .nb-toolbar {
@@ -21,14 +23,15 @@ export const shellCss = `
   padding: 8px 16px; background: var(--nb-surface); border-bottom: 1px solid var(--nb-border);
 }
 .nb-title {
-  flex: 1 1 220px; min-width: 120px; font: 600 16px var(--nb-font); color: var(--nb-text);
+  flex: 1 1 220px; min-width: 120px; font: 600 18px/1.2 var(--nb-font-brand); color: var(--nb-text);
   background: transparent; border: 1px solid transparent; border-radius: 4px; padding: 4px 6px;
 }
 .nb-title:hover, .nb-title:focus { border-color: var(--nb-border); outline: none; }
 .nb-toolbar button, .nb-toolbar select, .nb-ask button {
-  font: inherit; padding: 4px 10px; border: 1px solid var(--nb-border); border-radius: 4px;
+  font: 600 13px/1.4 var(--nb-font); padding: 4px 10px; border: 1px solid var(--nb-edge); border-radius: 4px;
   background: var(--nb-surface); color: var(--nb-text); cursor: pointer;
 }
+.nb-ask .nb-send:not(:disabled) { background: var(--nb-accent); border-color: var(--nb-accent); color: #fff; }
 .nb-toolbar button:disabled, .nb-toolbar select:disabled, .nb-ask button:disabled { color: var(--nb-dim); cursor: default; }
 .nb-toolbar-sep { width: 1px; align-self: stretch; background: var(--nb-border); margin: 0 4px; }
 .nb-status { flex-basis: 100%; font-size: 12px; color: var(--nb-dim); min-height: 1em; }
@@ -38,7 +41,7 @@ export const shellCss = `
   border-radius: 8px; color: var(--nb-text); background: var(--nb-surface);
 }
 .nb-problems-heading { font-weight: 600; color: var(--nb-red); }
-.nb-problems ul { margin: 6px 0; padding-left: 18px; font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+.nb-problems ul { margin: 6px 0; padding-left: 18px; font: 400 12px/1.5 var(--nb-font-mono); }
 .nb-empty { color: var(--nb-dim); text-align: center; padding: 32px 0; }
 .nb-note { color: var(--nb-dim); font-style: italic; margin: 0 0 12px; border-left: 3px solid var(--nb-border); padding-left: 10px; }
 .nb-live {
@@ -59,8 +62,9 @@ export const shellCss = `
 }
 .nb-ask textarea {
   width: 100%; box-sizing: border-box; min-height: 64px; resize: vertical; font: inherit; padding: 8px;
-  color: var(--nb-text); background: var(--nb-surface); border: 1px solid var(--nb-border); border-radius: 6px;
+  color: var(--nb-text); background: var(--nb-surface); border: 1px solid var(--nb-edge); border-radius: 6px;
 }
+.nb-ask textarea:focus { outline: none; border-color: var(--nb-accent); }
 .nb-ask textarea:disabled { color: var(--nb-dim); }
 .nb-ask-row { display: flex; align-items: center; gap: 8px; }
 .nb-ask-row .nb-send { margin-left: auto; }

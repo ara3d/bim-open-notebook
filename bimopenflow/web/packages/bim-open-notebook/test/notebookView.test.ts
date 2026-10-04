@@ -180,7 +180,9 @@ describe("mountNotebook", () => {
   it("shows a brand bar naming BIM Open Notebook, linked to the toolkit repository", () => {
     mount({ initial: sample() });
     const brand = q<HTMLElement>(".nb-brand");
-    expect(brand.querySelector(".nb-brand-name")!.textContent).toBe(BRAND_NAME);
+    expect(brand.querySelector(".nb-brand-family")!.textContent).toBe("BIM Open");
+    expect(brand.querySelector(".nb-brand-product")!.textContent).toBe("Notebook");
+    expect(brand.querySelector(".nb-brand-mark path")!.getAttribute("d")).toMatch(/^M1.8 12a3.2/);
     const link = brand.querySelector<HTMLAnchorElement>(".nb-brand-link")!;
     expect(link.textContent).toBe(BRAND_TAGLINE);
     expect(link.href).toBe(TOOLKIT_URL);

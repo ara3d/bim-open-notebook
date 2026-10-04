@@ -61,6 +61,14 @@ export const UNTITLED = "Untitled notebook";
 /** The product name shown in the brand bar and the document title. */
 export const BRAND_NAME = "BIM Open Notebook";
 
+/** The two halves of the wordmark: the family in weight 600 dim, the product in weight 700 (docs/BRANDING.md, The names). */
+const BRAND_FAMILY = "BIM Open";
+const BRAND_PRODUCT = "Notebook";
+
+/** The notebook mark, Flow to Page: the path of docs/brand/notebook-mark.svg, filled with the accent. */
+const BRAND_MARK_PATH =
+  "M1.8 12a3.2 3.2 0 1 1 6.4 0a3.2 3.2 0 1 1-6.4 0ZM8 11h4.5v2H8ZM12 2h2v20h-2ZM15.5 3h4.5v2.2h-4.5ZM15.5 7h6.5v4h-6.5ZM15.5 13h4.5v2.2h-4.5ZM15.5 17h6.5v4h-6.5Z";
+
 /** The brand bar's link text and target: the toolkit repository. */
 export const BRAND_TAGLINE = "part of BIM Open Toolkit";
 export const TOOLKIT_URL = "https://github.com/ara3d/bim-open-toolkit";
@@ -247,20 +255,18 @@ export function mountNotebook(root: HTMLElement, options: NotebookViewOptions): 
   // --- Brand bar -------------------------------------------------------------
 
   /**
-   * A slim bar above the toolbar: the product name and a link to the
-   * toolkit repository, so a screenshot or an embedded page reads as BIM
-   * Open Notebook without depending on the document title alone.
+   * A slim bar above the toolbar: the mark, the two-weight wordmark, and a
+   * link to the toolkit repository, so a screenshot or an embedded page
+   * reads as BIM Open Notebook without depending on the document title alone.
    */
   function buildBrandBar(): HTMLElement {
     const bar = el(doc, "div", "nb-brand");
     bar.innerHTML =
-      '<svg class="nb-brand-mark" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">' +
-      '<rect x="1" y="1" width="6" height="6" rx="1"></rect>' +
-      '<rect x="9" y="1" width="6" height="6" rx="1"></rect>' +
-      '<rect x="1" y="9" width="6" height="6" rx="1"></rect>' +
-      '<rect x="9" y="9" width="6" height="6" rx="1"></rect>' +
-      "</svg>";
-    bar.append(el(doc, "span", "nb-brand-name", BRAND_NAME));
+      '<svg class="nb-brand-mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' +
+      `<path d="${BRAND_MARK_PATH}"></path></svg>`;
+    const name = el(doc, "span", "nb-brand-name");
+    name.append(el(doc, "span", "nb-brand-family", BRAND_FAMILY), el(doc, "span", "nb-brand-product", BRAND_PRODUCT));
+    bar.append(name);
     const link = el(doc, "a", "nb-brand-link", BRAND_TAGLINE);
     link.href = TOOLKIT_URL;
     link.target = "_blank";

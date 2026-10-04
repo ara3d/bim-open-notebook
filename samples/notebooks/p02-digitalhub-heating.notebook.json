@@ -1,0 +1,1000 @@
+{
+  "format": "bimopen-notebook/0.1",
+  "title": "DigitalHub: the heating model",
+  "createdUtc": "2026-10-04T00:00:00Z",
+  "host": {
+    "profile": "tables",
+    "note": "Reconstructed session: the replies were written by an agent playing this session; every embed was computed by the host from the graphs named. The building is DigitalHub of RWTH Aachen University (MIT License, Copyright (c) 2020 RWTH Aachen University - E3D), converted to BIM Open Schema tables; NOTICE.md has the licence."
+  },
+  "turns": [
+    {
+      "id": "t1",
+      "request": {
+        "text": "Open digitalhub-hzg.duckdb, the heating model. Which systems does it define?"
+      },
+      "reply": {
+        "text": "42 IfcSystem entities, in pairs: 21 whose names contain VL (Vorlauf, supply) and 21 with RL (Rücklauf, return). 19 pairs are `H_Transport_*` circuits; the other two are `H_WP` (Wärmepumpe, heat pump) and `H_Wandlung` (conversion). Each of the 63 space heaters belongs to one supply and one return system, so both sides count 63. The side is read from the system name, which is how this model labels it; the file has no separate attribute for it.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-systems: 2 nodes, 1 edge"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "2 of 2 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-systems sides.table: 2 rows × 4 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-systems systems.table: 42 rows × 6 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "table",
+            "id": "e1",
+            "caption": "Systems per side",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-systems",
+              "nodeId": "sides",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Side",
+                  "type": "Text"
+                },
+                {
+                  "name": "Systems",
+                  "type": "Integer"
+                },
+                {
+                  "name": "SpaceHeaters",
+                  "type": "Integer"
+                },
+                {
+                  "name": "PipeSegments",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "return (RL)",
+                  21,
+                  63,
+                  567
+                ],
+                [
+                  "supply (VL)",
+                  21,
+                  63,
+                  351
+                ]
+              ],
+              "totalRows": 2,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "table",
+            "id": "e2",
+            "caption": "Members of each system",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-systems",
+              "nodeId": "systems",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "System",
+                  "type": "Text"
+                },
+                {
+                  "name": "Side",
+                  "type": "Text"
+                },
+                {
+                  "name": "PipeSegments",
+                  "type": "Integer"
+                },
+                {
+                  "name": "PipeFittings",
+                  "type": "Integer"
+                },
+                {
+                  "name": "SpaceHeaters",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Valves",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "H_WP_VL",
+                  "supply (VL)",
+                  6,
+                  4,
+                  0,
+                  0
+                ],
+                [
+                  "H_Wandlung_VL",
+                  "supply (VL)",
+                  16,
+                  11,
+                  0,
+                  3
+                ],
+                [
+                  "H_Transport_VL_0",
+                  "supply (VL)",
+                  17,
+                  12,
+                  0,
+                  5
+                ],
+                [
+                  "H_Transport_VL_1",
+                  "supply (VL)",
+                  18,
+                  15,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_2",
+                  "supply (VL)",
+                  13,
+                  10,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_VL_3",
+                  "supply (VL)",
+                  15,
+                  14,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_VL_4",
+                  "supply (VL)",
+                  17,
+                  13,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_5",
+                  "supply (VL)",
+                  17,
+                  15,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_6",
+                  "supply (VL)",
+                  16,
+                  12,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_7",
+                  "supply (VL)",
+                  15,
+                  14,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_VL_8",
+                  "supply (VL)",
+                  23,
+                  19,
+                  6,
+                  1
+                ],
+                [
+                  "H_Transport_VL_9",
+                  "supply (VL)",
+                  18,
+                  15,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_10",
+                  "supply (VL)",
+                  17,
+                  16,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_VL_11",
+                  "supply (VL)",
+                  16,
+                  12,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_12",
+                  "supply (VL)",
+                  18,
+                  15,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_13",
+                  "supply (VL)",
+                  23,
+                  19,
+                  6,
+                  1
+                ],
+                [
+                  "H_Transport_VL_14",
+                  "supply (VL)",
+                  15,
+                  14,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_VL_15",
+                  "supply (VL)",
+                  16,
+                  12,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_16",
+                  "supply (VL)",
+                  17,
+                  15,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_VL_17",
+                  "supply (VL)",
+                  17,
+                  12,
+                  0,
+                  5
+                ],
+                [
+                  "H_Transport_VL_18",
+                  "supply (VL)",
+                  21,
+                  11,
+                  0,
+                  6
+                ],
+                [
+                  "H_WP_RL",
+                  "return (RL)",
+                  18,
+                  15,
+                  0,
+                  0
+                ],
+                [
+                  "H_Wandlung_RL",
+                  "return (RL)",
+                  22,
+                  16,
+                  0,
+                  4
+                ],
+                [
+                  "H_Transport_RL_0",
+                  "return (RL)",
+                  18,
+                  16,
+                  0,
+                  3
+                ],
+                [
+                  "H_Transport_RL_1",
+                  "return (RL)",
+                  30,
+                  27,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_2",
+                  "return (RL)",
+                  22,
+                  19,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_RL_3",
+                  "return (RL)",
+                  27,
+                  26,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_RL_4",
+                  "return (RL)",
+                  30,
+                  26,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_5",
+                  "return (RL)",
+                  30,
+                  28,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_6",
+                  "return (RL)",
+                  28,
+                  24,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_7",
+                  "return (RL)",
+                  27,
+                  26,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_RL_8",
+                  "return (RL)",
+                  42,
+                  38,
+                  6,
+                  1
+                ],
+                [
+                  "H_Transport_RL_9",
+                  "return (RL)",
+                  30,
+                  27,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_10",
+                  "return (RL)",
+                  24,
+                  23,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_RL_11",
+                  "return (RL)",
+                  32,
+                  28,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_12",
+                  "return (RL)",
+                  30,
+                  27,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_13",
+                  "return (RL)",
+                  42,
+                  38,
+                  6,
+                  1
+                ],
+                [
+                  "H_Transport_RL_14",
+                  "return (RL)",
+                  23,
+                  22,
+                  3,
+                  1
+                ],
+                [
+                  "H_Transport_RL_15",
+                  "return (RL)",
+                  32,
+                  28,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_16",
+                  "return (RL)",
+                  26,
+                  24,
+                  4,
+                  1
+                ],
+                [
+                  "H_Transport_RL_17",
+                  "return (RL)",
+                  14,
+                  12,
+                  0,
+                  3
+                ],
+                [
+                  "H_Transport_RL_18",
+                  "return (RL)",
+                  20,
+                  13,
+                  0,
+                  6
+                ]
+              ],
+              "totalRows": 42,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p02-digitalhub-heating-systems"
+      }
+    },
+    {
+      "id": "t2",
+      "request": {
+        "text": "Where are the radiators and pipes, by storey?"
+      },
+      "reply": {
+        "text": "63 space heaters: 29 on `E00_OKRD` (ground floor) and 34 on `E01_OKRD` (first floor), none in the basement `B01_OKRD`. 914 pipe segments, 743 fittings, and 65 valves are spread over all three storeys; the basement holds 157 segments and 25 valves but no heaters.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-per-storey: 3 nodes, 2 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "3 of 3 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-per-storey total.table: 1 row × 4 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-per-storey chart.table: 3 rows × 5 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "table",
+            "id": "e1",
+            "caption": "Heating parts in the model",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-per-storey",
+              "nodeId": "total",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "SpaceHeaters",
+                  "type": "Integer"
+                },
+                {
+                  "name": "PipeSegments",
+                  "type": "Integer"
+                },
+                {
+                  "name": "PipeFittings",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Valves",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  63,
+                  914,
+                  743,
+                  65
+                ]
+              ],
+              "totalRows": 1,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "chart",
+            "id": "e2",
+            "caption": "Heating parts per storey",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-per-storey",
+              "nodeId": "chart",
+              "port": "table"
+            },
+            "chart": {
+              "chart": "bar",
+              "categoryColumn": "Storey",
+              "seriesColumns": [
+                "SpaceHeaters",
+                "PipeSegments",
+                "PipeFittings",
+                "Valves"
+              ],
+              "title": "Heating parts per storey"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Storey",
+                  "type": "Text"
+                },
+                {
+                  "name": "SpaceHeaters",
+                  "type": "Integer"
+                },
+                {
+                  "name": "PipeSegments",
+                  "type": "Integer"
+                },
+                {
+                  "name": "PipeFittings",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Valves",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "B01_OKRD",
+                  0,
+                  157,
+                  110,
+                  25
+                ],
+                [
+                  "E00_OKRD",
+                  29,
+                  373,
+                  310,
+                  20
+                ],
+                [
+                  "E01_OKRD",
+                  34,
+                  384,
+                  323,
+                  20
+                ]
+              ],
+              "totalRows": 3,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p02-digitalhub-heating-per-storey"
+      }
+    },
+    {
+      "id": "t3",
+      "request": {
+        "text": "What pipe sizes are there?"
+      },
+      "reply": {
+        "text": "Nine diameters in the `Durchmesser` parameter, from 8 to 65. Most segments are 15 (538 of 914). The table also sums each size's `Länge` (length) parameter. The file records no unit for either value; the figures read as millimetres, so treat them as the file's numbers rather than metres of pipe.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-diameters: 4 nodes, 3 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "4 of 4 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-diameters chart.table: 9 rows × 2 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-diameters sorted.table: 9 rows × 3 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "chart",
+            "id": "e1",
+            "caption": "Pipe segments per diameter",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-diameters",
+              "nodeId": "chart",
+              "port": "table"
+            },
+            "chart": {
+              "chart": "bar",
+              "categoryColumn": "Diameter",
+              "seriesColumns": [
+                "Segments"
+              ],
+              "title": "Pipe segments per diameter"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Diameter",
+                  "type": "Number"
+                },
+                {
+                  "name": "Segments",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  8,
+                  64
+                ],
+                [
+                  10,
+                  85
+                ],
+                [
+                  15,
+                  538
+                ],
+                [
+                  20,
+                  71
+                ],
+                [
+                  25,
+                  39
+                ],
+                [
+                  32,
+                  28
+                ],
+                [
+                  40,
+                  38
+                ],
+                [
+                  50,
+                  29
+                ],
+                [
+                  65,
+                  22
+                ]
+              ],
+              "totalRows": 9,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "table",
+            "id": "e2",
+            "caption": "Segments and summed length per diameter",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-diameters",
+              "nodeId": "sorted",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Diameter",
+                  "type": "Number"
+                },
+                {
+                  "name": "Segments",
+                  "type": "Integer"
+                },
+                {
+                  "name": "TotalLength",
+                  "type": "Number"
+                }
+              ],
+              "rows": [
+                [
+                  8,
+                  64,
+                  31623.880864000006
+                ],
+                [
+                  10,
+                  85,
+                  84656.97535220002
+                ],
+                [
+                  15,
+                  538,
+                  647769.8020842994
+                ],
+                [
+                  20,
+                  71,
+                  167937.78883740003
+                ],
+                [
+                  25,
+                  39,
+                  46462.490841999985
+                ],
+                [
+                  32,
+                  28,
+                  23304.220046000006
+                ],
+                [
+                  40,
+                  38,
+                  110467.868452
+                ],
+                [
+                  50,
+                  29,
+                  14221.074143999997
+                ],
+                [
+                  65,
+                  22,
+                  80932.99999
+                ]
+              ],
+              "totalRows": 9,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p02-digitalhub-heating-diameters"
+      }
+    },
+    {
+      "id": "t4",
+      "request": {
+        "text": "Show it in 3D."
+      },
+      "reply": {
+        "text": "The 3D view loads `digitalhub-hzg.bos` and colours the 1,795 elements placed on a storey by class: pipe segments orange, fittings blue, space heaters red, valves green, with pumps, tanks, and the one unitary equipment in their own colours, and the 2 elements of other classes grey.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-3d: 3 nodes, 2 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "3 of 3 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-3d sorted.table: 8 rows × 2 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "view3d",
+            "id": "e1",
+            "caption": "DigitalHub heating coloured by IFC class",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-3d",
+              "nodeId": "colours",
+              "port": "table"
+            }
+          },
+          {
+            "kind": "table",
+            "id": "e2",
+            "caption": "Elements per colour",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-3d",
+              "nodeId": "sorted",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "category",
+                  "type": "Text"
+                },
+                {
+                  "name": "Elements",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "IFCPIPESEGMENT",
+                  914
+                ],
+                [
+                  "IFCPIPEFITTING",
+                  743
+                ],
+                [
+                  "IFCVALVE",
+                  65
+                ],
+                [
+                  "IFCSPACEHEATER",
+                  63
+                ],
+                [
+                  "IFCPUMP",
+                  5
+                ],
+                [
+                  "IFCTANK",
+                  2
+                ],
+                [
+                  "other",
+                  2
+                ],
+                [
+                  "IFCUNITARYEQUIPMENT",
+                  1
+                ]
+              ],
+              "totalRows": 8,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p02-digitalhub-heating-3d"
+      }
+    },
+    {
+      "id": "t5",
+      "request": {
+        "text": "How does heating compare with the other disciplines?"
+      },
+      "reply": {
+        "text": "From `digitalhub-federated.duckdb`, which holds the four DigitalHub models side by side: heating defines 42 of the 65 systems, ventilation 4, plumbing 19, and the architecture model none. Plumbing adds 504 pipe segments of its own and 72 sanitary terminals; ventilation has 595 duct segments and 148 air terminals. The 63 space heaters are all in the heating model.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-disciplines: 1 node, 0 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "1 of 1 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p02-digitalhub-heating-disciplines models.table: 4 rows × 7 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "table",
+            "id": "e1",
+            "caption": "Systems and terminals per discipline model",
+            "source": {
+              "analysisId": "nb-p02-digitalhub-heating-disciplines",
+              "nodeId": "models",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Model",
+                  "type": "Text"
+                },
+                {
+                  "name": "Systems",
+                  "type": "Integer"
+                },
+                {
+                  "name": "SpaceHeaters",
+                  "type": "Integer"
+                },
+                {
+                  "name": "PipeSegments",
+                  "type": "Integer"
+                },
+                {
+                  "name": "DuctSegments",
+                  "type": "Integer"
+                },
+                {
+                  "name": "AirTerminals",
+                  "type": "Integer"
+                },
+                {
+                  "name": "SanitaryTerminals",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "DigitalHub_FM-ARC_v2",
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  "DigitalHub_FM-HZG_v2",
+                  42,
+                  63,
+                  914,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  "DigitalHub_FM-LFT_v2",
+                  4,
+                  0,
+                  0,
+                  595,
+                  148,
+                  0
+                ],
+                [
+                  "DigitalHub_FM-SAN_v2",
+                  19,
+                  0,
+                  504,
+                  0,
+                  0,
+                  72
+                ]
+              ],
+              "totalRows": 4,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p02-digitalhub-heating-disciplines"
+      }
+    }
+  ]
+}

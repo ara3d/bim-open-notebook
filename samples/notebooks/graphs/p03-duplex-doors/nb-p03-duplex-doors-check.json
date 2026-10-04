@@ -1,0 +1,160 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "alpha": {
+      "x": 1960,
+      "y": 560
+    },
+    "blue": {
+      "x": 1640,
+      "y": 560
+    },
+    "colours": {
+      "x": 2280,
+      "y": 560
+    },
+    "doors": {
+      "x": 40,
+      "y": 40
+    },
+    "failing": {
+      "x": 1000,
+      "y": 300
+    },
+    "green": {
+      "x": 1320,
+      "y": 560
+    },
+    "red": {
+      "x": 1000,
+      "y": 560
+    },
+    "tally": {
+      "x": 1000,
+      "y": 40
+    },
+    "verdict": {
+      "x": 680,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [
+      {
+        "from": "doors.table",
+        "to": "verdict.table"
+      },
+      {
+        "from": "verdict.table",
+        "to": "tally.table"
+      },
+      {
+        "from": "verdict.table",
+        "to": "failing.table"
+      },
+      {
+        "from": "verdict.table",
+        "to": "red.table"
+      },
+      {
+        "from": "red.table",
+        "to": "green.table"
+      },
+      {
+        "from": "green.table",
+        "to": "blue.table"
+      },
+      {
+        "from": "blue.table",
+        "to": "alpha.table"
+      },
+      {
+        "from": "alpha.table",
+        "to": "colours.table"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "alpha",
+        "kind": "table.derive",
+        "version": 1
+      },
+      {
+        "id": "blue",
+        "kind": "table.derive",
+        "version": 1
+      },
+      {
+        "id": "colours",
+        "kind": "table.project",
+        "version": 1
+      },
+      {
+        "id": "doors",
+        "kind": "duck.query",
+        "version": 1
+      },
+      {
+        "id": "failing",
+        "kind": "table.filter",
+        "version": 1
+      },
+      {
+        "id": "green",
+        "kind": "table.derive",
+        "version": 1
+      },
+      {
+        "id": "red",
+        "kind": "table.derive",
+        "version": 1
+      },
+      {
+        "id": "tally",
+        "kind": "table.aggregate",
+        "version": 1
+      },
+      {
+        "id": "verdict",
+        "kind": "table.derive",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "alpha": {
+      "name": "a",
+      "expr": "1.0"
+    },
+    "blue": {
+      "name": "b",
+      "expr": "verdict == 'Pass' ? 0.17 : 0.16"
+    },
+    "colours": {
+      "columns": "entityId, verdict, r, g, b, a"
+    },
+    "doors": {
+      "path": "{PUBLIC}/duplex.duckdb",
+      "sql": "SELECT e.GlobalId, CAST(e.StepId AS INTEGER) AS entityId, e.Name AS Door, s.StoreyName AS Storey, round(TRY_CAST(p.Value AS DOUBLE) * 1000) AS WidthMm FROM EntityText e JOIN ParameterText p ON p.EntityIndex = e.EntityIndex AND p.Name = 'Ifc:OverallWidth' LEFT JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCDOOR' ORDER BY WidthMm, Storey, e.Name"
+    },
+    "failing": {
+      "expr": "verdict == 'Fail'"
+    },
+    "green": {
+      "name": "g",
+      "expr": "verdict == 'Pass' ? 0.63 : 0.15"
+    },
+    "red": {
+      "name": "r",
+      "expr": "verdict == 'Pass' ? 0.17 : 0.84"
+    },
+    "tally": {
+      "groupBy": "verdict",
+      "aggregates": "count(GlobalId) as Doors"
+    },
+    "verdict": {
+      "name": "verdict",
+      "expr": "WidthMm >= 850 ? 'Pass' : 'Fail'"
+    }
+  }
+}

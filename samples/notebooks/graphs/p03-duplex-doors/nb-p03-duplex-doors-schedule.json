@@ -1,0 +1,59 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "doors": {
+      "x": 40,
+      "y": 40
+    },
+    "perWidth": {
+      "x": 680,
+      "y": 40
+    },
+    "sorted": {
+      "x": 1000,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [
+      {
+        "from": "doors.table",
+        "to": "perWidth.table"
+      },
+      {
+        "from": "perWidth.table",
+        "to": "sorted.table"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "doors",
+        "kind": "duck.query",
+        "version": 1
+      },
+      {
+        "id": "perWidth",
+        "kind": "table.aggregate",
+        "version": 1
+      },
+      {
+        "id": "sorted",
+        "kind": "table.sort",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "doors": {
+      "path": "{PUBLIC}/duplex.duckdb",
+      "sql": "SELECT e.GlobalId, CAST(e.StepId AS INTEGER) AS entityId, e.Name AS Door, s.StoreyName AS Storey, round(TRY_CAST(p.Value AS DOUBLE) * 1000) AS WidthMm FROM EntityText e JOIN ParameterText p ON p.EntityIndex = e.EntityIndex AND p.Name = 'Ifc:OverallWidth' LEFT JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCDOOR' ORDER BY WidthMm, Storey, e.Name"
+    },
+    "perWidth": {
+      "groupBy": "WidthMm",
+      "aggregates": "count(GlobalId) as Doors"
+    },
+    "sorted": {
+      "A": "WidthMm"
+    }
+  }
+}

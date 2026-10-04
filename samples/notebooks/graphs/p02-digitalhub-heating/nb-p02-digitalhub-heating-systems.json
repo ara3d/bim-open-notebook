@@ -1,0 +1,43 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "sides": {
+      "x": 680,
+      "y": 40
+    },
+    "systems": {
+      "x": 40,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [
+      {
+        "from": "systems.table",
+        "to": "sides.table"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "sides",
+        "kind": "table.aggregate",
+        "version": 1
+      },
+      {
+        "id": "systems",
+        "kind": "duck.query",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "sides": {
+      "groupBy": "Side",
+      "aggregates": "count(System) as Systems, sum(SpaceHeaters) as SpaceHeaters, sum(PipeSegments) as PipeSegments"
+    },
+    "systems": {
+      "path": "{PUBLIC}/digitalhub-hzg.duckdb",
+      "sql": "SELECT s.Name AS System, CASE WHEN s.Name LIKE '%VL%' THEN 'supply (VL)' WHEN s.Name LIKE '%RL%' THEN 'return (RL)' END AS Side, count(*) FILTER (WHERE a.Category = 'IFCPIPESEGMENT') AS PipeSegments, count(*) FILTER (WHERE a.Category = 'IFCPIPEFITTING') AS PipeFittings, count(*) FILTER (WHERE a.Category = 'IFCSPACEHEATER') AS SpaceHeaters, count(*) FILTER (WHERE a.Category = 'IFCVALVE') AS Valves FROM EntityText s LEFT JOIN RelationText r ON r.EntityIndexB = s.EntityIndex AND r.RelationType = 'MemberOf' LEFT JOIN EntityText a ON a.EntityIndex = r.EntityIndexA WHERE s.Category = 'IFCSYSTEM' GROUP BY s.Name ORDER BY Side DESC, length(s.Name), s.Name"
+    }
+  }
+}

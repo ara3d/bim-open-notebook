@@ -1,0 +1,53 @@
+{
+  "title": "Schependomlaan: a first look",
+  "createdUtc": "2026-10-04T00:00:00Z",
+  "host": {
+    "profile": "tables",
+    "note": "Reconstructed session: the replies were written by an agent playing this session; every embed was computed by the host from the graphs named. The building is the Schependomlaan design model (CC BY 4.0, (C) original owners), converted to BIM Open Schema tables; NOTICE.md has the attribution."
+  },
+  "graphs": [
+    "../graphs/p01-schependomlaan/nb-p01-schependomlaan-storeys.json",
+    "../graphs/p01-schependomlaan/nb-p01-schependomlaan-spaces.json",
+    "../graphs/p01-schependomlaan/nb-p01-schependomlaan-openings.json",
+    "../graphs/p01-schependomlaan/nb-p01-schependomlaan-3d.json"
+  ],
+  "turns": [
+    {
+      "request": "Open schependomlaan.duckdb. What storeys does it have?",
+      "reply": "Six storeys, from `-1 fundering` (foundation) at -1000 up to `04 dak` (roof) at 12000, 3000 apart. The file records no unit for these values; the 3000 spacing reads as millimetres. The four floors with rooms, `00 begane grond` (ground floor) to `03 derde verdieping` (third floor), carry a gross floor area between 195.9 and 339.6; the foundation and the roof carry 0.",
+      "analysisId": "nb-p01-schependomlaan-storeys",
+      "embeds": [
+        { "kind": "table", "node": "storeys", "port": "table", "caption": "Storeys with elevation, height, and gross floor area as the file gives them" }
+      ]
+    },
+    {
+      "request": "How many spaces per storey? Chart it.",
+      "reply": "100 spaces, all on the four middle storeys: 32 on the ground floor, 29 on the first, 20 on the second, 19 on the third. The foundation and roof storeys have none. The graph filters `EntityText` to IFCSPACE, joins `StoreyOfElement` for the storey, and counts per storey.",
+      "analysisId": "nb-p01-schependomlaan-spaces",
+      "embeds": [
+        { "kind": "value", "node": "total", "port": "table", "column": "Spaces", "caption": "Spaces in the model" },
+        { "kind": "chart", "node": "chart", "port": "table", "caption": "Spaces per storey" },
+        { "kind": "graph" }
+      ]
+    },
+    {
+      "request": "And doors and windows?",
+      "reply": "205 doors and 259 windows. The ground floor has the most doors (80), the first floor the most windows (88). The roof storey has 5 windows and no doors; the foundation has neither.",
+      "analysisId": "nb-p01-schependomlaan-openings",
+      "embeds": [
+        { "kind": "value", "node": "total", "port": "table", "column": "Doors", "caption": "Doors" },
+        { "kind": "value", "node": "total", "port": "table", "column": "Windows", "caption": "Windows" },
+        { "kind": "chart", "node": "chart", "port": "table", "caption": "Doors and windows per storey" }
+      ]
+    },
+    {
+      "request": "Show me the building, coloured by IFC class.",
+      "reply": "The 3D view loads `schependomlaan.bos` and colours each element placed on a storey by its class: 3,621 elements in 11 named colours plus grey for the 109 in smaller classes. Spaces are left out so they do not hide the walls; the query also drops entities with no STEP id (StepId -1), which the 3D view cannot match, though none of them sits on a storey.Coverings (1,262) and walls (652, plus 282 standard-case walls) are most of it. The table is the legend's counts.",
+      "analysisId": "nb-p01-schependomlaan-3d",
+      "embeds": [
+        { "kind": "view3d", "node": "colours", "port": "table", "caption": "Schependomlaan coloured by IFC class" },
+        { "kind": "table", "node": "sorted", "port": "table", "caption": "Elements per colour" }
+      ]
+    }
+  ]
+}

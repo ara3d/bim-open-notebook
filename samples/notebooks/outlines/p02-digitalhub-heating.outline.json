@@ -1,0 +1,61 @@
+{
+  "title": "DigitalHub: the heating model",
+  "createdUtc": "2026-10-04T00:00:00Z",
+  "host": {
+    "profile": "tables",
+    "note": "Reconstructed session: the replies were written by an agent playing this session; every embed was computed by the host from the graphs named. The building is DigitalHub of RWTH Aachen University (MIT License, Copyright (c) 2020 RWTH Aachen University - E3D), converted to BIM Open Schema tables; NOTICE.md has the licence."
+  },
+  "graphs": [
+    "../graphs/p02-digitalhub-heating/nb-p02-digitalhub-heating-systems.json",
+    "../graphs/p02-digitalhub-heating/nb-p02-digitalhub-heating-per-storey.json",
+    "../graphs/p02-digitalhub-heating/nb-p02-digitalhub-heating-diameters.json",
+    "../graphs/p02-digitalhub-heating/nb-p02-digitalhub-heating-3d.json",
+    "../graphs/p02-digitalhub-heating/nb-p02-digitalhub-heating-disciplines.json"
+  ],
+  "turns": [
+    {
+      "request": "Open digitalhub-hzg.duckdb, the heating model. Which systems does it define?",
+      "reply": "42 IfcSystem entities, in pairs: 21 whose names contain VL (Vorlauf, supply) and 21 with RL (Rücklauf, return). 19 pairs are `H_Transport_*` circuits; the other two are `H_WP` (Wärmepumpe, heat pump) and `H_Wandlung` (conversion). Each of the 63 space heaters belongs to one supply and one return system, so both sides count 63. The side is read from the system name, which is how this model labels it; the file has no separate attribute for it.",
+      "analysisId": "nb-p02-digitalhub-heating-systems",
+      "embeds": [
+        { "kind": "table", "node": "sides", "port": "table", "caption": "Systems per side" },
+        { "kind": "table", "node": "systems", "port": "table", "caption": "Members of each system" }
+      ]
+    },
+    {
+      "request": "Where are the radiators and pipes, by storey?",
+      "reply": "63 space heaters: 29 on `E00_OKRD` (ground floor) and 34 on `E01_OKRD` (first floor), none in the basement `B01_OKRD`. 914 pipe segments, 743 fittings, and 65 valves are spread over all three storeys; the basement holds 157 segments and 25 valves but no heaters.",
+      "analysisId": "nb-p02-digitalhub-heating-per-storey",
+      "embeds": [
+        { "kind": "table", "node": "total", "port": "table", "caption": "Heating parts in the model" },
+        { "kind": "chart", "node": "chart", "port": "table", "caption": "Heating parts per storey" }
+      ]
+    },
+    {
+      "request": "What pipe sizes are there?",
+      "reply": "Nine diameters in the `Durchmesser` parameter, from 8 to 65. Most segments are 15 (538 of 914). The table also sums each size's `Länge` (length) parameter. The file records no unit for either value; the figures read as millimetres, so treat them as the file's numbers rather than metres of pipe.",
+      "analysisId": "nb-p02-digitalhub-heating-diameters",
+      "embeds": [
+        { "kind": "chart", "node": "chart", "port": "table", "caption": "Pipe segments per diameter" },
+        { "kind": "table", "node": "sorted", "port": "table", "caption": "Segments and summed length per diameter" }
+      ]
+    },
+    {
+      "request": "Show it in 3D.",
+      "reply": "The 3D view loads `digitalhub-hzg.bos` and colours the 1,795 elements placed on a storey by class: pipe segments orange, fittings blue, space heaters red, valves green, with pumps, tanks, and the one unitary equipment in their own colours, and the 2 elements of other classes grey.",
+      "analysisId": "nb-p02-digitalhub-heating-3d",
+      "embeds": [
+        { "kind": "view3d", "node": "colours", "port": "table", "caption": "DigitalHub heating coloured by IFC class" },
+        { "kind": "table", "node": "sorted", "port": "table", "caption": "Elements per colour" }
+      ]
+    },
+    {
+      "request": "How does heating compare with the other disciplines?",
+      "reply": "From `digitalhub-federated.duckdb`, which holds the four DigitalHub models side by side: heating defines 42 of the 65 systems, ventilation 4, plumbing 19, and the architecture model none. Plumbing adds 504 pipe segments of its own and 72 sanitary terminals; ventilation has 595 duct segments and 148 air terminals. The 63 space heaters are all in the heating model.",
+      "analysisId": "nb-p02-digitalhub-heating-disciplines",
+      "embeds": [
+        { "kind": "table", "node": "models", "port": "table", "caption": "Systems and terminals per discipline model" }
+      ]
+    }
+  ]
+}

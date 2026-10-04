@@ -1,0 +1,25 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "models": {
+      "x": 40,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [],
+    "nodes": [
+      {
+        "id": "models",
+        "kind": "duck.query",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "models": {
+      "path": "{PUBLIC}/digitalhub-federated.duckdb",
+      "sql": "SELECT d.Strings AS Model, count(*) FILTER (WHERE t.Category = 'IFCSYSTEM') AS Systems, count(*) FILTER (WHERE t.Category = 'IFCSPACEHEATER') AS SpaceHeaters, count(*) FILTER (WHERE t.Category = 'IFCPIPESEGMENT') AS PipeSegments, count(*) FILTER (WHERE t.Category = 'IFCDUCTSEGMENT') AS DuctSegments, count(*) FILTER (WHERE t.Category = 'IFCAIRTERMINAL') AS AirTerminals, count(*) FILTER (WHERE t.Category = 'IFCSANITARYTERMINAL') AS SanitaryTerminals FROM EntityText t JOIN Entities e ON e.rowid = t.EntityIndex JOIN Documents doc ON doc.rowid = e.Document JOIN Strings d ON d.rowid = doc.Title GROUP BY d.Strings ORDER BY d.Strings"
+    }
+  }
+}

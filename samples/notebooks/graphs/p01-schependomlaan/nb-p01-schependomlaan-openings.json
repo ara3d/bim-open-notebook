@@ -1,0 +1,61 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "chart": {
+      "x": 680,
+      "y": 40
+    },
+    "openings": {
+      "x": 40,
+      "y": 40
+    },
+    "total": {
+      "x": 680,
+      "y": 300
+    }
+  },
+  "structure": {
+    "edges": [
+      {
+        "from": "openings.table",
+        "to": "chart.table"
+      },
+      {
+        "from": "openings.table",
+        "to": "total.table"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "chart",
+        "kind": "chart.bar",
+        "version": 1
+      },
+      {
+        "id": "openings",
+        "kind": "duck.query",
+        "version": 1
+      },
+      {
+        "id": "total",
+        "kind": "table.aggregate",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "chart": {
+      "labelColumn": "Storey",
+      "valueColumns": "Doors, Windows",
+      "title": "Doors and windows per storey"
+    },
+    "openings": {
+      "path": "{PUBLIC}/schependomlaan.duckdb",
+      "sql": "SELECT s.StoreyName AS Storey, count(*) FILTER (WHERE e.Category = 'IFCDOOR') AS Doors, count(*) FILTER (WHERE e.Category = 'IFCWINDOW') AS Windows FROM EntityText e JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex GROUP BY s.StoreyName ORDER BY s.StoreyName"
+    },
+    "total": {
+      "groupBy": "",
+      "aggregates": "sum(Doors) as Doors, sum(Windows) as Windows"
+    }
+  }
+}

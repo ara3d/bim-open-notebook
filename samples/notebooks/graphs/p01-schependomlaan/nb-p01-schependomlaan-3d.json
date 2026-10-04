@@ -1,0 +1,60 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "colours": {
+      "x": 40,
+      "y": 40
+    },
+    "legend": {
+      "x": 680,
+      "y": 40
+    },
+    "sorted": {
+      "x": 1000,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [
+      {
+        "from": "colours.table",
+        "to": "legend.table"
+      },
+      {
+        "from": "legend.table",
+        "to": "sorted.table"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "colours",
+        "kind": "duck.query",
+        "version": 1
+      },
+      {
+        "id": "legend",
+        "kind": "table.aggregate",
+        "version": 1
+      },
+      {
+        "id": "sorted",
+        "kind": "table.sort",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "colours": {
+      "path": "{PUBLIC}/schependomlaan.duckdb",
+      "sql": "WITH palette(Category, r, g, b) AS (VALUES ('IFCWALL', 31, 119, 180), ('IFCWALLSTANDARDCASE', 174, 199, 232), ('IFCSLAB', 127, 127, 127), ('IFCCOVERING', 219, 219, 141), ('IFCBUILDINGELEMENTPART', 140, 86, 75), ('IFCWINDOW', 44, 160, 44), ('IFCDOOR', 214, 39, 40), ('IFCBEAM', 255, 127, 14), ('IFCRAILING', 148, 103, 189), ('IFCCOLUMN', 227, 119, 194), ('IFCSTAIR', 23, 190, 207)) SELECT CAST(e.StepId AS INTEGER) AS entityId, coalesce(p.Category, 'other') AS category, coalesce(p.r, 199) / 255.0 AS r, coalesce(p.g, 199) / 255.0 AS g, coalesce(p.b, 199) / 255.0 AS b, 1.0 AS a FROM EntityText e JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex LEFT JOIN palette p ON p.Category = e.Category WHERE e.StepId <> -1 AND e.Category <> 'IFCSPACE'"
+    },
+    "legend": {
+      "groupBy": "category",
+      "aggregates": "count(entityId) as Elements"
+    },
+    "sorted": {
+      "A": "Elements",
+      "descendingA": "true"
+    }
+  }
+}

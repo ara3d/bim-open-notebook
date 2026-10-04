@@ -1,0 +1,77 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "chart": {
+      "x": 1320,
+      "y": 40
+    },
+    "perDiameter": {
+      "x": 680,
+      "y": 40
+    },
+    "segments": {
+      "x": 40,
+      "y": 40
+    },
+    "sorted": {
+      "x": 1000,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [
+      {
+        "from": "segments.table",
+        "to": "perDiameter.table"
+      },
+      {
+        "from": "perDiameter.table",
+        "to": "sorted.table"
+      },
+      {
+        "from": "sorted.table",
+        "to": "chart.table"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "chart",
+        "kind": "chart.bar",
+        "version": 1
+      },
+      {
+        "id": "perDiameter",
+        "kind": "table.aggregate",
+        "version": 1
+      },
+      {
+        "id": "segments",
+        "kind": "duck.query",
+        "version": 1
+      },
+      {
+        "id": "sorted",
+        "kind": "table.sort",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "chart": {
+      "labelColumn": "Diameter",
+      "valueColumns": "Segments",
+      "title": "Pipe segments per diameter"
+    },
+    "perDiameter": {
+      "groupBy": "Diameter",
+      "aggregates": "count(GlobalId) as Segments, sum(Length) as TotalLength"
+    },
+    "segments": {
+      "path": "{PUBLIC}/digitalhub-hzg.duckdb",
+      "sql": "SELECT e.GlobalId, max(CASE WHEN p.Name = 'Durchmesser' THEN TRY_CAST(p.Value AS DOUBLE) END) AS Diameter, max(CASE WHEN p.Name = 'Länge' THEN TRY_CAST(p.Value AS DOUBLE) END) AS Length FROM EntityText e LEFT JOIN ParameterText p ON p.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCPIPESEGMENT' GROUP BY e.GlobalId"
+    },
+    "sorted": {
+      "A": "Diameter"
+    }
+  }
+}

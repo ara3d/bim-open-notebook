@@ -1,0 +1,44 @@
+{
+  "title": "Duplex: door widths",
+  "createdUtc": "2026-10-04T00:00:00Z",
+  "host": {
+    "profile": "tables",
+    "note": "Reconstructed session: the replies were written by an agent playing this session; every embed was computed by the host from the graphs named. The building is buildingSMART's Duplex Apartment (BSI (2020) Duplex Apartment Test Files, buildingSMART International, CC BY 4.0), converted to BIM Open Schema tables; NOTICE.md has the attribution."
+  },
+  "graphs": [
+    "../graphs/p03-duplex-doors/nb-p03-duplex-doors-schedule.json",
+    "../graphs/p03-duplex-doors/nb-p03-duplex-doors-check.json",
+    "../graphs/p03-duplex-doors/nb-p03-duplex-doors-mep-systems.json"
+  ],
+  "turns": [
+    {
+      "request": "Open duplex.duckdb and list the doors with their widths.",
+      "reply": "14 doors, 6 on Level 1 and 8 on Level 2. Widths come from each door's `Ifc:OverallWidth`, which the file stores in metres (0.762 for a type named 0762 x 2032mm); the graph multiplies by 1000. Four widths occur: 762 mm (4 doors), 813 mm (2, the glazed doors), 864 mm (6), and 1250 mm (2).",
+      "analysisId": "nb-p03-duplex-doors-schedule",
+      "embeds": [
+        { "kind": "table", "node": "doors", "port": "table", "caption": "Doors, narrowest first" },
+        { "kind": "table", "node": "sorted", "port": "table", "caption": "Doors per width" }
+      ]
+    },
+    {
+      "request": "Which ones are narrower than 850 mm?",
+      "reply": "6 of 14 fail a minimum width of 850 mm: the four 762 mm doors and the two 813 mm glazed doors. The other 8 pass. The rule is a `table.derive` (`WidthMm >= 850 ? 'Pass' : 'Fail'`) and the failing list a `table.filter`, since the generic host has no rule-check node. The 3D view shows only the 14 doors, green for pass and red for fail; everything else in the model is hidden.",
+      "analysisId": "nb-p03-duplex-doors-check",
+      "embeds": [
+        { "kind": "table", "node": "tally", "port": "table", "caption": "Doors per verdict" },
+        { "kind": "table", "node": "failing", "port": "table", "caption": "Doors narrower than 850 mm" },
+        { "kind": "view3d", "node": "colours", "port": "table", "caption": "Duplex doors: green pass, red fail" },
+        { "kind": "graph" }
+      ]
+    },
+    {
+      "request": "Which heating system serves each of the failing doors' rooms?",
+      "reply": "That is not in the data. The Duplex MEP model (`duplex-mep.duckdb`) has 0 IfcSystem entities, though it has 908 flow elements (segments, fittings, terminals, and the like). Its only MemberOf relations point to storeys, buildings, the site, and the project, which is the spatial tree, not a system. So no element is assigned to a heating system, and I have not guessed one from names or positions. If you have a version of the MEP model with systems, I can run the same question on it.",
+      "analysisId": "nb-p03-duplex-doors-mep-systems",
+      "embeds": [
+        { "kind": "table", "node": "classes", "port": "table", "caption": "Systems and flow elements in the MEP model" },
+        { "kind": "table", "node": "memberOf", "port": "table", "caption": "What MemberOf points to" }
+      ]
+    }
+  ]
+}

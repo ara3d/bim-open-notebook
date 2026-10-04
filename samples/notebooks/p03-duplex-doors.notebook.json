@@ -1,0 +1,515 @@
+{
+  "format": "bimopen-notebook/0.1",
+  "title": "Duplex: door widths",
+  "createdUtc": "2026-10-04T00:00:00Z",
+  "host": {
+    "profile": "tables",
+    "note": "Reconstructed session: the replies were written by an agent playing this session; every embed was computed by the host from the graphs named. The building is buildingSMART's Duplex Apartment (BSI (2020) Duplex Apartment Test Files, buildingSMART International, CC BY 4.0), converted to BIM Open Schema tables; NOTICE.md has the attribution."
+  },
+  "turns": [
+    {
+      "id": "t1",
+      "request": {
+        "text": "Open duplex.duckdb and list the doors with their widths."
+      },
+      "reply": {
+        "text": "14 doors, 6 on Level 1 and 8 on Level 2. Widths come from each door's `Ifc:OverallWidth`, which the file stores in metres (0.762 for a type named 0762 x 2032mm); the graph multiplies by 1000. Four widths occur: 762 mm (4 doors), 813 mm (2, the glazed doors), 864 mm (6), and 1250 mm (2).",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-schedule: 3 nodes, 2 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "3 of 3 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-schedule doors.table: 14 rows × 5 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-schedule sorted.table: 4 rows × 2 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "table",
+            "id": "e1",
+            "caption": "Doors, narrowest first",
+            "source": {
+              "analysisId": "nb-p03-duplex-doors-schedule",
+              "nodeId": "doors",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "GlobalId",
+                  "type": "Text"
+                },
+                {
+                  "name": "entityId",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Door",
+                  "type": "Text"
+                },
+                {
+                  "name": "Storey",
+                  "type": "Text"
+                },
+                {
+                  "name": "WidthMm",
+                  "type": "Number"
+                }
+              ],
+              "rows": [
+                [
+                  "1hOSvn6df7F8_7GcBWlS8Z",
+                  8066,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150173",
+                  "Level 1",
+                  762
+                ],
+                [
+                  "1hOSvn6df7F8_7GcBWlS9F",
+                  8169,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150257",
+                  "Level 1",
+                  762
+                ],
+                [
+                  "1aj$VJZFn2TxepZUBcKp$i",
+                  35318,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:203720",
+                  "Level 2",
+                  762
+                ],
+                [
+                  "1aj$VJZFn2TxepZUBcKpac",
+                  35413,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:204034",
+                  "Level 2",
+                  762
+                ],
+                [
+                  "1s1jVhK8z0pgKYcr9jt781",
+                  21821,
+                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171853",
+                  "Level 1",
+                  813
+                ],
+                [
+                  "1s1jVhK8z0pgKYcr9jt7AB",
+                  21929,
+                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171975",
+                  "Level 1",
+                  813
+                ],
+                [
+                  "1hOSvn6df7F8_7GcBWlSFK",
+                  8283,
+                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:150378",
+                  "Level 2",
+                  864
+                ],
+                [
+                  "1hOSvn6df7F8_7GcBWlSDm",
+                  8386,
+                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:150478",
+                  "Level 2",
+                  864
+                ],
+                [
+                  "2OBrcmyk58NupXoVOHUuXp",
+                  15962,
+                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:159734",
+                  "Level 2",
+                  864
+                ],
+                [
+                  "2OBrcmyk58NupXoVOHUvVV",
+                  16013,
+                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:159834",
+                  "Level 2",
+                  864
+                ],
+                [
+                  "2OBrcmyk58NupXoVOHUvR4",
+                  16064,
+                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:160065",
+                  "Level 2",
+                  864
+                ],
+                [
+                  "2OBrcmyk58NupXoVOHUvPL",
+                  16115,
+                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:160208",
+                  "Level 2",
+                  864
+                ],
+                [
+                  "1hOSvn6df7F8_7GcBWlRGQ",
+                  6652,
+                  "M_Single-Flush:1250mm x 2010mm:1250mm x 2010mm:146596",
+                  "Level 1",
+                  1250
+                ],
+                [
+                  "1hOSvn6df7F8_7GcBWlRH8",
+                  6757,
+                  "M_Single-Flush:1250mm x 2010mm:1250mm x 2010mm:146678",
+                  "Level 1",
+                  1250
+                ]
+              ],
+              "totalRows": 14,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "table",
+            "id": "e2",
+            "caption": "Doors per width",
+            "source": {
+              "analysisId": "nb-p03-duplex-doors-schedule",
+              "nodeId": "sorted",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "WidthMm",
+                  "type": "Number"
+                },
+                {
+                  "name": "Doors",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  762,
+                  4
+                ],
+                [
+                  813,
+                  2
+                ],
+                [
+                  864,
+                  6
+                ],
+                [
+                  1250,
+                  2
+                ]
+              ],
+              "totalRows": 4,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p03-duplex-doors-schedule"
+      }
+    },
+    {
+      "id": "t2",
+      "request": {
+        "text": "Which ones are narrower than 850 mm?"
+      },
+      "reply": {
+        "text": "6 of 14 fail a minimum width of 850 mm: the four 762 mm doors and the two 813 mm glazed doors. The other 8 pass. The rule is a `table.derive` (`WidthMm >= 850 ? 'Pass' : 'Fail'`) and the failing list a `table.filter`, since the generic host has no rule-check node. The 3D view shows only the 14 doors, green for pass and red for fail; everything else in the model is hidden.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-check: 9 nodes, 8 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "9 of 9 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-check tally.table: 2 rows × 2 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-check failing.table: 6 rows × 6 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "table",
+            "id": "e1",
+            "caption": "Doors per verdict",
+            "source": {
+              "analysisId": "nb-p03-duplex-doors-check",
+              "nodeId": "tally",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "verdict",
+                  "type": "Text"
+                },
+                {
+                  "name": "Doors",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "Fail",
+                  6
+                ],
+                [
+                  "Pass",
+                  8
+                ]
+              ],
+              "totalRows": 2,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "table",
+            "id": "e2",
+            "caption": "Doors narrower than 850 mm",
+            "source": {
+              "analysisId": "nb-p03-duplex-doors-check",
+              "nodeId": "failing",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "GlobalId",
+                  "type": "Text"
+                },
+                {
+                  "name": "entityId",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Door",
+                  "type": "Text"
+                },
+                {
+                  "name": "Storey",
+                  "type": "Text"
+                },
+                {
+                  "name": "WidthMm",
+                  "type": "Number"
+                },
+                {
+                  "name": "verdict",
+                  "type": "Text"
+                }
+              ],
+              "rows": [
+                [
+                  "1hOSvn6df7F8_7GcBWlS8Z",
+                  8066,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150173",
+                  "Level 1",
+                  762,
+                  "Fail"
+                ],
+                [
+                  "1hOSvn6df7F8_7GcBWlS9F",
+                  8169,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150257",
+                  "Level 1",
+                  762,
+                  "Fail"
+                ],
+                [
+                  "1aj$VJZFn2TxepZUBcKp$i",
+                  35318,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:203720",
+                  "Level 2",
+                  762,
+                  "Fail"
+                ],
+                [
+                  "1aj$VJZFn2TxepZUBcKpac",
+                  35413,
+                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:204034",
+                  "Level 2",
+                  762,
+                  "Fail"
+                ],
+                [
+                  "1s1jVhK8z0pgKYcr9jt781",
+                  21821,
+                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171853",
+                  "Level 1",
+                  813,
+                  "Fail"
+                ],
+                [
+                  "1s1jVhK8z0pgKYcr9jt7AB",
+                  21929,
+                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171975",
+                  "Level 1",
+                  813,
+                  "Fail"
+                ]
+              ],
+              "totalRows": 6,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "view3d",
+            "id": "e3",
+            "caption": "Duplex doors: green pass, red fail",
+            "source": {
+              "analysisId": "nb-p03-duplex-doors-check",
+              "nodeId": "colours",
+              "port": "table"
+            }
+          },
+          {
+            "kind": "graph",
+            "id": "e4",
+            "analysisId": "nb-p03-duplex-doors-check",
+            "graphHash": "42b4a969ace86dbae5fe1900b454708316d946f2b8f0b54c169db25389e3dfc5",
+            "document": "{\n  \"formatVersion\": \"0.1.0\",\n  \"layout\": {\n    \"alpha\": {\n      \"x\": 1960,\n      \"y\": 560\n    },\n    \"blue\": {\n      \"x\": 1640,\n      \"y\": 560\n    },\n    \"colours\": {\n      \"x\": 2280,\n      \"y\": 560\n    },\n    \"doors\": {\n      \"x\": 40,\n      \"y\": 40\n    },\n    \"failing\": {\n      \"x\": 1000,\n      \"y\": 300\n    },\n    \"green\": {\n      \"x\": 1320,\n      \"y\": 560\n    },\n    \"red\": {\n      \"x\": 1000,\n      \"y\": 560\n    },\n    \"tally\": {\n      \"x\": 1000,\n      \"y\": 40\n    },\n    \"verdict\": {\n      \"x\": 680,\n      \"y\": 40\n    }\n  },\n  \"structure\": {\n    \"edges\": [\n      {\n        \"from\": \"blue.table\",\n        \"to\": \"alpha.table\"\n      },\n      {\n        \"from\": \"green.table\",\n        \"to\": \"blue.table\"\n      },\n      {\n        \"from\": \"alpha.table\",\n        \"to\": \"colours.table\"\n      },\n      {\n        \"from\": \"verdict.table\",\n        \"to\": \"failing.table\"\n      },\n      {\n        \"from\": \"red.table\",\n        \"to\": \"green.table\"\n      },\n      {\n        \"from\": \"verdict.table\",\n        \"to\": \"red.table\"\n      },\n      {\n        \"from\": \"verdict.table\",\n        \"to\": \"tally.table\"\n      },\n      {\n        \"from\": \"doors.table\",\n        \"to\": \"verdict.table\"\n      }\n    ],\n    \"nodes\": [\n      {\n        \"id\": \"alpha\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"blue\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"colours\",\n        \"kind\": \"table.project\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"doors\",\n        \"kind\": \"duck.query\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"failing\",\n        \"kind\": \"table.filter\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"green\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"red\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"tally\",\n        \"kind\": \"table.aggregate\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"verdict\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      }\n    ]\n  },\n  \"values\": {\n    \"alpha\": {\n      \"expr\": \"1.0\",\n      \"name\": \"a\"\n    },\n    \"blue\": {\n      \"expr\": \"verdict == 'Pass' ? 0.17 : 0.16\",\n      \"name\": \"b\"\n    },\n    \"colours\": {\n      \"columns\": \"entityId, verdict, r, g, b, a\"\n    },\n    \"doors\": {\n      \"path\": \"{PUBLIC}/duplex.duckdb\",\n      \"sql\": \"SELECT e.GlobalId, CAST(e.StepId AS INTEGER) AS entityId, e.Name AS Door, s.StoreyName AS Storey, round(TRY_CAST(p.Value AS DOUBLE) * 1000) AS WidthMm FROM EntityText e JOIN ParameterText p ON p.EntityIndex = e.EntityIndex AND p.Name = 'Ifc:OverallWidth' LEFT JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCDOOR' ORDER BY WidthMm, Storey, e.Name\"\n    },\n    \"failing\": {\n      \"expr\": \"verdict == 'Fail'\"\n    },\n    \"green\": {\n      \"expr\": \"verdict == 'Pass' ? 0.63 : 0.15\",\n      \"name\": \"g\"\n    },\n    \"red\": {\n      \"expr\": \"verdict == 'Pass' ? 0.17 : 0.84\",\n      \"name\": \"r\"\n    },\n    \"tally\": {\n      \"aggregates\": \"count(GlobalId) as Doors\",\n      \"groupBy\": \"verdict\"\n    },\n    \"verdict\": {\n      \"expr\": \"WidthMm >= 850 ? 'Pass' : 'Fail'\",\n      \"name\": \"verdict\"\n    }\n  }\n}\n",
+            "text": "dfg 0.1.0;\n// nb-p03-duplex-doors-check   graph 42b4a969ace8\ndoors = duck.query@1(path: \"{MODELS}/duplex.duckdb\", sql: \"SELECT e.GlobalId, CAST(e.StepId AS INTEGER) AS entityId, e.Name AS Door, s.StoreyName AS Storey, round(TRY_CAST(p.Value AS DOUBLE) * 1000) AS WidthMm FROM EntityText e JOIN ParameterText p ON p.EntityIndex = e.EntityIndex AND p.Name = 'Ifc:OverallWidth' LEFT JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCDOOR' ORDER BY WidthMm, Storey, e.Name\");\n  // Ok  table 14 rows x 5 cols  sha d75e4588bf95\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762\nverdict = table.derive@1(table: doors.table, name: \"verdict\", expr: \"WidthMm >= 850 ? 'Pass' : 'Fail'\");\n  // Ok  table 14 rows x 6 cols  sha f69f2cd32bd6\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\"\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\"\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\"\nfailing = table.filter@1(table: verdict.table, expr: \"verdict == 'Fail'\");\n  // Ok  table 6 rows x 6 cols  sha ab12f1650aeb\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\"\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\"\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\"\nred = table.derive@1(table: verdict.table, name: \"r\", expr: \"verdict == 'Pass' ? 0.17 : 0.84\");\n  // Ok  table 14 rows x 7 cols  sha ea237028461b\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84\ngreen = table.derive@1(table: red.table, name: \"g\", expr: \"verdict == 'Pass' ? 0.63 : 0.15\");\n  // Ok  table 14 rows x 8 cols  sha 67f6aeaf0c76\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number, g:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84, 0.15\nblue = table.derive@1(table: green.table, name: \"b\", expr: \"verdict == 'Pass' ? 0.17 : 0.16\");\n  // Ok  table 14 rows x 9 cols  sha 191b4d57f8d9\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number, g:Number, b:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84, 0.15, 0.16\nalpha = table.derive@1(table: blue.table, name: \"a\", expr: \"1.0\");\n  // Ok  table 14 rows x 10 cols  sha 3c3a5e94a6d7\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number, g:Number, b:Number, a:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84, 0.15, 0.16, 1\ncolours = table.project@1(table: alpha.table, columns: \"entityId, verdict, r, g, b, a\");\n  // Ok  table 14 rows x 6 cols  sha 085b3b6f9aaa\n  //   columns entityId:Integer, verdict:Text, r:Number, g:Number, b:Number, a:Number\n  //   [0] 8066, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [1] 8169, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [2] 35318, \"Fail\", 0.84, 0.15, 0.16, 1\ntally = table.aggregate@1(table: verdict.table, groupBy: \"verdict\", aggregates: \"count(GlobalId) as Doors\");\n  // Ok  table 2 rows x 2 cols  sha 9e32fc56f60d\n  //   columns verdict:Text, Doors:Integer\n  //   [0] \"Fail\", 6\n  //   [1] \"Pass\", 8\n",
+            "focus": [
+              "colours",
+              "failing",
+              "tally"
+            ]
+          }
+        ],
+        "analysisId": "nb-p03-duplex-doors-check"
+      }
+    },
+    {
+      "id": "t3",
+      "request": {
+        "text": "Which heating system serves each of the failing doors' rooms?"
+      },
+      "reply": {
+        "text": "That is not in the data. The Duplex MEP model (`duplex-mep.duckdb`) has 0 IfcSystem entities, though it has 908 flow elements (segments, fittings, terminals, and the like). Its only MemberOf relations point to storeys, buildings, the site, and the project, which is the spatial tree, not a system. So no element is assigned to a heating system, and I have not guessed one from names or positions. If you have a version of the MEP model with systems, I can run the same question on it.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-mep-systems: 2 nodes, 0 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "2 of 2 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-mep-systems classes.table: 1 row × 3 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-mep-systems memberOf.table: 4 rows × 2 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "table",
+            "id": "e1",
+            "caption": "Systems and flow elements in the MEP model",
+            "source": {
+              "analysisId": "nb-p03-duplex-doors-mep-systems",
+              "nodeId": "classes",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Systems",
+                  "type": "Integer"
+                },
+                {
+                  "name": "FlowElements",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Entities",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  0,
+                  908,
+                  5826
+                ]
+              ],
+              "totalRows": 1,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "table",
+            "id": "e2",
+            "caption": "What MemberOf points to",
+            "source": {
+              "analysisId": "nb-p03-duplex-doors-mep-systems",
+              "nodeId": "memberOf",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "GroupClass",
+                  "type": "Text"
+                },
+                {
+                  "name": "Relations",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "IFCBUILDINGSTOREY",
+                  42
+                ],
+                [
+                  "IFCBUILDING",
+                  3
+                ],
+                [
+                  "IFCSITE",
+                  1
+                ],
+                [
+                  "IFCPROJECT",
+                  1
+                ]
+              ],
+              "totalRows": 4,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p03-duplex-doors-mep-systems"
+      }
+    }
+  ]
+}

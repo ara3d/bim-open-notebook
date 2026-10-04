@@ -1,0 +1,25 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "storeys": {
+      "x": 40,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [],
+    "nodes": [
+      {
+        "id": "storeys",
+        "kind": "duck.query",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "storeys": {
+      "path": "{PUBLIC}/schependomlaan.duckdb",
+      "sql": "SELECT e.Name AS Storey, max(CASE WHEN p.Name = 'Ifc:Elevation' THEN TRY_CAST(p.Value AS DOUBLE) END) AS Elevation, max(CASE WHEN p.Name = 'GrossHeight' THEN TRY_CAST(p.Value AS DOUBLE) END) AS GrossHeight, max(CASE WHEN p.Name = 'GrossFloorArea' THEN TRY_CAST(p.Value AS DOUBLE) END) AS GrossFloorArea FROM EntityText e LEFT JOIN ParameterText p ON p.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCBUILDINGSTOREY' GROUP BY e.Name ORDER BY Elevation"
+    }
+  }
+}

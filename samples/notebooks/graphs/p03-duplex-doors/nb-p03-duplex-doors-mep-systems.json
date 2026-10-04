@@ -1,0 +1,38 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "classes": {
+      "x": 40,
+      "y": 40
+    },
+    "memberOf": {
+      "x": 40,
+      "y": 300
+    }
+  },
+  "structure": {
+    "edges": [],
+    "nodes": [
+      {
+        "id": "classes",
+        "kind": "duck.query",
+        "version": 1
+      },
+      {
+        "id": "memberOf",
+        "kind": "duck.query",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "classes": {
+      "path": "{PUBLIC}/duplex-mep.duckdb",
+      "sql": "SELECT count(*) FILTER (WHERE Category = 'IFCSYSTEM') AS Systems, count(*) FILTER (WHERE Category LIKE 'IFCFLOW%') AS FlowElements, count(*) AS Entities FROM EntityText"
+    },
+    "memberOf": {
+      "path": "{PUBLIC}/duplex-mep.duckdb",
+      "sql": "SELECT b.Category AS GroupClass, count(*) AS Relations FROM RelationText r JOIN EntityText b ON b.EntityIndex = r.EntityIndexB WHERE r.RelationType = 'MemberOf' GROUP BY b.Category ORDER BY Relations DESC"
+    }
+  }
+}

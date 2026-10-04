@@ -1,0 +1,60 @@
+{
+  "formatVersion": "0.1.0",
+  "layout": {
+    "colours": {
+      "x": 40,
+      "y": 40
+    },
+    "legend": {
+      "x": 680,
+      "y": 40
+    },
+    "sorted": {
+      "x": 1000,
+      "y": 40
+    }
+  },
+  "structure": {
+    "edges": [
+      {
+        "from": "colours.table",
+        "to": "legend.table"
+      },
+      {
+        "from": "legend.table",
+        "to": "sorted.table"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "colours",
+        "kind": "duck.query",
+        "version": 1
+      },
+      {
+        "id": "legend",
+        "kind": "table.aggregate",
+        "version": 1
+      },
+      {
+        "id": "sorted",
+        "kind": "table.sort",
+        "version": 1
+      }
+    ]
+  },
+  "values": {
+    "colours": {
+      "path": "{PUBLIC}/digitalhub-hzg.duckdb",
+      "sql": "WITH palette(Category, r, g, b) AS (VALUES ('IFCSPACEHEATER', 214, 39, 40), ('IFCPIPESEGMENT', 255, 127, 14), ('IFCPIPEFITTING', 31, 119, 180), ('IFCVALVE', 44, 160, 44), ('IFCPUMP', 148, 103, 189), ('IFCTANK', 140, 86, 75), ('IFCUNITARYEQUIPMENT', 227, 119, 194)) SELECT CAST(e.StepId AS INTEGER) AS entityId, coalesce(p.Category, 'other') AS category, coalesce(p.r, 199) / 255.0 AS r, coalesce(p.g, 199) / 255.0 AS g, coalesce(p.b, 199) / 255.0 AS b, 1.0 AS a FROM EntityText e JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex LEFT JOIN palette p ON p.Category = e.Category WHERE e.StepId <> -1"
+    },
+    "legend": {
+      "groupBy": "category",
+      "aggregates": "count(entityId) as Elements"
+    },
+    "sorted": {
+      "A": "Elements",
+      "descendingA": "true"
+    }
+  }
+}

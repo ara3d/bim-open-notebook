@@ -1,0 +1,510 @@
+{
+  "format": "bimopen-notebook/0.1",
+  "title": "Schependomlaan: a first look",
+  "createdUtc": "2026-10-04T00:00:00Z",
+  "host": {
+    "profile": "tables",
+    "note": "Reconstructed session: the replies were written by an agent playing this session; every embed was computed by the host from the graphs named. The building is the Schependomlaan design model (CC BY 4.0, (C) original owners), converted to BIM Open Schema tables; NOTICE.md has the attribution."
+  },
+  "turns": [
+    {
+      "id": "t1",
+      "request": {
+        "text": "Open schependomlaan.duckdb. What storeys does it have?"
+      },
+      "reply": {
+        "text": "Six storeys, from `-1 fundering` (foundation) at -1000 up to `04 dak` (roof) at 12000, 3000 apart. The file records no unit for these values; the 3000 spacing reads as millimetres. The four floors with rooms, `00 begane grond` (ground floor) to `03 derde verdieping` (third floor), carry a gross floor area between 195.9 and 339.6; the foundation and the roof carry 0.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-storeys: 1 node, 0 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "1 of 1 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-storeys storeys.table: 6 rows × 4 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "table",
+            "id": "e1",
+            "caption": "Storeys with elevation, height, and gross floor area as the file gives them",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-storeys",
+              "nodeId": "storeys",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Storey",
+                  "type": "Text"
+                },
+                {
+                  "name": "Elevation",
+                  "type": "Number"
+                },
+                {
+                  "name": "GrossHeight",
+                  "type": "Number"
+                },
+                {
+                  "name": "GrossFloorArea",
+                  "type": "Number"
+                }
+              ],
+              "rows": [
+                [
+                  "-1 fundering",
+                  -1000,
+                  1000,
+                  0
+                ],
+                [
+                  "00 begane grond",
+                  0,
+                  3000,
+                  339.55148
+                ],
+                [
+                  "01 eerste verdieping",
+                  3000,
+                  3000,
+                  290.63113
+                ],
+                [
+                  "02 tweede verdieping",
+                  6000,
+                  3000,
+                  195.91501
+                ],
+                [
+                  "03 derde verdieping",
+                  9000,
+                  3000,
+                  211.64403
+                ],
+                [
+                  "04 dak",
+                  12000,
+                  3000,
+                  0
+                ]
+              ],
+              "totalRows": 6,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p01-schependomlaan-storeys"
+      }
+    },
+    {
+      "id": "t2",
+      "request": {
+        "text": "How many spaces per storey? Chart it."
+      },
+      "reply": {
+        "text": "100 spaces, all on the four middle storeys: 32 on the ground floor, 29 on the first, 20 on the second, 19 on the third. The foundation and roof storeys have none. The graph filters `EntityText` to IFCSPACE, joins `StoreyOfElement` for the storey, and counts per storey.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-spaces: 8 nodes, 7 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "8 of 8 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-spaces total.table: 100"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-spaces chart.table: 4 rows × 2 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "value",
+            "id": "e1",
+            "caption": "Spaces in the model",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-spaces",
+              "nodeId": "total",
+              "port": "table"
+            },
+            "column": "Spaces",
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Spaces",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  100
+                ]
+              ],
+              "totalRows": 1,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "chart",
+            "id": "e2",
+            "caption": "Spaces per storey",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-spaces",
+              "nodeId": "chart",
+              "port": "table"
+            },
+            "chart": {
+              "chart": "bar",
+              "categoryColumn": "StoreyName",
+              "seriesColumns": [
+                "Spaces"
+              ],
+              "title": "Spaces per storey"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "StoreyName",
+                  "type": "Text"
+                },
+                {
+                  "name": "Spaces",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "00 begane grond",
+                  32
+                ],
+                [
+                  "01 eerste verdieping",
+                  29
+                ],
+                [
+                  "02 tweede verdieping",
+                  20
+                ],
+                [
+                  "03 derde verdieping",
+                  19
+                ]
+              ],
+              "totalRows": 4,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "graph",
+            "id": "e3",
+            "analysisId": "nb-p01-schependomlaan-spaces",
+            "graphHash": "e9ad9495c67187bd6051147057fb2eeb2e2290b9da3f106b4bd7f60f57764061",
+            "document": "{\n  \"formatVersion\": \"0.1.0\",\n  \"layout\": {\n    \"chart\": {\n      \"x\": 1640,\n      \"y\": 40\n    },\n    \"entities\": {\n      \"x\": 40,\n      \"y\": 40\n    },\n    \"perStorey\": {\n      \"x\": 1000,\n      \"y\": 40\n    },\n    \"placed\": {\n      \"x\": 680,\n      \"y\": 40\n    },\n    \"sorted\": {\n      \"x\": 1320,\n      \"y\": 40\n    },\n    \"spaces\": {\n      \"x\": 360,\n      \"y\": 40\n    },\n    \"storeys\": {\n      \"x\": 360,\n      \"y\": 300\n    },\n    \"total\": {\n      \"x\": 1320,\n      \"y\": 300\n    }\n  },\n  \"structure\": {\n    \"edges\": [\n      {\n        \"from\": \"sorted.table\",\n        \"to\": \"chart.table\"\n      },\n      {\n        \"from\": \"placed.table\",\n        \"to\": \"perStorey.table\"\n      },\n      {\n        \"from\": \"spaces.table\",\n        \"to\": \"placed.a\"\n      },\n      {\n        \"from\": \"storeys.table\",\n        \"to\": \"placed.b\"\n      },\n      {\n        \"from\": \"perStorey.table\",\n        \"to\": \"sorted.table\"\n      },\n      {\n        \"from\": \"entities.table\",\n        \"to\": \"spaces.table\"\n      },\n      {\n        \"from\": \"perStorey.table\",\n        \"to\": \"total.table\"\n      }\n    ],\n    \"nodes\": [\n      {\n        \"id\": \"chart\",\n        \"kind\": \"chart.bar\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"entities\",\n        \"kind\": \"duck.table\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"perStorey\",\n        \"kind\": \"table.aggregate\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"placed\",\n        \"kind\": \"table.join\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"sorted\",\n        \"kind\": \"table.sort\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"spaces\",\n        \"kind\": \"table.filter\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"storeys\",\n        \"kind\": \"duck.table\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"total\",\n        \"kind\": \"table.aggregate\",\n        \"version\": 1\n      }\n    ]\n  },\n  \"values\": {\n    \"chart\": {\n      \"labelColumn\": \"StoreyName\",\n      \"title\": \"Spaces per storey\",\n      \"valueColumns\": \"Spaces\"\n    },\n    \"entities\": {\n      \"path\": \"{PUBLIC}/schependomlaan.duckdb\",\n      \"table\": \"EntityText\"\n    },\n    \"perStorey\": {\n      \"aggregates\": \"count(EntityIndex) as Spaces\",\n      \"groupBy\": \"StoreyName\"\n    },\n    \"placed\": {\n      \"aKey\": \"EntityIndex\",\n      \"mode\": \"inner\"\n    },\n    \"sorted\": {\n      \"A\": \"StoreyName\"\n    },\n    \"spaces\": {\n      \"expr\": \"Category == 'IFCSPACE'\"\n    },\n    \"storeys\": {\n      \"path\": \"{PUBLIC}/schependomlaan.duckdb\",\n      \"table\": \"StoreyOfElement\"\n    },\n    \"total\": {\n      \"aggregates\": \"sum(Spaces) as Spaces\",\n      \"groupBy\": \"\"\n    }\n  }\n}\n",
+            "text": "dfg 0.1.0;\n// nb-p01-schependomlaan-spaces   graph e9ad9495c671\nentities = duck.table@1(path: \"{MODELS}/schependomlaan.duckdb\", table: \"EntityText\");\n  // Ok  table 38947 rows x 6 cols  sha 3d5953d5d659\n  //   columns EntityIndex:Integer, StepId:Integer, GlobalId:Text, Name:Text, Category:Text, Type:Text\n  //   [0] 316, 224, \"1nOs6Hg0v9fR$sLR1LjIyX\", \"opgaand werk\", \"IFCWALLSTANDARDCASE\", \"IFC_kalkzandsteen_100mm 100\"\n  //   [1] 337, 478, \"3vSAOyJwTEhQMEIJ6D9qRY\", \"liftputwand\", \"IFCBEAM\", \"IFC_betonopstort_220x345 220 x 345\"\n  //   [2] 350, 639, \"1a49H1hof5wg_s62YvIj$u\", \"fund_strook\", \"IFCBEAM\", \"IFC_strookfundering_2600x550 2600 x 550\"\nspaces = table.filter@1(table: entities.table, expr: \"Category == 'IFCSPACE'\");\n  // Ok  table 100 rows x 6 cols  sha 614d0e4b0f46\n  //   columns EntityIndex:Integer, StepId:Integer, GlobalId:Text, Name:Text, Category:Text, Type:Text\n  //   [0] 8307, 268319, \"22lJvI_rz50umvUizzyEQi\", \"instal. ruimte\", \"IFCSPACE\", \"Technische ruimte\"\n  //   [1] 8319, 268689, \"2dFicWHgz1KPbr5tHWzMcP\", \"entree\", \"IFCSPACE\", \"Verkeersruimte\"\n  //   [2] 8337, 269205, \"3ZMk1e17XESP$vROePi38_\", \"berging\", \"IFCSPACE\", \"Onbenoemde ruimte\"\nstoreys = duck.table@1(path: \"{MODELS}/schependomlaan.duckdb\", table: \"StoreyOfElement\");\n  // Ok  table 3721 rows x 4 cols  sha bda4a8fdb2d6\n  //   columns EntityIndex:Integer, StoreyIndex:Integer, StoreyName:Text, Depth:Integer\n  //   [0] 1160, 307, \"-1 fundering\", 1\n  //   [1] 8334, 1162, \"00 begane grond\", 2\n  //   [2] 16520, 9692, \"01 eerste verdieping\", 2\nplaced = table.join@1(a: spaces.table, b: storeys.table, aKey: \"EntityIndex\", mode: \"inner\");\n  // Ok  table 100 rows x 9 cols  sha a8484267dc29\n  //   columns EntityIndex:Integer, StepId:Integer, GlobalId:Text, Name:Text, Category:Text, Type:Text, StoreyIndex:Integer, StoreyName:Text, Depth:Integer\n  //   [0] 8307, 268319, \"22lJvI_rz50umvUizzyEQi\", \"instal. ruimte\", \"IFCSPACE\", \"Technische ruimte\", 1162, \"00 begane grond\", 1\n  //   [1] 8319, 268689, \"2dFicWHgz1KPbr5tHWzMcP\", \"entree\", \"IFCSPACE\", \"Verkeersruimte\", 1162, \"00 begane grond\", 1\n  //   [2] 8337, 269205, \"3ZMk1e17XESP$vROePi38_\", \"berging\", \"IFCSPACE\", \"Onbenoemde ruimte\", 1162, \"00 begane grond\", 1\nperStorey = table.aggregate@1(table: placed.table, groupBy: \"StoreyName\", aggregates: \"count(EntityIndex) as Spaces\");\n  // Ok  table 4 rows x 2 cols  sha 4db59ed8df8a\n  //   columns StoreyName:Text, Spaces:Integer\n  //   [0] \"00 begane grond\", 32\n  //   [1] \"01 eerste verdieping\", 29\n  //   [2] \"02 tweede verdieping\", 20\nsorted = table.sort@1(table: perStorey.table, A: \"StoreyName\");\n  // Ok  table 4 rows x 2 cols  sha 4db59ed8df8a\n  //   columns StoreyName:Text, Spaces:Integer\n  //   [0] \"00 begane grond\", 32\n  //   [1] \"01 eerste verdieping\", 29\n  //   [2] \"02 tweede verdieping\", 20\nchart = chart.bar@1(table: sorted.table, labelColumn: \"StoreyName\", valueColumns: \"Spaces\", title: \"Spaces per storey\");\n  // Ok\n  //   table: table 4 rows x 2 cols  sha 4db59ed8df8a\n  //     columns StoreyName:Text, Spaces:Integer\n  //     chart 4 categories x 1 series: \"Spaces\"\n  //     \"00 begane grond\": 32\n  //     \"01 eerste verdieping\": 29\n  //     \"02 tweede verdieping\": 20\n  //     \"03 derde verdieping\": 19\n  //   legend: table 0 rows x 9 cols  sha b47d2a37380c\n  //     columns column:Text, domain:Text, role:Text, label:Text, value:Number, r:Number, g:Number, b:Number, count:Integer\n  //     legend empty\ntotal = table.aggregate@1(table: perStorey.table, groupBy: \"\", aggregates: \"sum(Spaces) as Spaces\");\n  // Ok  table 1 rows x 1 cols  sha af208ac9231c\n  //   columns Spaces:Integer\n  //   [0] 100\n",
+            "focus": [
+              "chart",
+              "total"
+            ]
+          }
+        ],
+        "analysisId": "nb-p01-schependomlaan-spaces"
+      }
+    },
+    {
+      "id": "t3",
+      "request": {
+        "text": "And doors and windows?"
+      },
+      "reply": {
+        "text": "205 doors and 259 windows. The ground floor has the most doors (80), the first floor the most windows (88). The roof storey has 5 windows and no doors; the foundation has neither.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-openings: 3 nodes, 2 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "3 of 3 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-openings total.table: 1 row × 2 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-openings chart.table: 6 rows × 3 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "value",
+            "id": "e1",
+            "caption": "Doors",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-openings",
+              "nodeId": "total",
+              "port": "table"
+            },
+            "column": "Doors",
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Doors",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Windows",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  205,
+                  259
+                ]
+              ],
+              "totalRows": 1,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "value",
+            "id": "e2",
+            "caption": "Windows",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-openings",
+              "nodeId": "total",
+              "port": "table"
+            },
+            "column": "Windows",
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Doors",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Windows",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  205,
+                  259
+                ]
+              ],
+              "totalRows": 1,
+              "skip": 0
+            }
+          },
+          {
+            "kind": "chart",
+            "id": "e3",
+            "caption": "Doors and windows per storey",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-openings",
+              "nodeId": "chart",
+              "port": "table"
+            },
+            "chart": {
+              "chart": "bar",
+              "categoryColumn": "Storey",
+              "seriesColumns": [
+                "Doors",
+                "Windows"
+              ],
+              "title": "Doors and windows per storey"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "Storey",
+                  "type": "Text"
+                },
+                {
+                  "name": "Doors",
+                  "type": "Integer"
+                },
+                {
+                  "name": "Windows",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "-1 fundering",
+                  0,
+                  0
+                ],
+                [
+                  "00 begane grond",
+                  80,
+                  84
+                ],
+                [
+                  "01 eerste verdieping",
+                  48,
+                  88
+                ],
+                [
+                  "02 tweede verdieping",
+                  50,
+                  66
+                ],
+                [
+                  "03 derde verdieping",
+                  27,
+                  16
+                ],
+                [
+                  "04 dak",
+                  0,
+                  5
+                ]
+              ],
+              "totalRows": 6,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p01-schependomlaan-openings"
+      }
+    },
+    {
+      "id": "t4",
+      "request": {
+        "text": "Show me the building, coloured by IFC class."
+      },
+      "reply": {
+        "text": "The 3D view loads `schependomlaan.bos` and colours each element placed on a storey by its class: 3,621 elements in 11 named colours plus grey for the 109 in smaller classes. Spaces are left out so they do not hide the walls; the query also drops entities with no STEP id (StepId -1), which the 3D view cannot match, though none of them sits on a storey.Coverings (1,262) and walls (652, plus 282 standard-case walls) are most of it. The table is the legend's counts.",
+        "tools": [
+          {
+            "name": "getAnalysis",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-3d: 3 nodes, 2 edges"
+          },
+          {
+            "name": "evaluate",
+            "ok": true,
+            "summary": "3 of 3 nodes Ok"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p01-schependomlaan-3d sorted.table: 12 rows × 2 columns"
+          }
+        ],
+        "embeds": [
+          {
+            "kind": "view3d",
+            "id": "e1",
+            "caption": "Schependomlaan coloured by IFC class",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-3d",
+              "nodeId": "colours",
+              "port": "table"
+            }
+          },
+          {
+            "kind": "table",
+            "id": "e2",
+            "caption": "Elements per colour",
+            "source": {
+              "analysisId": "nb-p01-schependomlaan-3d",
+              "nodeId": "sorted",
+              "port": "table"
+            },
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "category",
+                  "type": "Text"
+                },
+                {
+                  "name": "Elements",
+                  "type": "Integer"
+                }
+              ],
+              "rows": [
+                [
+                  "IFCCOVERING",
+                  1262
+                ],
+                [
+                  "IFCWALL",
+                  652
+                ],
+                [
+                  "IFCWALLSTANDARDCASE",
+                  282
+                ],
+                [
+                  "IFCSLAB",
+                  279
+                ],
+                [
+                  "IFCBUILDINGELEMENTPART",
+                  277
+                ],
+                [
+                  "IFCWINDOW",
+                  259
+                ],
+                [
+                  "IFCDOOR",
+                  205
+                ],
+                [
+                  "IFCBEAM",
+                  174
+                ],
+                [
+                  "other",
+                  109
+                ],
+                [
+                  "IFCRAILING",
+                  90
+                ],
+                [
+                  "IFCCOLUMN",
+                  23
+                ],
+                [
+                  "IFCSTAIR",
+                  9
+                ]
+              ],
+              "totalRows": 12,
+              "skip": 0
+            }
+          }
+        ],
+        "analysisId": "nb-p01-schependomlaan-3d"
+      }
+    }
+  ]
+}

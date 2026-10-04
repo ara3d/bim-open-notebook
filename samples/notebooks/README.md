@@ -57,9 +57,22 @@ snapshots and update the outline's reply texts to match. A changed card
 position needs no host: `npx vite-node scripts/sync-embed-layouts.ts -- --samples ../../../../samples/notebooks`
 copies the graph files' positions into the notebooks' graph embeds.
 
-The 3D embeds need the host at view time. A `view3d` embed names a node whose
-table has `entityId` (the IFC STEP id) and `r g b a` columns, computed by a
-`duck.query` over `x.duckdb`; the pane loads `x.bos` from the host's model
-catalog. To look at them, serve the notebook page against the same host:
-`BOF_HOST=http://127.0.0.1:5431 npm run dev -w @bimopenflow/bim-open-notebook --prefix bimopenflow/web`,
-then open `http://127.0.0.1:5354/notebook.html` and choose a notebook.
+`node-catalog.json` beside the notebooks is the same host's node catalog
+(GET `/api/catalog/nodes`), which the static site ships so a page with no
+host can place ports and draw the wires in its graph cells. Regenerate it
+with the notebooks whenever a node kind they use changes:
+`npx vite-node scripts/write-node-catalog.ts -- --host http://127.0.0.1:5431 --out ../../../../samples/notebooks`.
+The script fails if the catalog lacks a kind a notebook uses.
+
+A `view3d` embed names a node whose table has `entityId` (the IFC STEP id)
+and `r g b a` columns, computed by a `duck.query` over `x.duckdb`. The script
+records every row of that table in the embed and, when `x.bos` sits beside
+`x.duckdb` (bim-open-data converts each sample to both), names it as
+`models/x.bos`: the page's config says which folder `models/` is
+(`vite.config.ts` points it at `deps/bim-open-data/samples/public`), the dev
+server serves it at `/__notebooks/models/x.bos`, and the static build copies it
+to `notebooks/models/`. So the 3D views draw with no host. Against a host
+(`BOF_HOST=http://127.0.0.1:5431 npm run dev -w @bimopenflow/bim-open-notebook --prefix bimopenflow/web`,
+then `http://127.0.0.1:5354/notebook.html`), the pane loads `x.bos` from the
+host's model catalog and the node's current result instead, and falls back to
+the recorded view, saying so, when the host cannot feed it.

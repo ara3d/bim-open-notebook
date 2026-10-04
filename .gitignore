@@ -153,3 +153,5 @@ deps/
 dist/
 # The static site's notebook page, built by vite.pages.config.ts in CI (.github/workflows/pages.yml)
 site/app/
+# Stores, caches, and regenerated notebooks written by the README's host commands
+artifacts/

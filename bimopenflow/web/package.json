@@ -1,0 +1,34 @@
+{
+  "name": "bim-open-notebook-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@bimopenflow/api-client": "file:../../deps/bim-open-flow/bimopenflow/web/packages/api-client",
+    "@bimopenflow/app": "file:../../deps/bim-open-flow/bimopenflow/web/packages/app",
+    "@bimopenflow/client": "file:../../deps/bim-open-flow/bimopenflow/web/packages/client",
+    "@bimopenflow/contracts": "file:../../deps/bim-open-flow/bimopenflow/web/packages/contracts",
+    "@bimopenflow/graph": "file:../../deps/bim-open-flow/bimopenflow/web/packages/graph",
+    "@bimopenflow/panes": "file:../../deps/bim-open-flow/bimopenflow/web/packages/panes",
+    "@bimopenflow/state": "file:../../deps/bim-open-flow/bimopenflow/web/packages/state",
+    "@bimopenflow/viz": "file:../../deps/bim-open-flow/bimopenflow/web/packages/viz"
+  },
+  "overrides": {
+    "@bimopenflow/api-client": "$@bimopenflow/api-client",
+    "@bimopenflow/app": "$@bimopenflow/app",
+    "@bimopenflow/client": "$@bimopenflow/client",
+    "@bimopenflow/contracts": "$@bimopenflow/contracts",
+    "@bimopenflow/graph": "$@bimopenflow/graph",
+    "@bimopenflow/panes": "$@bimopenflow/panes",
+    "@bimopenflow/state": "$@bimopenflow/state",
+    "@bimopenflow/viz": "$@bimopenflow/viz"
+  },
+  "scripts": {
+    "notebook": "npm run dev -w @bimopenflow/bim-open-notebook",
+    "test": "npm test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}

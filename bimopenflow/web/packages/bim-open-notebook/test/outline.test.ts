@@ -1,13 +1,15 @@
 // Offline tests for scripts/outline.ts: outline
 // validation and the placeholder transforms, none of which need a running host.
 
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { expandPlaceholders, hidePlaceholders, outlineErrors, outlineRoot, parsePlaceholders, slashed } from "../scripts/outline";
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "..", "scripts", "fixtures");
+/** The checkout this package sits in, from bimopenflow/web/packages/<package>/test. */
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..", "..");
 const FIXTURE_OUTLINE = JSON.parse(readFileSync(join(FIXTURES, "nb-fixture.outline.json"), "utf8"));
 
 // The fixture's own graph ids ("nb-fixture-carbon", "nb-fixture-chart") were
@@ -46,7 +48,8 @@ describe("outlineErrors", () => {
 
   it("passes every committed outline's own graph-id prefix check", () => {
     const outlinesDir = join(outlineRoot(join(FIXTURES, "nb-fixture.outline.json")), "samples", "notebooks", "outlines");
-    for (const file of readdirSync(outlinesDir)) {
+    // This repository's own outlines, when it has any; the toolkit's are checked by its own tests.
+    for (const file of existsSync(outlinesDir) ? readdirSync(outlinesDir) : []) {
       if (!file.endsWith(".outline.json")) continue;
       const name = file.replace(/\.outline\.json$/, "");
       const outline = JSON.parse(readFileSync(join(outlinesDir, file), "utf8"));
@@ -120,6 +123,6 @@ describe("slashed and outlineRoot", () => {
   });
 
   it("outlineRoot is the git checkout that holds the outline", () => {
-    expect(slashed(outlineRoot(join(FIXTURES, "nb-fixture.outline.json"))).endsWith("bim-open-toolkit")).toBe(true);
+    expect(slashed(outlineRoot(join(FIXTURES, "nb-fixture.outline.json")))).toBe(slashed(REPO_ROOT));
   });
 });

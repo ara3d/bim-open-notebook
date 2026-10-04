@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: bimopenflow/web/package-lock.json
+      # bim-open-flow, bim-open-viewer, gratify, and bim-open-data (deps.json), and
+      # their own pins, cloned into deps/.
+      - run: node deps.mjs
+      # Three of the viewer's packages (core, controls, loaders) resolve to their built dist/.
+      - run: npm ci
+        working-directory: deps/bim-open-viewer
+      - run: npm run build
+        working-directory: deps/bim-open-viewer
+      - run: npm ci
+        working-directory: bimopenflow/web
+      - run: node gates/web-smoke.mjs

@@ -1,0 +1,18 @@
+{
+  "bim-open-flow": {
+    "url": "https://github.com/ara3d/bim-open-flow",
+    "commit": "f482e4adb4f8d20fa5dc069352c6937fe34f2bc2"
+  },
+  "bim-open-viewer": {
+    "url": "https://github.com/ara3d/bim-open-viewer",
+    "commit": "22bb41369c5004d79f91b3fd58e1ef54a63dadd0"
+  },
+  "gratify": {
+    "url": "https://github.com/ara3d/gratify",
+    "commit": "bcf5f595dc73bd0d3de5e9990d8baa0726cd44b5"
+  },
+  "bim-open-data": {
+    "url": "https://github.com/ara3d/bim-open-data",
+    "commit": "c6916da0791edc8dfdc21f8d34f3833b10d34b7c"
+  }
+}

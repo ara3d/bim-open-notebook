@@ -28,13 +28,15 @@
 // the committed file.
 
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, relative, resolve } from "node:path";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { basename, dirname, extname, join, relative, resolve } from "node:path";
 import { ApiClient } from "@bimopenflow/api-client";
+import { completeTable, makePaneContext, modelPathFor } from "@bimopenflow/client";
 import { parseDocument, type GraphDocument } from "@bimopenflow/state";
 import { chartEmbedDraft, embedsForAnalysis, graphEmbedDraft, type EmbedDraft } from "../src/ask/reply";
 import { NOTEBOOK_EXTENSION, type Embed, type Notebook, type NodeRef, type ToolCall } from "../src/document/format";
 import { emptyNotebook, parseNotebook, serializeNotebook } from "../src/document/io";
+import { MODELS_FOLDER } from "../src/document/paths";
 import { appendTurn } from "../src/document/edits";
 import type { NotebookApi } from "../src/embeds/contract";
 import { describeSnapshot, snapshotOf, SNAPSHOT_ROWS } from "../src/live/compare";
@@ -98,7 +100,7 @@ async function draftsFor(spec: EmbedSpec, turn: OutlineTurn, api: NotebookApi, r
   const analysisId = requireAnalysisId(spec, turn, `${spec.kind} embed for ${spec.node}.${spec.port}`);
   const source: NodeRef = { analysisId, nodeId: spec.node, port: spec.port };
   const caption = spec.caption ?? `${spec.node}.${spec.port}`;
-  if (spec.kind === "view3d") return [{ kind: "view3d", source, caption }];
+  if (spec.kind === "view3d") return [await view3dEmbedDraft(source, caption, api)];
   const slice = await api.getResult(source.analysisId, source.nodeId, source.port, 0, SNAPSHOT_ROWS);
   const snapshot = snapshotOf(slice);
   if (spec.kind === "table") return [{ kind: "table", source, caption, snapshot }];
@@ -117,6 +119,32 @@ async function draftsFor(spec: EmbedSpec, turn: OutlineTurn, api: NotebookApi, r
       snapshot,
     },
   ];
+}
+
+/**
+ * A 3D view with what a page needs to draw it without a host: the node's
+ * whole output (completeTable pages through it, as the pane would) and the
+ * model's .bos file, named models/<file> beside the notebook
+ * (src/document/paths.ts) when a .bos of the model's name sits in the model's
+ * own folder (bim-open-data converts each sample to both). A model with no
+ * .bos beside it is left out, with a line on stderr, and the view then needs
+ * a host at view time.
+ */
+async function view3dEmbedDraft(source: NodeRef, caption: string, api: NotebookApi): Promise<EmbedDraft> {
+  const { analysisId, nodeId, port } = source;
+  const snapshot = await completeTable(makePaneContext(api, analysisId), nodeId, port, () => true);
+  const path = modelPathFor(parseDocument(await api.getAnalysis(analysisId)), nodeId);
+  const bos = path === undefined ? undefined : join(dirname(path), `${basename(path, extname(path))}.bos`);
+  const model = bos !== undefined && existsSync(bos) ? `${MODELS_FOLDER}${basename(bos)}` : undefined;
+  if (model === undefined)
+    console.error(`${analysisId} ${nodeId}: no .bos beside ${path ?? "its model (none found upstream)"}; the 3D view will need a host`);
+  return {
+    kind: "view3d",
+    source,
+    caption,
+    ...(model !== undefined ? { model } : {}),
+    ...(snapshot !== undefined ? { snapshot } : {}),
+  };
 }
 
 /** A file embed for a path relative to `root`, the outline's checkout: its size, hash, and first lines. */
@@ -194,7 +222,7 @@ export async function toolCallsFor(
   );
   const reads = new Map<string, ToolCall>();
   for (const e of embeds) {
-    if (!("snapshot" in e)) continue;
+    if (!("snapshot" in e) || e.snapshot === undefined) continue;
     const { analysisId, nodeId, port } = e.source;
     const summary = `${analysisId} ${nodeId}.${port}: ${describeSnapshot(e.snapshot)}`;
     reads.set(`${analysisId}/${nodeId}/${port}`, { name: "getResult", ok: true, summary });

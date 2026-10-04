@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { Embed, Notebook, TableSnapshot } from "../src/document/format";
 import { parseNotebook } from "../src/document/io";
+import { view3dEmbeds } from "../src/document/paths";
 import { sampleGraphFiles, staleLayouts } from "../scripts/embedLayouts";
 import { outlineErrors } from "../scripts/outline";
 
@@ -54,7 +55,7 @@ function load(name: string): Notebook {
 /** The snapshot of the embed in turn `turn` that reads `node`. */
 function snapshot(notebook: Notebook, turn: number, node: string): TableSnapshot {
   const embed = notebook.turns[turn].reply.embeds.find((e) => "snapshot" in e && e.source.nodeId === node);
-  if (!embed || !("snapshot" in embed)) throw new Error(`turn ${turn} has no snapshot of ${node}`);
+  if (!embed || !("snapshot" in embed) || embed.snapshot === undefined) throw new Error(`turn ${turn} has no snapshot of ${node}`);
   return embed.snapshot;
 }
 
@@ -106,6 +107,20 @@ describe("public sample notebooks", () => {
 
   it.each(sampleFiles)("%s names no path on the machine that wrote it", (file) => {
     expect(readFileSync(join(SAMPLES, file), "utf8")).not.toMatch(LOCAL_PATH);
+  });
+
+  // The static site draws every 3D view with no host: each names a public .bos
+  // (bundled from samples/public) and holds every row of its colouring.
+  it.each(sampleFiles)("%s records a public model and every row for each 3D view", (file) => {
+    const views = view3dEmbeds(load(nameOf(file)));
+    for (const view of views) {
+      expect(view.model, `${view.id} names its model`).toMatch(/^models\/[^/]+\.bos$/);
+      expect(existsSync(join(PUBLIC, view.model!.slice("models/".length))), `${view.model} is a public sample`).toBe(true);
+      expect(view.snapshot, `${view.id} has rows`).toBeDefined();
+      expect(view.snapshot!.rows.length).toBe(view.snapshot!.totalRows);
+      expect(view.snapshot!.totalRows).toBeGreaterThan(0);
+      expect(view.snapshot!.columns.map((c) => c.name)).toContain("entityId");
+    }
   });
 });
 

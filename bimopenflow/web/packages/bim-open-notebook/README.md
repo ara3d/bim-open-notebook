@@ -42,11 +42,15 @@ npm run build:pages -w @bimopenflow/bim-open-notebook --prefix bimopenflow/web
 builds `notebook.html` into the repository's `site/app` (git-ignored), with
 every sample notebook copied into `notebooks/`, plus `notebooks/index.json`
 (the file names), `notebooks/catalog.json` (title, turn count, and first
-request of each, for the landing page `site/index.html`), and `NOTICE.md`,
-the sample buildings' licences. The base is relative and no host stands
-behind it (`vite.pages.config.ts`, `src/page/site.ts`): the page shows every
-answer as recorded, leaves out Re-evaluate, and says in the request box that
-asking needs a host, with a link to `NOTICE.md`. `--outDir <folder>` writes
+request of each, for the landing page `site/index.html`),
+`notebooks/models/` (each `.bos` file a 3D view names, read from the folder
+the config's `models` option points at), and `NOTICE.md`, the sample
+buildings' licences. The base is relative and no host stands behind it
+(`vite.pages.config.ts`, `src/page/site.ts`): the page shows every answer as
+recorded, draws each 3D view from its model file and recorded rows
+(`src/document/paths.ts` resolves the paths against the notebook's URL),
+leaves out Re-evaluate, and says in the request box that asking needs a
+host, with a link to `NOTICE.md`. `--outDir <folder>` writes
 elsewhere. `node gates/pages-smoke.mjs` opens the built site in headless Edge;
 `.github/workflows/pages.yml` builds, checks, and publishes it.
 

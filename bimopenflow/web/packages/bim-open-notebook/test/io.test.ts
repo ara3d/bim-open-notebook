@@ -62,6 +62,8 @@ const fullNotebook: Notebook = {
             kind: "view3d",
             source,
             still: "still-q1.png",
+            model: "models/duplex.bos",
+            snapshot: { ...snapshot(5), rows: [[5, 1, 0, 0]], columns: [{ name: "entityId", type: "Integer" }, { name: "r", type: "Number" }, { name: "g", type: "Number" }, { name: "b", type: "Number" }] },
           },
           {
             id: "p1",

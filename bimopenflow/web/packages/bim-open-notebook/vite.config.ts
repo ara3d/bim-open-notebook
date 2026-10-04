@@ -7,6 +7,8 @@ import { sampleNotebooks } from "./vite/samples";
 const gratify = resolve(__dirname, "../../../../deps/gratify/src/gratify");
 /** The committed sample notebooks, served in dev and copied into the static site (vite.pages.config.ts). */
 export const samples = resolve(__dirname, "../../../../samples/notebooks");
+/** The public buildings' files (bim-open-data), where the samples' 3D views find the models they name as models/<file>. */
+export const models = resolve(__dirname, "../../../../deps/bim-open-data/samples/public");
 
 // The notebook talks to one host through /api. The default is the tables
 // profile of scripts/start-bim-flow.mjs; point BOF_HOST at the studio host
@@ -16,7 +18,7 @@ const host = process.env.BOF_HOST ?? "http://127.0.0.1:5224";
 const port = Number(process.env.NOTEBOOK_PORT ?? 5354);
 
 export default defineConfig({
-  plugins: [sampleNotebooks(samples)],
+  plugins: [sampleNotebooks(samples, { models })],
   build: {
     rollupOptions: { input: { notebook: resolve(__dirname, "notebook.html") } },
   },

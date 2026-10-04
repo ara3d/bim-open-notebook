@@ -7,13 +7,14 @@
 // writes the repository's site/app (git-ignored; .github/workflows/pages.yml
 // builds it and publishes site/): notebook.html, assets/, NOTICE.md (the
 // building licences), and notebooks/ (every sample, index.json with their file
-// names, catalog.json with one landing-page entry each). The base is relative,
-// so the folder works under any path. --outDir writes elsewhere.
+// names, catalog.json with one landing-page entry each, and models/ with the
+// public buildings' .bos files the samples' 3D views name). The base is
+// relative, so the folder works under any path. --outDir writes elsewhere.
 
 import { defineConfig, type Plugin } from "vite";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import base, { samples } from "./vite.config";
+import base, { models, samples } from "./vite.config";
 import { bundleSamples } from "./vite/samples";
 import { NOTICE_FILE } from "./src/page/sitePaths";
 
@@ -36,7 +37,7 @@ export default defineConfig({
   ...base,
   mode: "pages",
   base: "./",
-  plugins: [bundleSamples(samples, LEAD), notice()],
+  plugins: [bundleSamples(samples, LEAD, { models }), notice()],
   build: {
     outDir: resolve(repository, "site/app"),
     emptyOutDir: true,

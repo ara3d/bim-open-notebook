@@ -125,15 +125,19 @@ class FakeIntersectionObserver {
   }
 }
 
+/** The same view with its model file and every row recorded, as the static site's samples have. */
+const recorded: View3dEmbed = { ...embed, model: "models/duplex.bos", snapshot: instances };
+
 const mount = (
   api: NotebookApi,
   e: View3dEmbed = embed,
   pane = recordingPane(),
   observer?: FakeIntersectionObserver,
   hostless?: boolean,
+  base?: string,
 ) => {
   const el = document.createElement("div");
-  const ctx: EmbedContext = { api, selection: createSelectionBus(), hostless };
+  const ctx: EmbedContext = { api, selection: createSelectionBus(), hostless, base };
   if (observer) (window as unknown as { IntersectionObserver: unknown }).IntersectionObserver = observer.ctor();
   const handle = createView3dRenderer(() => pane.pane)(el, e, ctx);
   if (observer) delete (window as { IntersectionObserver?: unknown }).IntersectionObserver;
@@ -158,6 +162,44 @@ describe("view3d embed", () => {
     expect(el.textContent).toContain("running host");
     expect(api.listModels).not.toHaveBeenCalled();
     expect(api.getAnalysis).not.toHaveBeenCalled();
+  });
+
+  it("on a hostless page draws a recorded view from its model file and rows, resolved against the notebook's URL, and calls nothing", async () => {
+    const api = fakeApi({ listModels: vi.fn(), getAnalysis: vi.fn(), getAnalysisState: vi.fn(), getResult: vi.fn() });
+    const { el, pane, button } = mount(api, recorded, recordingPane(), undefined, true, "notebooks/p03-duplex-doors.notebook.json");
+    await settle();
+    expect(pane.log).toEqual(["mount", "model", "instances"]);
+    expect(pane.inputs[0]).toEqual({ kind: "model", url: new URL("notebooks/models/duplex.bos", document.baseURI).href, format: "bos" });
+    expect(pane.inputs[1]).toEqual({ kind: "instances", data: instances });
+    expect(button().disabled).toBe(false);
+    expect(button().textContent).toBe("Hide");
+    expect(el.querySelector('[role="status"]')!.textContent).toBe("");
+    expect(api.listModels).not.toHaveBeenCalled();
+    expect(api.getAnalysis).not.toHaveBeenCalled();
+    expect(api.getResult).not.toHaveBeenCalled();
+  });
+
+  it("with a host that cannot feed the view, falls back to the recorded one and says so", async () => {
+    const api = fakeApi({ getAnalysis: vi.fn(async () => { throw new Error("No analysis nrc-color-category"); }) });
+    const { el, pane } = mount(api, recorded, recordingPane(), undefined, false, "/__notebooks/p03.notebook.json");
+    await settle();
+    expect(pane.log).toEqual(["mount", "model", "instances"]);
+    expect(pane.inputs[0]).toEqual({ kind: "model", url: new URL("/__notebooks/models/duplex.bos", document.baseURI).href, format: "bos" });
+    const status = el.querySelector('[role="status"]')!;
+    expect(status.textContent).toContain("as recorded");
+    expect(status.textContent).toContain("No analysis nrc-color-category");
+  });
+
+  it("with a host, a recorded view is still fed live, and refresh compares the recorded rows with the host's", async () => {
+    const api = fakeApi();
+    const { pane, handle } = mount(api, recorded);
+    await settle();
+    expect(pane.inputs[0]).toEqual({ kind: "model", url: "model:duplex-enriched.ifc", format: "bos" });
+    expect(await handle.refresh()).toEqual({ state: "current" });
+    const changed = fakeApi({ getResult: vi.fn(async () => ({ ...instances, rows: [[5, 0, 1, 0]] })) });
+    const other = mount(changed, recorded);
+    await settle();
+    expect(await other.handle.refresh()).toMatchObject({ state: "changed" });
   });
 
   it("draws the still as an image when there is one", () => {

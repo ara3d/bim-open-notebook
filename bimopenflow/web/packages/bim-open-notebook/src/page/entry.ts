@@ -9,7 +9,7 @@ import { ApiClient } from "@bimopenflow/api-client";
 import { createAskTransport, mountHostBanner, watchHost, type AskTransport } from "@bimopenflow/client/host";
 import type { Notebook } from "../document/format";
 import { parseNotebook } from "../document/io";
-import { fetchSample } from "./files";
+import { fetchSample, sampleUrl } from "./files";
 import type { EmbedRegistry } from "../embeds/contract";
 import { defaultRenderers, withRenderers } from "../embeds/registry";
 import { mountNotebook, renderProblems } from "./notebookView";
@@ -88,6 +88,7 @@ export async function startNotebookPage(options: NotebookPageOptions = {}): Prom
     ask,
     hostless: HOSTLESS ? hostlessNote(document) : undefined,
     initial: opened.notebook,
+    initialFrom: opened.notebook && sample ? sampleUrl(sample) : undefined,
     renderers: options.renderers ?? withRenderers(defaultRenderers, { view3d: renderView3d }),
   });
   if (opened.errors) root.prepend(renderProblems(document, `Could not open the sample ${sample}`, opened.errors));

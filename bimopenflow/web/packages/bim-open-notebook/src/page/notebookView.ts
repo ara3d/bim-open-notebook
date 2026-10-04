@@ -28,7 +28,7 @@ import { createSelectionBus } from "../embeds/selection";
 import { renderTurn, type TurnContext, type TurnHandle } from "./turnView";
 import { ensureNotebookStyles } from "./styles";
 import { ensureShellStyles } from "./shellStyles";
-import { downloadText, fetchSample, listSamples, notebookFileName, readFileText } from "./files";
+import { downloadText, fetchSample, listSamples, notebookFileName, readFileText, sampleUrl } from "./files";
 
 export interface NotebookViewOptions {
   readonly api: NotebookApi;
@@ -42,6 +42,8 @@ export interface NotebookViewOptions {
   readonly hostless?: string | Node;
   readonly renderers?: EmbedRegistry;
   readonly initial?: Notebook;
+  /** The URL `initial` was read from, so relative paths in its embeds resolve (document/paths.ts). */
+  readonly initialFrom?: string;
   /** The clock, for request timestamps; injectable for tests. */
   readonly now?: () => string;
 }
@@ -102,9 +104,14 @@ export function mountNotebook(root: HTMLElement, options: NotebookViewOptions): 
   // One catalog request per page, started by the first graph cell that asks.
   let catalog: Promise<ReadonlyMap<string, NodeDescriptor>> | undefined;
   const hostless = options.hostless !== undefined;
+  /** Where the shown notebook came from; a sample's URL, nothing for a picked file or a new notebook. */
+  let base = options.initialFrom;
   const embeds: EmbedContext = {
     api: options.api,
     selection: createSelectionBus(),
+    get base() {
+      return base;
+    },
     catalog: hostless
       ? undefined
       : () => (catalog ??= options.api.getNodeCatalog().then((c) => new Map(c.nodes.map((n) => [n.kind, n])))),
@@ -320,7 +327,7 @@ export function mountNotebook(root: HTMLElement, options: NotebookViewOptions): 
 
   async function openSample(name: string): Promise<void> {
     try {
-      openText(name, await fetchSample(name));
+      openText(name, await fetchSample(name), sampleUrl(name));
     } catch (e) {
       showProblems({ heading: `Could not open the sample ${name}`, list: [message(e)] });
     }
@@ -334,13 +341,14 @@ export function mountNotebook(root: HTMLElement, options: NotebookViewOptions): 
     }
   }
 
-  /** Loads a notebook file's text, or lists its problems and keeps the current notebook. */
-  function openText(name: string, text: string): void {
+  /** Loads a notebook file's text, read from `from` when it has a URL, or lists its problems and keeps the current notebook. */
+  function openText(name: string, text: string, from?: string): void {
     const parsed = parseNotebook(text);
     if (!parsed.ok) {
       showProblems({ heading: `${name} is not a notebook this page can open`, list: parsed.errors });
       return;
     }
+    base = from;
     load(parsed.notebook);
     setStatus(`Opened ${name}.`);
   }

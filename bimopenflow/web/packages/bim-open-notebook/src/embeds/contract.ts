@@ -49,6 +49,9 @@ export interface EmbedContext {
   /** True when no host stands behind the page (the static site): renderers draw
    *  their snapshots and start nothing that would need one, such as a 3D load. */
   readonly hostless?: boolean;
+  /** The URL the notebook was read from; an embed's relative path (a model, a still, a picture)
+   *  resolves against it (document/paths.ts). Absent for a picked file or a new notebook. */
+  readonly base?: string;
 }
 
 /** A mounted embed. */

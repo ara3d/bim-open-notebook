@@ -6,6 +6,7 @@ describe("hostlessNote", () => {
     const span = document.createElement("span");
     span.append(hostlessNote(document));
     expect(span.textContent).toMatch(/^This is a static copy with no host behind it/);
+    expect(span.textContent).toContain("draws each 3D view from the model file");
     const link = span.querySelector("a");
     expect(link?.getAttribute("href")).toBe("NOTICE.md");
     expect(link?.textContent).toBe("NOTICE.md");

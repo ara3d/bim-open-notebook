@@ -239,6 +239,8 @@ const checkView3dEmbed = checkObject([
   field("kind", checkLiteral("view3d")),
   field("source", checkNodeRef),
   field("still", checkString, false),
+  field("model", checkString, false),
+  field("snapshot", checkTableSnapshot, false),
 ]);
 
 const checkPictureEmbed = checkObject([
@@ -451,6 +453,8 @@ const serializeEmbed = (embed: Embed): Record<string, unknown> => {
       const e: View3dEmbed = embed;
       out.source = serializeNodeRef(e.source);
       if (e.still !== undefined) out.still = e.still;
+      if (e.model !== undefined) out.model = e.model;
+      if (e.snapshot !== undefined) out.snapshot = serializeSnapshot(e.snapshot);
       return out;
     }
     case "picture": {
@@ -515,7 +519,22 @@ export function serializeNotebook(notebook: Notebook): string {
   };
   if (notebook.host !== undefined) out.host = serializeHostHint(notebook.host);
   out.turns = notebook.turns.map(serializeTurn);
-  return `${JSON.stringify(out, null, 2)}\n`;
+  return `${compactLeafArrays(JSON.stringify(out, null, 2))}\n`;
+}
+
+/** One JSON scalar as JSON.stringify writes it: a string, a number, true, false, or null. */
+const SCALAR = String.raw`"(?:[^"\\]|\\.)*"|-?\d[\d.eE+-]*|true|false|null`;
+/** An array holding only scalars, as JSON.stringify lays it out over several lines. */
+const LEAF_ARRAY = new RegExp(String.raw`\[\s*((?:${SCALAR})(?:\s*,\s*(?:${SCALAR}))*)\s*\]`, "g");
+const SCALARS = new RegExp(SCALAR, "g");
+
+/**
+ * JSON.stringify's two-space layout with every array of scalars (a table row,
+ * a focus list) on one line, so a snapshot of thousands of rows reads as rows
+ * and is a third of the size. The text still parses to the same value.
+ */
+export function compactLeafArrays(json: string): string {
+  return json.replace(LEAF_ARRAY, (_match, inner: string) => `[${(inner.match(SCALARS) ?? []).join(", ")}]`);
 }
 
 /** A notebook with no turns. */

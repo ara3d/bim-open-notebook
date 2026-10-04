@@ -1,8 +1,9 @@
 // Checks the built static site the way GitHub Pages serves it: plain files under site/, no dev
 // server, no host. Opens the landing page and every notebook it lists in a headless browser and
 // fails on an uncaught exception, a console error, a failed request or a response of 400 or more,
-// a notebook that shows fewer turns than its catalog entry, a "could not open" box, or a missing
-// link to NOTICE.md.
+// a notebook that shows fewer turns than its catalog entry, a "could not open" box, a missing
+// link to NOTICE.md, or a 3D view that does not draw its recorded model (each is scrolled into
+// view, which mounts it, and must report its rendered instances).
 //
 // Usage, from the repository root, after npm run build:pages (it writes site/app):
 //   node gates/pages-smoke.mjs                          headless Edge
@@ -31,7 +32,7 @@ const timeoutMs = 60_000;
 const TYPES = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".md": "text/markdown; charset=utf-8", ".svg": "image/svg+xml",
-  ".png": "image/png", ".wasm": "application/wasm", ".woff2": "font/woff2",
+  ".png": "image/png", ".wasm": "application/wasm", ".woff2": "font/woff2", ".bos": "application/octet-stream",
 };
 
 /** Serves site/ as GitHub Pages does: a folder answers with its index.html. */
@@ -61,6 +62,34 @@ function watch(page) {
 async function settle(page) {
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => new Promise((done) => setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(done)), 500)));
+}
+
+/**
+ * Scrolls each 3D view into the viewport, which mounts its pane, and waits until the pane reports
+ * its rendered instances or an error. The static site records the model file and the rows of each
+ * view, so every one must draw; the hostless "needs a host" placeholder counts as a failure.
+ */
+async function drawViews(page) {
+  const count = await page.evaluate(() => document.querySelectorAll(".bof-nb-view3d").length);
+  const views = [];
+  for (let index = 0; index < count; index++) {
+    await page.evaluate((i) => document.querySelectorAll(".bof-nb-view3d")[i].scrollIntoView({ block: "center" }), index);
+    const status = await page
+      .waitForFunction((i) => {
+        const figure = document.querySelectorAll(".bof-nb-view3d")[i];
+        const pane = figure.querySelector(".bof-panes-viewstatus")?.textContent ?? "";
+        const own = figure.querySelector(".bof-nb-view3d-status");
+        if (/rendered instances/.test(pane)) return pane;
+        if (own?.getAttribute("role") === "alert") return `error: ${own.textContent}`;
+        if (/^(Error|TypeError|RangeError)\b/.test(pane) || figure.querySelector('.bof-panes-viewstatus[role="alert"]')) return `error: ${pane}`;
+        if (figure.querySelector("button")?.disabled) return `error: ${own?.textContent ?? "disabled"}`;
+        return false;
+      }, index, { timeout: timeoutMs })
+      .then((handle) => handle.jsonValue())
+      .catch(() => "error: timed out waiting for the view to draw");
+    views.push({ index, status, ok: !status.startsWith("error:") });
+  }
+  return views;
 }
 
 async function main() {
@@ -112,13 +141,16 @@ async function main() {
         if (seen.problems.length > 0) throw new Error(seen.problems.join("; "));
         if (seen.turns !== turns) throw new Error(`${seen.turns} turns drawn, catalog says ${turns}`);
         if (!seen.notice) throw new Error("the hostless note does not link NOTICE.md");
+        const views = await drawViews(one);
+        for (const view of views) if (!view.ok) throw new Error(`3D view ${view.index + 1}: ${view.status}`);
+        if (shots) await one.evaluate(() => window.scrollTo(0, 0));
         if (shots) {
           // The top of the notebook, with the sticky request box moved to the end so it covers nothing.
           await one.addStyleTag({ content: ".nb-ask { position: static !important; }" });
           await settle(one);
           await one.screenshot({ path: join(shots, `${name}.png`) });
         }
-        console.log(`ok   ${name}: ${seen.turns} turns, ${seen.embeds} embeds`);
+        console.log(`ok   ${name}: ${seen.turns} turns, ${seen.embeds} embeds, ${views.length} 3D view${views.length === 1 ? "" : "s"} drawn${views.map((v) => ` (${v.status.replace(/ · .*$/, "")})`).join("")}`);
       } catch (cause) {
         failures.push(`${name}: ${cause instanceof Error ? cause.message : String(cause)}`);
         console.log(`FAIL ${name}`);

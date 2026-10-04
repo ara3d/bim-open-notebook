@@ -139,12 +139,20 @@ export interface GraphEmbed extends EmbedBase {
   readonly focus?: readonly string[];
 }
 
-/** A 3D view of a view3d node's output over its model. */
+/**
+ * A 3D view of a view3d node's output over its model. With `model` and
+ * `snapshot` both present the view redraws with no host, from the model file
+ * and the rows recorded here; without them it needs a host at view time.
+ */
 export interface View3dEmbed extends EmbedBase {
   readonly kind: "view3d";
   readonly source: NodeRef;
   /** A still of the view as shown: a path relative to the notebook, or a data: URL. */
   readonly still?: string;
+  /** The model's geometry file in BIM Open Schema (.bos): a path relative to the notebook, such as `models/duplex.bos`. */
+  readonly model?: string;
+  /** The node's output as shown, every row (a view needs them all, unlike the first rows the other embeds keep). */
+  readonly snapshot?: TableSnapshot;
 }
 
 /** A picture the agent made or the user attached. */

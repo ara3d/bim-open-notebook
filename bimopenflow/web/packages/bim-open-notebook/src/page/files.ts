@@ -23,10 +23,15 @@ export async function listSamples(fetchFn: typeof fetch = globalThis.fetch): Pro
   return names;
 }
 
+/** The URL of one sample notebook; `name` may leave out the `.notebook.json` extension. Relative paths in its embeds resolve against it. */
+export function sampleUrl(name: string): string {
+  const file = name.endsWith(NOTEBOOK_EXTENSION) ? name : `${name}${NOTEBOOK_EXTENSION}`;
+  return `${SAMPLES_ROUTE}${encodeURIComponent(file)}`;
+}
+
 /** One sample notebook's text, unparsed; `name` may leave out the `.notebook.json` extension. */
 export async function fetchSample(name: string, fetchFn: typeof fetch = globalThis.fetch): Promise<string> {
-  const file = name.endsWith(NOTEBOOK_EXTENSION) ? name : `${name}${NOTEBOOK_EXTENSION}`;
-  const url = `${SAMPLES_ROUTE}${encodeURIComponent(file)}`;
+  const url = sampleUrl(name);
   const response = await fetchFn(url);
   if (!response.ok) throw new Error(`GET ${url} -> ${response.status}`);
   return response.text();

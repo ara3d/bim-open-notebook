@@ -14,6 +14,11 @@
 // "model:<id>" in BOS, then the node's view recipe when the chain is one
 // buildLiveViewRecipe can read, else its complete result table as view,
 // boxes, or instances.
+//
+// An embed that recorded its model file and its rows (View3dEmbed.model and
+// .snapshot) also draws with no host at all: the static site shows it that
+// way, and a page with a host falls back to it when the host cannot feed the
+// view (the analysis is not in its store, say) and says so.
 
 import type { NodeDescriptor, TableSlice } from "@bimopenflow/contracts";
 import { buildLiveViewRecipe, createViewPane3D } from "@bimopenflow/pane-3d";
@@ -30,7 +35,9 @@ import {
 } from "@bimopenflow/client";
 import { hostMessage } from "@bimopenflow/client/host";
 import type { View3dEmbed } from "../document/format";
-import type { EmbedRenderer, Freshness, NotebookApi } from "../embeds/contract";
+import { resolveEmbedPath } from "../document/paths";
+import type { EmbedContext, EmbedRenderer, Freshness, NotebookApi } from "../embeds/contract";
+import { compareWithHost } from "../live/compare";
 
 /** Makes the 3D pane; tests pass one built on fake View3DDeps (no WebGL in jsdom). */
 export type View3dPaneFactory = () => Pane;
@@ -86,6 +93,19 @@ async function planFeed(
     },
   };
 }
+
+/** The feed an embed recorded in itself (model file and rows), or undefined when it recorded neither or only one. */
+function recordedFeed(embed: View3dEmbed, ctx: EmbedContext, documentUrl: string): Feed | undefined {
+  const { model, snapshot } = embed;
+  if (model === undefined || snapshot === undefined) return undefined;
+  return {
+    modelUrl: resolveEmbedPath(model, ctx.base, documentUrl),
+    data: async () => ({ kind: view3dDataKind(embed.source.port, snapshot), data: snapshot }),
+  };
+}
+
+/** What a hostless page says under a view it cannot draw. */
+const NEEDS_HOST = "The 3D view loads the model from a running host, so this copy shows only its description.";
 
 /** A view3d renderer that makes its pane with `makePane`. */
 export function createView3dRenderer(makePane: View3dPaneFactory = defaultPane): EmbedRenderer<View3dEmbed> {
@@ -170,10 +190,25 @@ export function createView3dRenderer(makePane: View3dPaneFactory = defaultPane):
       });
       say("Loading…");
       try {
-        const feed = await planFeed(embed, ctx.api, paneCtx, current);
+        const recorded = recordedFeed(embed, ctx, doc.baseURI);
+        let feed: Feed;
+        let note = "";
+        if (ctx.hostless) {
+          if (!recorded) throw new Error(NEEDS_HOST);
+          feed = recorded;
+        } else {
+          try {
+            feed = await planFeed(embed, ctx.api, paneCtx, current);
+          } catch (e) {
+            if (!recorded) throw e;
+            feed = recorded;
+            note = `Showing the view as recorded; the host could not draw it: ${hostMessage(e)}`;
+          }
+        }
         if (!current()) return;
-        // The model-bytes endpoint always serves BOS; the id may keep a source
-        // extension (.ifc), so the format is given, not inferred.
+        // The model-bytes endpoint always serves BOS, and so is a recorded model
+        // file; the id may keep a source extension (.ifc), so the format is
+        // given, not inferred.
         if (feed.modelUrl) shown.update({ kind: "model", url: feed.modelUrl, format: "bos" });
         const input = await feed.data();
         if (!current() || !input) return;
@@ -181,7 +216,7 @@ export function createView3dRenderer(makePane: View3dPaneFactory = defaultPane):
         const legend = await feed.legend?.().catch(() => undefined);
         if (!current()) return;
         if (legend) shown.update({ kind: "legend", data: legend });
-        say("");
+        say(note);
       } catch (e) {
         if (current()) say(hostMessage(e), true);
       }
@@ -193,10 +228,10 @@ export function createView3dRenderer(makePane: View3dPaneFactory = defaultPane):
     });
 
     const IO = doc.defaultView?.IntersectionObserver;
-    if (ctx.hostless) {
-      // The model comes from a host; with none, keep the placeholder and say why.
+    if (ctx.hostless && !recordedFeed(embed, ctx, doc.baseURI)) {
+      // The model would come from a host; with none, keep the placeholder and say why.
       toggle.disabled = true;
-      say("The 3D view loads the model from a running host, so this copy shows only its description.");
+      say(NEEDS_HOST);
     } else if (IO) {
       observer = new IO(
         (entries) => {
@@ -214,6 +249,9 @@ export function createView3dRenderer(makePane: View3dPaneFactory = defaultPane):
 
     return {
       async refresh(): Promise<Freshness> {
+        // With recorded rows, the comparison is the same as any table's; the
+        // pane already draws the host's result when the host could feed it.
+        if (embed.snapshot) return (await compareWithHost(embed.source, embed.snapshot, ctx.api)).freshness;
         try {
           const update = await ctx.api.getAnalysisState(analysisId);
           const state = update.nodes.find((n) => n.nodeId === nodeId);

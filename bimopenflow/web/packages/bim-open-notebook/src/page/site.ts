@@ -10,8 +10,9 @@ export const HOSTLESS = import.meta.env.MODE === "pages";
 
 /** What the static site says in place of the host banner and the request box. */
 const HOSTLESS_NOTE =
-  "This is a static copy with no host behind it, so it shows every answer as it was recorded. " +
-  "Asking, Re-evaluate, and the live 3D view need a running host; the BIM Open Notebook README says how to start one.";
+  "This is a static copy with no host behind it, so it shows every answer as it was recorded, " +
+  "and draws each 3D view from the model file and the rows recorded with it. " +
+  "Asking and Re-evaluate need a running host; the BIM Open Notebook README says how to start one.";
 
 /** HOSTLESS_NOTE followed by a link to the sample buildings' licences, which the static build copies beside the page. */
 export function hostlessNote(doc: Document): Node {

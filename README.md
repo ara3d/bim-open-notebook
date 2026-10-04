@@ -4,7 +4,7 @@ A lab notebook for building models: ask in plain language, keep every answer as 
 
 BIM Open Notebook is a web page and a file format for people who ask an AI agent questions about a building model and need to show later where each answer came from. It is a working prototype, built and checked in this repository on 2026-10-04.
 
-**Try it:** [ara3d.github.io/bim-open-notebook](https://ara3d.github.io/bim-open-notebook/) is meant to open the three sample notebooks in the browser, with no install and no server. GitHub Pages is not yet switched on for the repository, so the address does not answer yet. The same site can be built and checked locally (see [Building it alone](#building-it-alone)).
+**Try it:** [ara3d.github.io/bim-open-notebook](https://ara3d.github.io/bim-open-notebook/) opens the three sample notebooks in the browser, with no install and no server, 3D views included. The same site can be built and checked locally (see [Building it alone](#building-it-alone)).
 
 ![The Schependomlaan sample: a request about storeys, the reply text, and a table of six storeys with elevation, height, and floor area](docs/images/p01-schependomlaan.png)
 
@@ -20,7 +20,7 @@ A reply holds:
 
 Most results come from a **graph**: a small dataflow program of nodes and wires that reads the model's tables and computes the answer. The agent builds the graph on a **host**, a local server from [BIM Open Flow](https://github.com/ara3d/bim-open-flow) that holds the models and evaluates graphs. The graph is the reproducible part of a notebook.
 
-Every embed keeps a **snapshot** of its result in the file, so a notebook opens anywhere, with no host. With a host running, **Re-evaluate** asks it for each graph's current result and marks the embed *current*, *changed* (showing the old and the new value), or *unavailable*.
+Every embed keeps a **snapshot** of its result in the file, so a notebook opens anywhere, with no host. A 3D view keeps every row of its colouring and names its model's geometry file (`models/duplex.bos`, beside the notebook), so it draws without a host too. With a host running, **Re-evaluate** asks it for each graph's current result and marks the embed *current*, *changed* (showing the old and the new value), or *unavailable*.
 
 ## What problem it solves
 
@@ -77,7 +77,7 @@ node gates/web-smoke.mjs
 node gates/pages-smoke.mjs
 ```
 
-`node deps.mjs` clones the repositories `deps.json` pins (BIM Open Flow, BIM Open Viewer, Gratify, BIM Open Data, and their own pins) into `deps/`, which git ignores; it took 34 s. The viewer is built first because three of its packages are used from their built `dist/` folders. `gates/web-smoke.mjs` runs the tests and the type check of both packages (pane-3d 81 tests, the notebook 269) and builds the static site into `site/app`. `gates/pages-smoke.mjs` serves `site/` as plain files, opens the landing page and each notebook in headless Edge, and fails on a page error, a failed request, a notebook that draws fewer turns than its catalog entry, or a missing link to `NOTICE.md`. A pass ends with `PAGES SMOKE: PASS`.
+`node deps.mjs` clones the repositories `deps.json` pins (BIM Open Flow, BIM Open Viewer, Gratify, BIM Open Data, and their own pins) into `deps/`, which git ignores; it took 34 s. The viewer is built first because three of its packages are used from their built `dist/` folders. `gates/web-smoke.mjs` runs the tests and the type check of both packages (pane-3d 81 tests, the notebook 282) and builds the static site into `site/app`, copying the three sample buildings' `.bos` files (2.2 MB together) in beside the notebooks. `gates/pages-smoke.mjs` serves `site/` as plain files, opens the landing page and each notebook in headless Edge, and fails on a page error, a failed request, a notebook that draws fewer turns than its catalog entry, a 3D view that does not draw its recorded model, or a missing link to `NOTICE.md`. A pass ends with `PAGES SMOKE: PASS`.
 
 ![The landing page of the static site, listing the three sample notebooks](docs/images/landing.png)
 
@@ -91,7 +91,7 @@ dotnet run --project deps/bim-open-flow/src/flow/BimOpenFlow.Host -c Release -- 
 
 The first run builds the host. It is ready when `http://127.0.0.1:5431/api/models` lists 11 models.
 
-A new store holds none of the samples' graphs, so Re-evaluate and the 3D views have nothing to ask for until the graphs are saved to the host. The script that generated the samples does that; `--out` sends its copy of each notebook to `artifacts/regen` so the committed files stay as they are. In a second terminal:
+A new store holds none of the samples' graphs, so Re-evaluate has nothing to ask for until the graphs are saved to the host (a 3D view then says it is showing the recorded view, and why). The script that generated the samples does that; `--out` sends its copy of each notebook to `artifacts/regen` so the committed files stay as they are. In a second terminal:
 
 ```powershell
 mkdir artifacts/regen
@@ -109,7 +109,7 @@ $env:BOF_HOST = "http://127.0.0.1:5431"
 npm run dev -w @bimopenflow/bim-open-notebook --prefix bimopenflow/web
 ```
 
-Open `http://127.0.0.1:5354/notebook.html` and choose a sample. Re-evaluate and the live 3D views now work. The request box stays off, because this host serves no agent, and the Open in editor links need BIM Open Flow's editor, which these steps do not start.
+Open `http://127.0.0.1:5354/notebook.html` and choose a sample. Re-evaluate now works and the 3D views are fed by the host rather than from the recorded rows. The request box stays off, because this host serves no agent, and the Open in editor links need BIM Open Flow's editor, which these steps do not start.
 
 ![The live 3D view of the Duplex doors, 8 green for pass and 6 red for fail, with its legend](docs/images/live-3d.png)
 
@@ -129,18 +129,18 @@ dotnet run --project src/studio/BimOpenFlow.Studio -c Release -- --profile table
 
 Tested on 2026-10-04, in a fresh clone on Windows 11:
 
-- Every command in [Building it alone](#building-it-alone) and [Running it with BIM Open Flow's host](#running-it-with-bim-open-flows-host) ran as written. Both smokes passed: 3 notebooks with 4, 5, and 3 turns.
+- Every command in [Building it alone](#building-it-alone) and [Running it with BIM Open Flow's host](#running-it-with-bim-open-flows-host) ran as written. Both smokes passed: 3 notebooks with 4, 5, and 3 turns, and the three 3D views drew their bundled models (5,972, 4,119, and 660 rendered instances) in headless Edge.
 - Against the generic host, Re-evaluate marked 8 of 9 embeds current in `p01-schependomlaan`, 8 of 9 in `p02-digitalhub-heating`, and 7 of 8 in `p03-duplex-doors`; the three that were not are explained below. The live 3D view of the Duplex doors drew 660 instances with the 14 doors coloured.
 - The studio host ran from the toolkit's own checkout, not a fresh clone. Three requests about the Duplex doors each produced a reply with 14 doors (6 on Level 1, 8 on Level 2), a table, and a graph, using Claude Haiku 4.5. Two were timed: 21 and 54 seconds to the first embed.
 - `.github/workflows/build.yml` runs the build and the web smoke on every push. `.github/workflows/pages.yml` is set to build the site, run the pages smoke with Chrome, and publish `site/` on every push to `main`; no run of it has been checked.
 
 Not tested or not working:
 
-- **The public site is not live.** GitHub Pages is not switched on for the repository, so the Pages workflow's deploy step has never run. Switching it on is a one-time owner step: Settings, Pages, Build and deployment, Source: GitHub Actions.
 - **No live multi-turn session has been recorded.** All three samples are reconstructed.
 - **A graph embed reports "changed" in any other checkout.** The host saves each graph with the data folder's absolute path, which enters the graph's hash, so the hashes recorded on the machine that generated the samples differ from a fresh clone's (one embed each in `p01` and `p03`). The graph's results are unchanged.
 - **The pipe lengths in `p02` report "changed"** because the host's sums differ in the last digits from run to run (31623.880864000006 against 31623.880864), and Re-evaluate compares numbers exactly.
 - In the static copy, a graph embed draws its nodes without wires, because the wires need the node catalog that only a host provides.
+- In the static copy, picking an element in a 3D view selects it but shows no property sets, because the entity index behind them lives on the host.
 - Reply text renders a small Markdown subset with no tables, so a Markdown table in a reply shows as literal `|` characters.
 - The host and the studio host run on Windows only.
 

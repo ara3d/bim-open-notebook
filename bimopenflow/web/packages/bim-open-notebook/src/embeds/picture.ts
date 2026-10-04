@@ -3,16 +3,17 @@
 // host to compare with, so refresh() only reports "snapshot" (contract.ts, Freshness).
 
 import type { PictureEmbed } from "../document/format";
+import { resolveEmbedPath } from "../document/paths";
 import type { EmbedRenderer, Freshness } from "./contract";
 
 const ENLARGED_CLASS = "notebook-picture-enlarged";
 
-export const renderPicture: EmbedRenderer<PictureEmbed> = (el, embed) => {
+export const renderPicture: EmbedRenderer<PictureEmbed> = (el, embed, ctx) => {
   const figure = document.createElement("figure");
   figure.className = "notebook-embed notebook-embed-picture";
 
   const img = document.createElement("img");
-  img.src = embed.src;
+  img.src = resolveEmbedPath(embed.src, ctx.base, document.baseURI);
   img.alt = embed.alt;
   img.className = "notebook-picture-image";
   const toggle = () => img.classList.toggle(ENLARGED_CLASS);

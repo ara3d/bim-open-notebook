@@ -70,104 +70,20 @@
                 }
               ],
               "rows": [
-                [
-                  "1hOSvn6df7F8_7GcBWlS8Z",
-                  8066,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150173",
-                  "Level 1",
-                  762
-                ],
-                [
-                  "1hOSvn6df7F8_7GcBWlS9F",
-                  8169,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150257",
-                  "Level 1",
-                  762
-                ],
-                [
-                  "1aj$VJZFn2TxepZUBcKp$i",
-                  35318,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:203720",
-                  "Level 2",
-                  762
-                ],
-                [
-                  "1aj$VJZFn2TxepZUBcKpac",
-                  35413,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:204034",
-                  "Level 2",
-                  762
-                ],
-                [
-                  "1s1jVhK8z0pgKYcr9jt781",
-                  21821,
-                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171853",
-                  "Level 1",
-                  813
-                ],
-                [
-                  "1s1jVhK8z0pgKYcr9jt7AB",
-                  21929,
-                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171975",
-                  "Level 1",
-                  813
-                ],
-                [
-                  "1hOSvn6df7F8_7GcBWlSFK",
-                  8283,
-                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:150378",
-                  "Level 2",
-                  864
-                ],
-                [
-                  "1hOSvn6df7F8_7GcBWlSDm",
-                  8386,
-                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:150478",
-                  "Level 2",
-                  864
-                ],
-                [
-                  "2OBrcmyk58NupXoVOHUuXp",
-                  15962,
-                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:159734",
-                  "Level 2",
-                  864
-                ],
-                [
-                  "2OBrcmyk58NupXoVOHUvVV",
-                  16013,
-                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:159834",
-                  "Level 2",
-                  864
-                ],
-                [
-                  "2OBrcmyk58NupXoVOHUvR4",
-                  16064,
-                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:160065",
-                  "Level 2",
-                  864
-                ],
-                [
-                  "2OBrcmyk58NupXoVOHUvPL",
-                  16115,
-                  "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:160208",
-                  "Level 2",
-                  864
-                ],
-                [
-                  "1hOSvn6df7F8_7GcBWlRGQ",
-                  6652,
-                  "M_Single-Flush:1250mm x 2010mm:1250mm x 2010mm:146596",
-                  "Level 1",
-                  1250
-                ],
-                [
-                  "1hOSvn6df7F8_7GcBWlRH8",
-                  6757,
-                  "M_Single-Flush:1250mm x 2010mm:1250mm x 2010mm:146678",
-                  "Level 1",
-                  1250
-                ]
+                ["1hOSvn6df7F8_7GcBWlS8Z", 8066, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150173", "Level 1", 762],
+                ["1hOSvn6df7F8_7GcBWlS9F", 8169, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150257", "Level 1", 762],
+                ["1aj$VJZFn2TxepZUBcKp$i", 35318, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:203720", "Level 2", 762],
+                ["1aj$VJZFn2TxepZUBcKpac", 35413, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:204034", "Level 2", 762],
+                ["1s1jVhK8z0pgKYcr9jt781", 21821, "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171853", "Level 1", 813],
+                ["1s1jVhK8z0pgKYcr9jt7AB", 21929, "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171975", "Level 1", 813],
+                ["1hOSvn6df7F8_7GcBWlSFK", 8283, "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:150378", "Level 2", 864],
+                ["1hOSvn6df7F8_7GcBWlSDm", 8386, "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:150478", "Level 2", 864],
+                ["2OBrcmyk58NupXoVOHUuXp", 15962, "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:159734", "Level 2", 864],
+                ["2OBrcmyk58NupXoVOHUvVV", 16013, "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:159834", "Level 2", 864],
+                ["2OBrcmyk58NupXoVOHUvR4", 16064, "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:160065", "Level 2", 864],
+                ["2OBrcmyk58NupXoVOHUvPL", 16115, "M_Single-Flush:0864 x 2032mm:0864 x 2032mm:160208", "Level 2", 864],
+                ["1hOSvn6df7F8_7GcBWlRGQ", 6652, "M_Single-Flush:1250mm x 2010mm:1250mm x 2010mm:146596", "Level 1", 1250],
+                ["1hOSvn6df7F8_7GcBWlRH8", 6757, "M_Single-Flush:1250mm x 2010mm:1250mm x 2010mm:146678", "Level 1", 1250]
               ],
               "totalRows": 14,
               "skip": 0
@@ -194,22 +110,10 @@
                 }
               ],
               "rows": [
-                [
-                  762,
-                  4
-                ],
-                [
-                  813,
-                  2
-                ],
-                [
-                  864,
-                  6
-                ],
-                [
-                  1250,
-                  2
-                ]
+                [762, 4],
+                [813, 2],
+                [864, 6],
+                [1250, 2]
               ],
               "totalRows": 4,
               "skip": 0
@@ -246,6 +150,11 @@
             "name": "getResult",
             "ok": true,
             "summary": "nb-p03-duplex-doors-check failing.table: 6 rows × 6 columns"
+          },
+          {
+            "name": "getResult",
+            "ok": true,
+            "summary": "nb-p03-duplex-doors-check colours.table: 14 rows × 6 columns"
           }
         ],
         "embeds": [
@@ -270,14 +179,8 @@
                 }
               ],
               "rows": [
-                [
-                  "Fail",
-                  6
-                ],
-                [
-                  "Pass",
-                  8
-                ]
+                ["Fail", 6],
+                ["Pass", 8]
               ],
               "totalRows": 2,
               "skip": 0
@@ -320,54 +223,12 @@
                 }
               ],
               "rows": [
-                [
-                  "1hOSvn6df7F8_7GcBWlS8Z",
-                  8066,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150173",
-                  "Level 1",
-                  762,
-                  "Fail"
-                ],
-                [
-                  "1hOSvn6df7F8_7GcBWlS9F",
-                  8169,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150257",
-                  "Level 1",
-                  762,
-                  "Fail"
-                ],
-                [
-                  "1aj$VJZFn2TxepZUBcKp$i",
-                  35318,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:203720",
-                  "Level 2",
-                  762,
-                  "Fail"
-                ],
-                [
-                  "1aj$VJZFn2TxepZUBcKpac",
-                  35413,
-                  "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:204034",
-                  "Level 2",
-                  762,
-                  "Fail"
-                ],
-                [
-                  "1s1jVhK8z0pgKYcr9jt781",
-                  21821,
-                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171853",
-                  "Level 1",
-                  813,
-                  "Fail"
-                ],
-                [
-                  "1s1jVhK8z0pgKYcr9jt7AB",
-                  21929,
-                  "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171975",
-                  "Level 1",
-                  813,
-                  "Fail"
-                ]
+                ["1hOSvn6df7F8_7GcBWlS8Z", 8066, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150173", "Level 1", 762, "Fail"],
+                ["1hOSvn6df7F8_7GcBWlS9F", 8169, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:150257", "Level 1", 762, "Fail"],
+                ["1aj$VJZFn2TxepZUBcKp$i", 35318, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:203720", "Level 2", 762, "Fail"],
+                ["1aj$VJZFn2TxepZUBcKpac", 35413, "M_Single-Flush:0762 x 2032mm:0762 x 2032mm:204034", "Level 2", 762, "Fail"],
+                ["1s1jVhK8z0pgKYcr9jt781", 21821, "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171853", "Level 1", 813, "Fail"],
+                ["1s1jVhK8z0pgKYcr9jt7AB", 21929, "M_Single-Glass 1:0813 x 2420mm:0813 x 2420mm:171975", "Level 1", 813, "Fail"]
               ],
               "totalRows": 6,
               "skip": 0
@@ -381,6 +242,53 @@
               "analysisId": "nb-p03-duplex-doors-check",
               "nodeId": "colours",
               "port": "table"
+            },
+            "model": "models/duplex.bos",
+            "snapshot": {
+              "columns": [
+                {
+                  "name": "entityId",
+                  "type": "Integer"
+                },
+                {
+                  "name": "verdict",
+                  "type": "Text"
+                },
+                {
+                  "name": "r",
+                  "type": "Number"
+                },
+                {
+                  "name": "g",
+                  "type": "Number"
+                },
+                {
+                  "name": "b",
+                  "type": "Number"
+                },
+                {
+                  "name": "a",
+                  "type": "Number"
+                }
+              ],
+              "rows": [
+                [8066, "Fail", 0.84, 0.15, 0.16, 1],
+                [8169, "Fail", 0.84, 0.15, 0.16, 1],
+                [35318, "Fail", 0.84, 0.15, 0.16, 1],
+                [35413, "Fail", 0.84, 0.15, 0.16, 1],
+                [21821, "Fail", 0.84, 0.15, 0.16, 1],
+                [21929, "Fail", 0.84, 0.15, 0.16, 1],
+                [8283, "Pass", 0.17, 0.63, 0.17, 1],
+                [8386, "Pass", 0.17, 0.63, 0.17, 1],
+                [15962, "Pass", 0.17, 0.63, 0.17, 1],
+                [16013, "Pass", 0.17, 0.63, 0.17, 1],
+                [16064, "Pass", 0.17, 0.63, 0.17, 1],
+                [16115, "Pass", 0.17, 0.63, 0.17, 1],
+                [6652, "Pass", 0.17, 0.63, 0.17, 1],
+                [6757, "Pass", 0.17, 0.63, 0.17, 1]
+              ],
+              "totalRows": 14,
+              "skip": 0
             }
           },
           {
@@ -390,11 +298,7 @@
             "graphHash": "42b4a969ace86dbae5fe1900b454708316d946f2b8f0b54c169db25389e3dfc5",
             "document": "{\n  \"formatVersion\": \"0.1.0\",\n  \"layout\": {\n    \"alpha\": {\n      \"x\": 1960,\n      \"y\": 560\n    },\n    \"blue\": {\n      \"x\": 1640,\n      \"y\": 560\n    },\n    \"colours\": {\n      \"x\": 2280,\n      \"y\": 560\n    },\n    \"doors\": {\n      \"x\": 40,\n      \"y\": 40\n    },\n    \"failing\": {\n      \"x\": 1000,\n      \"y\": 300\n    },\n    \"green\": {\n      \"x\": 1320,\n      \"y\": 560\n    },\n    \"red\": {\n      \"x\": 1000,\n      \"y\": 560\n    },\n    \"tally\": {\n      \"x\": 1000,\n      \"y\": 40\n    },\n    \"verdict\": {\n      \"x\": 680,\n      \"y\": 40\n    }\n  },\n  \"structure\": {\n    \"edges\": [\n      {\n        \"from\": \"blue.table\",\n        \"to\": \"alpha.table\"\n      },\n      {\n        \"from\": \"green.table\",\n        \"to\": \"blue.table\"\n      },\n      {\n        \"from\": \"alpha.table\",\n        \"to\": \"colours.table\"\n      },\n      {\n        \"from\": \"verdict.table\",\n        \"to\": \"failing.table\"\n      },\n      {\n        \"from\": \"red.table\",\n        \"to\": \"green.table\"\n      },\n      {\n        \"from\": \"verdict.table\",\n        \"to\": \"red.table\"\n      },\n      {\n        \"from\": \"verdict.table\",\n        \"to\": \"tally.table\"\n      },\n      {\n        \"from\": \"doors.table\",\n        \"to\": \"verdict.table\"\n      }\n    ],\n    \"nodes\": [\n      {\n        \"id\": \"alpha\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"blue\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"colours\",\n        \"kind\": \"table.project\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"doors\",\n        \"kind\": \"duck.query\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"failing\",\n        \"kind\": \"table.filter\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"green\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"red\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"tally\",\n        \"kind\": \"table.aggregate\",\n        \"version\": 1\n      },\n      {\n        \"id\": \"verdict\",\n        \"kind\": \"table.derive\",\n        \"version\": 1\n      }\n    ]\n  },\n  \"values\": {\n    \"alpha\": {\n      \"expr\": \"1.0\",\n      \"name\": \"a\"\n    },\n    \"blue\": {\n      \"expr\": \"verdict == 'Pass' ? 0.17 : 0.16\",\n      \"name\": \"b\"\n    },\n    \"colours\": {\n      \"columns\": \"entityId, verdict, r, g, b, a\"\n    },\n    \"doors\": {\n      \"path\": \"{PUBLIC}/duplex.duckdb\",\n      \"sql\": \"SELECT e.GlobalId, CAST(e.StepId AS INTEGER) AS entityId, e.Name AS Door, s.StoreyName AS Storey, round(TRY_CAST(p.Value AS DOUBLE) * 1000) AS WidthMm FROM EntityText e JOIN ParameterText p ON p.EntityIndex = e.EntityIndex AND p.Name = 'Ifc:OverallWidth' LEFT JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCDOOR' ORDER BY WidthMm, Storey, e.Name\"\n    },\n    \"failing\": {\n      \"expr\": \"verdict == 'Fail'\"\n    },\n    \"green\": {\n      \"expr\": \"verdict == 'Pass' ? 0.63 : 0.15\",\n      \"name\": \"g\"\n    },\n    \"red\": {\n      \"expr\": \"verdict == 'Pass' ? 0.17 : 0.84\",\n      \"name\": \"r\"\n    },\n    \"tally\": {\n      \"aggregates\": \"count(GlobalId) as Doors\",\n      \"groupBy\": \"verdict\"\n    },\n    \"verdict\": {\n      \"expr\": \"WidthMm >= 850 ? 'Pass' : 'Fail'\",\n      \"name\": \"verdict\"\n    }\n  }\n}\n",
             "text": "dfg 0.1.0;\n// nb-p03-duplex-doors-check   graph 42b4a969ace8\ndoors = duck.query@1(path: \"{MODELS}/duplex.duckdb\", sql: \"SELECT e.GlobalId, CAST(e.StepId AS INTEGER) AS entityId, e.Name AS Door, s.StoreyName AS Storey, round(TRY_CAST(p.Value AS DOUBLE) * 1000) AS WidthMm FROM EntityText e JOIN ParameterText p ON p.EntityIndex = e.EntityIndex AND p.Name = 'Ifc:OverallWidth' LEFT JOIN StoreyOfElement s ON s.EntityIndex = e.EntityIndex WHERE e.Category = 'IFCDOOR' ORDER BY WidthMm, Storey, e.Name\");\n  // Ok  table 14 rows x 5 cols  sha d75e4588bf95\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762\nverdict = table.derive@1(table: doors.table, name: \"verdict\", expr: \"WidthMm >= 850 ? 'Pass' : 'Fail'\");\n  // Ok  table 14 rows x 6 cols  sha f69f2cd32bd6\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\"\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\"\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\"\nfailing = table.filter@1(table: verdict.table, expr: \"verdict == 'Fail'\");\n  // Ok  table 6 rows x 6 cols  sha ab12f1650aeb\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\"\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\"\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\"\nred = table.derive@1(table: verdict.table, name: \"r\", expr: \"verdict == 'Pass' ? 0.17 : 0.84\");\n  // Ok  table 14 rows x 7 cols  sha ea237028461b\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84\ngreen = table.derive@1(table: red.table, name: \"g\", expr: \"verdict == 'Pass' ? 0.63 : 0.15\");\n  // Ok  table 14 rows x 8 cols  sha 67f6aeaf0c76\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number, g:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84, 0.15\nblue = table.derive@1(table: green.table, name: \"b\", expr: \"verdict == 'Pass' ? 0.17 : 0.16\");\n  // Ok  table 14 rows x 9 cols  sha 191b4d57f8d9\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number, g:Number, b:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84, 0.15, 0.16\nalpha = table.derive@1(table: blue.table, name: \"a\", expr: \"1.0\");\n  // Ok  table 14 rows x 10 cols  sha 3c3a5e94a6d7\n  //   columns GlobalId:Text, entityId:Integer, Door:Text, Storey:Text, WidthMm:Number, verdict:Text, r:Number, g:Number, b:Number, a:Number\n  //   [0] \"1hOSvn6df7F8_7GcBWlS8Z\", 8066, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15017\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [1] \"1hOSvn6df7F8_7GcBWlS9F\", 8169, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:15025\"..., \"Level 1\", 762, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [2] \"1aj$VJZFn2TxepZUBcKp$i\", 35318, \"M_Single-Flush:0762 x 2032mm:0762 x 2032mm:20372\"..., \"Level 2\", 762, \"Fail\", 0.84, 0.15, 0.16, 1\ncolours = table.project@1(table: alpha.table, columns: \"entityId, verdict, r, g, b, a\");\n  // Ok  table 14 rows x 6 cols  sha 085b3b6f9aaa\n  //   columns entityId:Integer, verdict:Text, r:Number, g:Number, b:Number, a:Number\n  //   [0] 8066, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [1] 8169, \"Fail\", 0.84, 0.15, 0.16, 1\n  //   [2] 35318, \"Fail\", 0.84, 0.15, 0.16, 1\ntally = table.aggregate@1(table: verdict.table, groupBy: \"verdict\", aggregates: \"count(GlobalId) as Doors\");\n  // Ok  table 2 rows x 2 cols  sha 9e32fc56f60d\n  //   columns verdict:Text, Doors:Integer\n  //   [0] \"Fail\", 6\n  //   [1] \"Pass\", 8\n",
-            "focus": [
-              "colours",
-              "failing",
-              "tally"
-            ]
+            "focus": ["colours", "failing", "tally"]
           }
         ],
         "analysisId": "nb-p03-duplex-doors-check"
@@ -455,11 +359,7 @@
                 }
               ],
               "rows": [
-                [
-                  0,
-                  908,
-                  5826
-                ]
+                [0, 908, 5826]
               ],
               "totalRows": 1,
               "skip": 0
@@ -486,22 +386,10 @@
                 }
               ],
               "rows": [
-                [
-                  "IFCBUILDINGSTOREY",
-                  42
-                ],
-                [
-                  "IFCBUILDING",
-                  3
-                ],
-                [
-                  "IFCSITE",
-                  1
-                ],
-                [
-                  "IFCPROJECT",
-                  1
-                ]
+                ["IFCBUILDINGSTOREY", 42],
+                ["IFCBUILDING", 3],
+                ["IFCSITE", 1],
+                ["IFCPROJECT", 1]
               ],
               "totalRows": 4,
               "skip": 0

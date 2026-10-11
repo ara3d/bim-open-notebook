@@ -1,5 +1,5 @@
 // Renders a table embed on the existing table pane, or the verdict pane when
-// the snapshot's columns are the compliance convention (checkId, verdict).
+// the snapshot's columns are the compliance convention (CheckId, Verdict; recorded notebooks use camelCase, so names match ignoring case).
 // Draws the snapshot at once, with no host; "Show more" pages further rows
 // through the host, and refresh() compares with the host's current result.
 
@@ -9,9 +9,11 @@ import { compareWithHost, SNAPSHOT_ROWS } from "../live/compare";
 import type { TableSnapshot, TableEmbed } from "../document/format";
 import type { EmbedRenderer, Freshness } from "./contract";
 
+const hasColumn = (snapshot: TableSnapshot, name: string): boolean =>
+  snapshot.columns.some((c) => c.name.toLowerCase() === name.toLowerCase());
+
 const isVerdictSnapshot = (snapshot: TableSnapshot): boolean =>
-  snapshot.columns.some((c) => c.name === "checkId") &&
-  snapshot.columns.some((c) => c.name === "verdict");
+  hasColumn(snapshot, "CheckId") && hasColumn(snapshot, "Verdict");
 
 const rowsInfo = (held: number, total: number): string => `showing ${held} of ${total} rows`;
 

@@ -173,15 +173,9 @@ describe("renderTable", () => {
       2,
     );
 
-  const verdictSnapshot = () =>
+  const verdictSnapshot = (names = ["GlobalId", "Verdict", "CheckId", "CheckTitle", "Citation"]) =>
     slice(
-      [
-        ["globalId", "Text"],
-        ["verdict", "Text"],
-        ["checkId", "Text"],
-        ["checkTitle", "Text"],
-        ["citation", "Text"],
-      ],
+      names.map((name) => [name, "Text"] as [string, "Text"]),
       [
         ["g1", "Pass", "NBC-1", "Doors", "9.5.1"],
         ["g2", "Fail", "NBC-1", "Doors", "9.5.1"],
@@ -207,7 +201,15 @@ describe("renderTable", () => {
     handle.destroy();
   });
 
-  it("mounts the verdict pane when columns are checkId and verdict", () => {
+  it("mounts the verdict pane for recorded camelCase columns too", () => {
+    const el = mountEl();
+    const recorded = verdictSnapshot(["globalId", "verdict", "checkId", "checkTitle", "citation"]);
+    const handle = renderTable(el, embed({ snapshot: recorded }), makeCtx(fakeApi()));
+    expect(el.querySelectorAll(".bof-panes-check").length).toBe(1);
+    handle.destroy();
+  });
+
+  it("mounts the verdict pane when columns are CheckId and Verdict", () => {
     const el = mountEl();
     const handle = renderTable(el, embed({ snapshot: verdictSnapshot() }), makeCtx(fakeApi()));
     expect(el.querySelectorAll(".bof-panes-check").length).toBe(1);

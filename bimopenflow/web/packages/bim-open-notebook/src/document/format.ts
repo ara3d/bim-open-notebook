@@ -111,7 +111,7 @@ export interface ValueEmbed extends EmbedBase {
   readonly snapshot: TableSnapshot;
 }
 
-/** Rows of a node's output. Verdict tables (checkId, verdict) render as verdicts. */
+/** Rows of a node's output. Verdict tables (CheckId, Verdict, in any case) render as verdicts. */
 export interface TableEmbed extends EmbedBase {
   readonly kind: "table";
   readonly source: NodeRef;

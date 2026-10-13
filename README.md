@@ -16,7 +16,7 @@ A reply holds:
 
 - **text**: what the agent did, and any doubt it has;
 - **tool calls**: each call the agent made to the model's tools, folded under the text;
-- **embeds**: the results themselves. An embed is one of seven kinds: a value, a table, a chart, the graph that computed them, a 3D view of the model, a picture, or a file.
+- **embeds**: the results themselves. An embed is one of seven kinds: a value, a table, a chart, the graph that computed them, a 3D view of the model, a picture, or a file. Charts and pictures are drawn today by BIM Open Flow's `viz` package and the 3D pane; [BIM Open Plot](https://github.com/ara3d/bim-open-plot), the family's figure layer, will draw them once it has code (as of 2026-10-13 it holds a brand, a brief, and a demo page).
 
 Most results come from a **graph**: a small dataflow program of nodes and wires that reads the model's tables and computes the answer. The agent builds the graph on a **host**, a local server from [BIM Open Flow](https://github.com/ara3d/bim-open-flow) that holds the models and evaluates graphs. The graph is the reproducible part of a notebook.
 
@@ -170,6 +170,10 @@ Jupyter AI and similar extensions add an AI assistant to a code notebook; the ce
 | `NOTICE.md` | Sources, licences, and attributions of the sample buildings |
 
 BIM Open Toolkit takes both packages from this repository through its own `deps/` and serves its own notebook page with its NRC (National Research Council Canada) samples.
+
+## The family
+
+BIM Open Notebook is one of the BIM Open repositories, with [BIM Open Flow](https://github.com/ara3d/bim-open-flow) (the graphs and the host), [BIM Open Data](https://github.com/ara3d/bim-open-data) (BIM Open Schema and IFC in .NET), [BIM Open Viewer](https://github.com/ara3d/bim-open-viewer) (the 3D viewer), [BIM Open Plot](https://github.com/ara3d/bim-open-plot) (the figure layer to come), and [BIM Open Toolkit](https://github.com/ara3d/bim-open-toolkit), which joins them. The mark and colours follow the toolkit's `docs/BRANDING.md`.
 
 ## Licences
 

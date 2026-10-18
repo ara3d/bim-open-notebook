@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import type { EntityProperties } from "@bimopenflow/contracts";
 import { createViewPane3D, inferFormat } from "../src/viewPane3D";
-import type { PickModifiers, RigCamera, View3DDeps, ViewerRig } from "../src/viewerDeps";
+import type { PickInfo, RigCamera, View3DDeps, ViewerRig } from "../src/viewerDeps";
 import {
   parseScaleLegend,
   renderLegendView,
@@ -36,7 +36,7 @@ interface FakeRig extends ViewerRig {
   boxClears: number;
   renders: number;
   disposed: boolean;
-  pick: (entityId: number | null, modifiers?: PickModifiers) => void;
+  pick: (entityId: number | null, modifiers?: Partial<PickInfo>) => void;
   selects: Array<readonly number[]>;
   cameraResult: RigCamera | undefined;
 }
@@ -57,7 +57,7 @@ const fakeDeps = (
           boxClears: 0,
           renders: 0,
           disposed: false,
-          pick: (entityId, modifiers = { extend: false }) => onPick(entityId, modifiers),
+          pick: (entityId, modifiers = {}) => onPick(entityId, { extend: false, onModel: entityId !== null, ...modifiers }),
           selects: [],
           cameraResult: fakeCamera,
           select: (entityIds) => void rig!.selects.push([...entityIds]),
@@ -342,17 +342,92 @@ describe("ViewPane3D", () => {
     pane.destroy();
   });
 
-  it("emits a selection event when the rig reports a pick", () => {
+  it("highlights a pick through the rig and emits the entity id", () => {
+    const { deps, rig } = fakeDeps();
+    const pane = createViewPane3D({ deps });
+    const { events, handler } = collect();
+    pane.onEvent(handler);
+    const host = document.createElement("div");
+    pane.mount(host, fakeCtx());
+    rig().pick(42);
+    expect(rig().selects).toEqual([[42]]);
+    expect(host.querySelector(".bof-panes-viewstatus")?.textContent).toBe("1 selected");
+    expect(events).toEqual([
+      { kind: "selection", event: { source: "view3d", ids: ["42"] } },
+    ]);
+    pane.destroy();
+  });
+
+  it("replaces on a plain pick, toggles on an extended one, and clears on empty space", () => {
+    const { deps, rig } = fakeDeps();
+    const pane = createViewPane3D({ deps });
+    const { events, handler } = collect();
+    pane.onEvent(handler);
+    const host = document.createElement("div");
+    pane.mount(host, fakeCtx());
+    const status = () => host.querySelector(".bof-panes-viewstatus")?.textContent;
+    rig().pick(1);
+    rig().pick(2, { extend: true });
+    expect(rig().selects.at(-1)).toEqual([1, 2]);
+    expect(status()).toBe("2 selected");
+    rig().pick(1, { extend: true });
+    expect(rig().selects.at(-1)).toEqual([2]);
+    rig().pick(3);
+    expect(rig().selects.at(-1)).toEqual([3]);
+    rig().pick(null);
+    expect(rig().selects.at(-1)).toEqual([]);
+    expect(status()).toBe("Nothing selected.");
+    const ids = events.map((e) => (e.kind === "selection" ? e.event.ids : null));
+    expect(ids).toEqual([["1"], ["1", "2"], ["2"], ["3"], []]);
+    pane.destroy();
+  });
+
+  it("leaves the selection alone and says so when a pick lands on an object with no entity", () => {
+    const { deps, rig } = fakeDeps();
+    const pane = createViewPane3D({ deps });
+    const { events, handler } = collect();
+    pane.onEvent(handler);
+    const host = document.createElement("div");
+    pane.mount(host, fakeCtx());
+    rig().pick(5);
+    rig().pick(null, { onModel: true });
+    expect(host.querySelector(".bof-panes-viewstatus")?.textContent)
+      .toBe("That object has no entity id, so it cannot be selected.");
+    expect(rig().selects).toEqual([[5]]);
+    expect(events.length).toBe(1);
+    rig().pick(null);
+    rig().pick(null); // already empty: no second event
+    expect(events.length).toBe(2);
+    pane.destroy();
+  });
+
+  it("adds the GlobalIds to the selection event once the properties resolve", async () => {
+    const { deps, rig } = fakeDeps();
+    const { ctx } = ctxWithProperties((id) => Promise.resolve(wallProps(id)));
+    const pane = createViewPane3D({ deps });
+    const { events, handler } = collect();
+    pane.onEvent(handler);
+    pane.mount(document.createElement("div"), ctx);
+    pane.update({ kind: "model", url: "model:duplex" });
+    await settle();
+    rig().pick(7);
+    expect(events.at(-1)).toEqual({ kind: "selection", event: { source: "view3d", ids: ["7"] } });
+    await settle();
+    expect(events.at(-1)).toEqual({ kind: "selection", event: { source: "view3d", ids: ["7", "0Xs3"] } });
+    pane.destroy();
+  });
+
+  it("clears the selection when a new model loads", async () => {
     const { deps, rig } = fakeDeps();
     const pane = createViewPane3D({ deps });
     const { events, handler } = collect();
     pane.onEvent(handler);
     pane.mount(document.createElement("div"), fakeCtx());
-    rig().pick(42);
-    rig().pick(null); // cleared selection: no event
-    expect(events).toEqual([
-      { kind: "selection", event: { source: "view3d", ids: ["42"] } },
-    ]);
+    pane.update({ kind: "model", url: "a.bos" });
+    await settle();
+    rig().pick(7);
+    pane.update({ kind: "model", url: "b.bos" });
+    expect(events.at(-1)).toEqual({ kind: "selection", event: { source: "view3d", ids: [] } });
     pane.destroy();
   });
 
@@ -412,7 +487,7 @@ describe("ViewPane3D", () => {
     const { ctx } = ctxWithProperties(() => Promise.reject(new Error("offline")));
     const { host, pane, panel } = await mountAndPick(ctx, deps, rig);
     expect(panel.querySelector(".bof-panes-error")?.textContent).toContain("offline");
-    expect(host.querySelector(".bof-panes-viewstatus")?.textContent).toBe("Selected entity 1234");
+    expect(host.querySelector(".bof-panes-viewstatus")?.textContent).toBe("1 selected");
     pane.destroy();
   });
 

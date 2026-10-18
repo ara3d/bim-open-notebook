@@ -14,8 +14,8 @@ import { objectKey, type ObjectKey } from "@bim-open-viewer/model";
 type Triple = [number, number, number];
 /** The first view's pose, as a review control saves it. `orthographic` marks a view whose fov is the 60 degree stand-in. */
 export interface RigCamera { position: Triple; target: Triple; up: Triple; fov: number; aspect: number; orthographic?: true }
-/** Modifier state of a pick: `extend` is shift or ctrl held. */
-export interface PickModifiers { extend: boolean }
+/** What a click reported: `extend` is shift or ctrl held; `onModel` is false when the click hit empty space. */
+export interface PickInfo { extend: boolean; onModel: boolean }
 
 export interface ViewerRig {
   load(url: string, format: ModelFormat, onPreview?: () => void): Promise<readonly GroupEntityMap[]>;
@@ -34,7 +34,7 @@ export interface ViewerRig {
   dispose(): void;
 }
 export interface View3DDeps {
-  createRig(canvas: HTMLCanvasElement, onPick: (entityId: number | null, modifiers: PickModifiers) => void): ViewerRig;
+  createRig(canvas: HTMLCanvasElement, onPick: (entityId: number | null, modifiers: PickInfo) => void): ViewerRig;
 }
 
 /** Public V2 composition owns model binding, resize, camera, clipping, capture and disposal. */
@@ -77,11 +77,11 @@ export const defaultView3DDeps: View3DDeps = {
       const view = viewer.views.all()[0];
       const ndc = view?.ndc(e.clientX, e.clientY);
       const hit = ndc ? viewer.pick(ndc.x, ndc.y) : undefined;
-      const modifiers = { extend: e.shiftKey || e.ctrlKey };
-      if (!hit) { onPick(null, modifiers); return; }
+      const extend = e.shiftKey || e.ctrlKey;
+      if (!hit) { onPick(null, { extend, onModel: false }); return; }
       const local = hit.key.split("|").at(-1);
       const id = local ? entityKeys.get(decodeURIComponent(local)) : undefined;
-      onPick(id !== undefined && Number.isFinite(id) ? id : null, modifiers);
+      onPick(id !== undefined && Number.isFinite(id) ? id : null, { extend, onModel: true });
     }, { signal: listeners.signal });
     const clearBoxes = () => {
       if (!boxes) return;

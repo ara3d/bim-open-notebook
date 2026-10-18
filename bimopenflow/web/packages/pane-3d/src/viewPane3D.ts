@@ -18,7 +18,7 @@ import {
   type ModelFormat,
   type Pane,
 } from "@bimopenflow/panes";
-import { defaultView3DDeps, type View3DDeps } from "./viewerDeps";
+import { defaultView3DDeps, type PickInfo, type View3DDeps } from "./viewerDeps";
 import { parseViewRecipe } from "./viewRecipe";
 
 export interface ViewPane3DOptions {
@@ -98,15 +98,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       emit({ kind: "action", action: "loadError", payload: { message: String(error) } });
     };
     let rig: ReturnType<View3DDeps["createRig"]>;
-    try { rig = deps.createRig(canvas, (entityId) => {
-      if (entityId === null) return;
-      status.textContent = `Selected entity ${entityId}`;
-      showProperties(entityId);
-      emit({
-        kind: "selection",
-        event: { source: "view3d", ids: [String(entityId)] },
-      });
-    }); } catch (error) {
+    try { rig = deps.createRig(canvas, (entityId, info) => onPick(entityId, info)); } catch (error) {
       reportError(error);
       return { update() {}, destroy() {} };
     }
@@ -123,15 +115,74 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     let lastModel: { url: string; format: ModelFormat } | null = null;
     let disposed = false;
     let propsToken = 0;
+    /** Picked entity ids in pick order, each with its GlobalId once the property fetch has returned. */
+    const selected = new Map<number, string | undefined>();
+    /** GlobalIds learned for the loaded model, kept so a re-pick carries its GlobalId at once. */
+    const globalIds = new Map<number, string>();
+    let lastPicked: number | null = null;
+    /** The selection event: entity ids as text, then the GlobalIds known so far. */
+    const emitSelection = () => emit({
+      kind: "selection",
+      event: {
+        source: "view3d",
+        ids: [
+          ...[...selected.keys()].map(String),
+          ...[...selected.values()].filter((id): id is string => !!id),
+        ],
+      },
+    });
+    const hideProperties = () => {
+      propsToken++;
+      properties.hidden = true;
+      properties.replaceChildren();
+    };
+    const selectionChanged = () => {
+      rig.select?.([...selected.keys()]);
+      status.textContent = selected.size === 0 ? "Nothing selected." : `${selected.size} selected`;
+      emitSelection();
+    };
+    /** Replace on a plain pick, toggle on an extended one, clear on a click in empty space. */
+    const onPick = (entityId: number | null, info: PickInfo): void => {
+      if (entityId === null) {
+        if (info.onModel) { status.textContent = "That object has no entity id, so it cannot be selected."; return; }
+        if (selected.size === 0) return;
+        selected.clear();
+        lastPicked = null;
+        hideProperties();
+        selectionChanged();
+        return;
+      }
+      if (info.extend && selected.has(entityId)) {
+        selected.delete(entityId);
+        if (lastPicked === entityId) { lastPicked = null; hideProperties(); }
+      } else {
+        if (!info.extend) selected.clear();
+        selected.set(entityId, globalIds.get(entityId));
+        lastPicked = entityId;
+        showProperties(entityId);
+      }
+      selectionChanged();
+    };
     /** Fetches the picked entity's properties; a later pick supersedes an
-     * in-flight one, and a failure is reported in the panel only. */
+     * in-flight one in the panel, and a failure is reported in the panel only.
+     * Every answer still records its GlobalId for the selection event. */
     const showProperties = (entityId: number): void => {
       const model = lastModel;
       if (!ctx.requestEntityProperties || !model) return;
       const token = ++propsToken;
       const current = () => !disposed && token === propsToken;
       ctx.requestEntityProperties(model.url, entityId).then(
-        props => { if (current()) renderEntityProperties(properties, props); },
+        props => {
+          if (disposed || model !== lastModel) return;
+          if (props.globalId) {
+            globalIds.set(entityId, props.globalId);
+            if (selected.has(entityId) && selected.get(entityId) !== props.globalId) {
+              selected.set(entityId, props.globalId);
+              emitSelection();
+            }
+          }
+          if (current()) renderEntityProperties(properties, props);
+        },
         error => { if (current()) renderEntityMessage(properties, `No properties for entity ${entityId} (${error})`); },
       );
     };
@@ -215,9 +266,10 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     };
     const load = (url: string, format: ModelFormat) => {
       lastModel = { url, format };
-      propsToken++;
-      properties.hidden = true;
-      properties.replaceChildren();
+      hideProperties();
+      globalIds.clear();
+      lastPicked = null;
+      if (selected.size > 0) { selected.clear(); emitSelection(); }
       const token = ++loadToken;
       maps = [];
       loading = true;

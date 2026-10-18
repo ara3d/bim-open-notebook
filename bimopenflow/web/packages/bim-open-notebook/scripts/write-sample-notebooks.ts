@@ -147,10 +147,12 @@ async function view3dEmbedDraft(source: NodeRef, caption: string, api: NotebookA
   };
 }
 
-/** A file embed for a path relative to `root`, the outline's checkout: its size, hash, and first lines. */
+/** A file embed for a path relative to `root`, the outline's checkout: its size, hash, and, for a
+ * text file, its first lines. A binary file (one holding a NUL byte, such as a BCF zip) gets no
+ * preview: its bytes read as text are noise. */
 function fileEmbed(spec: Extract<EmbedSpec, { kind: "file" }>, root: string): EmbedDraft {
   const bytes = readFileSync(join(root, spec.path));
-  const preview = bytes.toString("utf8").replace(/^﻿/, "").split(/\r?\n/).slice(0, PREVIEW_LINES).join("\n");
+  const preview = bytes.includes(0) ? undefined : bytes.toString("utf8").replace(/^﻿/, "").split(/\r?\n/).slice(0, PREVIEW_LINES).join("\n");
   return {
     kind: "file",
     ...(spec.caption !== undefined ? { caption: spec.caption } : {}),
@@ -158,7 +160,7 @@ function fileEmbed(spec: Extract<EmbedSpec, { kind: "file" }>, root: string): Em
     ...(spec.mediaType !== undefined ? { mediaType: spec.mediaType } : {}),
     bytes: bytes.length,
     sha256: createHash("sha256").update(bytes).digest("hex"),
-    preview,
+    ...(preview !== undefined ? { preview } : {}),
   };
 }
 

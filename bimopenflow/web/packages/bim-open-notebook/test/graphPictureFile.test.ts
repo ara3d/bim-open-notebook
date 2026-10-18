@@ -45,6 +45,7 @@ function fakeMount(bounds = { x: 0, y: 0, width: 400, height: 100 }) {
   const editor: GraphEditor = {
     refresh: vi.fn(), results: () => ({ counts: new Map(), peek: null }), fit: vi.fn(), focus: vi.fn(),
     bounds: () => bounds, refreshSuggestions: vi.fn(), setTheme: vi.fn(), dispose: vi.fn(),
+    sourceView: vi.fn(), setSourceView: vi.fn(),
   };
   const mount: GraphEditorMount = (canvas, options) => { mounts.push({ canvas, options }); return editor; };
   return { mount, mounts, editor, render: createGraphRenderer(mount) };

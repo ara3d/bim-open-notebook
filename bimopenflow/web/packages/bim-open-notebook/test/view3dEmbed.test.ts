@@ -341,7 +341,7 @@ describe("view3d embed", () => {
 
 describe("view3d embed on the real pane (fake viewer rig)", () => {
   it("loads the model through the host's BOS url and asks the host for a picked entity's properties", async () => {
-    let pick: (id: number | null) => void = () => {};
+    let pick: (id: number | null, info: { extend: boolean; onModel: boolean }) => void = () => {};
     const loads: string[] = [];
     let disposed = 0;
     const deps: View3DDeps = {
@@ -364,7 +364,7 @@ describe("view3d embed on the real pane (fake viewer rig)", () => {
     const handle = createView3dRenderer(() => createViewPane3D({ deps }))(el, embed, ctx);
     await settle();
     expect(loads).toEqual(["/api/models/duplex-enriched.ifc/bos"]);
-    pick(5);
+    pick(5, { extend: false, onModel: true });
     await settle();
     expect(heard).toEqual(["e3d:5"]);
     expect(api.getEntityProperties).toHaveBeenCalledWith("duplex-enriched.ifc", "5");

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import type { EntityProperties } from "@bimopenflow/contracts";
 import { createViewPane3D, inferFormat } from "../src/viewPane3D";
-import type { View3DDeps, ViewerRig } from "../src/viewerDeps";
+import type { PickModifiers, RigCamera, View3DDeps, ViewerRig } from "../src/viewerDeps";
 import {
   parseScaleLegend,
   renderLegendView,
@@ -36,14 +36,18 @@ interface FakeRig extends ViewerRig {
   boxClears: number;
   renders: number;
   disposed: boolean;
-  pick: (entityId: number | null) => void;
+  pick: (entityId: number | null, modifiers?: PickModifiers) => void;
+  selects: Array<readonly number[]>;
+  cameraResult: RigCamera | undefined;
 }
+
+const fakeCamera: RigCamera = { position: [1, 2, 3], target: [4, 5, 6], up: [0, 0, 1], fov: 50, aspect: 1.5 };
 
 const fakeDeps = (
   maps: readonly GroupEntityMap[] = [],
   fail = false,
 ): { deps: View3DDeps; rig: () => FakeRig } => {
-  let rig: FakeRig | null = null;
+  let rig: FakeRig | undefined;
   return {
     deps: {
       createRig: (_canvas, onPick) => {
@@ -53,7 +57,11 @@ const fakeDeps = (
           boxClears: 0,
           renders: 0,
           disposed: false,
-          pick: onPick,
+          pick: (entityId, modifiers = { extend: false }) => onPick(entityId, modifiers),
+          selects: [],
+          cameraResult: fakeCamera,
+          select: (entityIds) => void rig!.selects.push([...entityIds]),
+          camera: () => rig!.cameraResult,
           load(url, format) {
             rig!.calls.push({ url, format });
             return fail ? Promise.reject(new Error("nope")) : Promise.resolve(maps);

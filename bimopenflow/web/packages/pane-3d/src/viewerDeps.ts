@@ -9,6 +9,13 @@ import { parseViewRecipe } from "./viewRecipe";
 import { visibleSource, restoreSourceColors } from "./toolkitSource";
 import { startupTrace } from "./startupTrace";
 import { entityKeyOf, entityKeysByObjectId } from "./entityKeys";
+import { objectKey, type ObjectKey } from "@bim-open-viewer/model";
+
+type Triple = [number, number, number];
+/** The first view's pose, as a review control saves it. `orthographic` marks a view whose fov is the 60 degree stand-in. */
+export interface RigCamera { position: Triple; target: Triple; up: Triple; fov: number; aspect: number; orthographic?: true }
+/** Modifier state of a pick: `extend` is shift or ctrl held. */
+export interface PickModifiers { extend: boolean }
 
 export interface ViewerRig {
   load(url: string, format: ModelFormat, onPreview?: () => void): Promise<readonly GroupEntityMap[]>;
@@ -20,10 +27,14 @@ export interface ViewerRig {
   reset?(): void;
   capture?(): Promise<Blob>;
   legend?(): readonly LegendEntry[];
+  /** Highlights these entities (an empty list clears the highlight); ids the model does not hold are skipped. */
+  select?(entityIds: readonly number[]): void;
+  /** The first view's pose, or undefined before a view exists. */
+  camera?(): RigCamera | undefined;
   dispose(): void;
 }
 export interface View3DDeps {
-  createRig(canvas: HTMLCanvasElement, onPick: (entityId: number | null) => void): ViewerRig;
+  createRig(canvas: HTMLCanvasElement, onPick: (entityId: number | null, modifiers: PickModifiers) => void): ViewerRig;
 }
 
 /** Public V2 composition owns model binding, resize, camera, clipping, capture and disposal. */
@@ -52,6 +63,7 @@ export const defaultView3DDeps: View3DDeps = {
     let generation = 0;
     let disposed = false;
     let entityKeys: ReadonlyMap<string, number> = new Map();
+    let objectKeyOfEntity: ReadonlyMap<number, ObjectKey> = new Map();
     const listeners = new AbortController();
     let down: { x: number; y: number; id: number } | undefined;
     canvas.addEventListener("pointerdown", e => {
@@ -65,10 +77,11 @@ export const defaultView3DDeps: View3DDeps = {
       const view = viewer.views.all()[0];
       const ndc = view?.ndc(e.clientX, e.clientY);
       const hit = ndc ? viewer.pick(ndc.x, ndc.y) : undefined;
-      if (!hit) return;
+      const modifiers = { extend: e.shiftKey || e.ctrlKey };
+      if (!hit) { onPick(null, modifiers); return; }
       const local = hit.key.split("|").at(-1);
       const id = local ? entityKeys.get(decodeURIComponent(local)) : undefined;
-      onPick(id !== undefined && Number.isFinite(id) ? id : null);
+      onPick(id !== undefined && Number.isFinite(id) ? id : null, modifiers);
     }, { signal: listeners.signal });
     const clearBoxes = () => {
       if (!boxes) return;
@@ -111,6 +124,7 @@ export const defaultView3DDeps: View3DDeps = {
         for (const model of viewer.models()) viewer.close(model.id);
         const opened = trace.span("model-bind", () => requireResult(viewer.show(loaded)));
         entityKeys = entityKeysByObjectId(loaded.data.objects);
+        objectKeyOfEntity = new Map(loaded.data.objects.map(record => [entityKeyOf(record), objectKey(record.ref)]));
         const table = viewer.binding.tableOf(opened.ref.id);
         if (!table || table.rowCount === 0) throw new Error("The model contains no renderable geometry.");
         // Frame with the source coordinate convention, including z-up BOS.
@@ -155,6 +169,24 @@ export const defaultView3DDeps: View3DDeps = {
         recipeApplied = true;
       },
       fit,
+      select(entityIds) {
+        const keys = entityIds.flatMap(id => objectKeyOfEntity.get(id) ?? []);
+        requireResult(viewer.select(keys));
+      },
+      camera() {
+        const view = viewer.views.all()[0];
+        if (!view) return undefined;
+        const state = view.camera();
+        const { position, target, up } = state.camera;
+        const projection = state.projection;
+        const perspective = projection.kind === "perspective";
+        const aspect = canvas.clientWidth > 0 && canvas.clientHeight > 0 ? canvas.clientWidth / canvas.clientHeight : view.aspect();
+        return {
+          position: Array.from(position) as Triple, target: Array.from(target) as Triple, up: Array.from(up) as Triple,
+          fov: perspective ? projection.fieldOfViewDegrees : 60, aspect,
+          ...(perspective ? {} : { orthographic: true as const }),
+        };
+      },
       reset: () => recipe?.reset(),
       legend: () => recipe?.legend() ?? [],
       async capture() {

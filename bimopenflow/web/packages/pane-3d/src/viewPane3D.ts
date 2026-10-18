@@ -22,6 +22,7 @@ import { defaultView3DDeps, type PickInfo, type View3DDeps } from "./viewerDeps"
 import { parseViewRecipe } from "./viewRecipe";
 import { openForm } from "./reviewForms";
 import { ensureReviewStyles } from "./reviewStyles";
+import { createLabelLayer, parseLabels } from "./sceneLabels";
 import { commentPlan, editPropertyPlan, selectionPlan } from "./reviewPlans";
 
 export interface ViewPane3DOptions {
@@ -102,6 +103,9 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       );
     };
 
+    // Text labels from an instances input's label columns, placed on every drawn frame.
+    const labels = createLabelLayer(root, canvas, point => rig.project?.(point));
+    let labelNote = "";
     const reportError = (error: unknown) => {
       status.textContent = String(error);
       status.setAttribute("role", "alert");
@@ -113,6 +117,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       return { update() {}, destroy() {} };
     }
 
+    const stopFrames = rig.onFrame?.(() => labels.layout());
     let maps: readonly GroupEntityMap[] = [];
     let baseColors: Float32Array[] = [];
     let baseTransforms: (Float32Array | null)[] = [];
@@ -363,6 +368,8 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       });
       offsetsApplied = plan.offsets !== null;
       tableLegend = legendFromSlice(slice);
+      labelNote = labels.set(rig.project ? parseLabels(slice) : null);
+      if (labelNote) note(labelNote);
       updateLegend();
       rig.requestRender();
     };
@@ -375,6 +382,8 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     };
     const load = (url: string, format: ModelFormat) => {
       lastModel = { url, format };
+      labels.set(null);
+      labelNote = "";
       hideProperties();
       globalIds.clear();
       lastPicked = null;
@@ -401,7 +410,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
         if (pendingBoxes) applyBoxes(pendingBoxes);
         if (pendingView) rig.applyRecipe?.(pendingView);
         updateLegend();
-        status.textContent = `${loaded.reduce((n, m) => n + m.entities.length, 0).toLocaleString()} rendered instances · orbit / pan / zoom`;
+        status.textContent = `${loaded.reduce((n, m) => n + m.entities.length, 0).toLocaleString()} rendered instances · orbit / pan / zoom${labelNote ? ` · ${labelNote}` : ""}`;
         emit({ kind: "action", action: "modelLoaded", payload: { url } });
       }).catch(error => {
         if (disposed || token !== loadToken) return;
@@ -444,6 +453,8 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       destroy: () => {
         disposed = true; loadToken++;
         if (recipeFrame !== null) root.ownerDocument.defaultView?.cancelAnimationFrame(recipeFrame);
+        stopFrames?.();
+        labels.destroy();
         rig.dispose();
       },
     };

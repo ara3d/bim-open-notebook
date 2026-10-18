@@ -27,6 +27,17 @@ export const reviewCss = `
   background: var(--bof-panes-bg, #ffffff); color: var(--bof-panes-fg, #1f2430);
   border: 1px solid var(--bof-panes-border, #d7dbe0); border-radius: 5px;
 }
+.bof-panes-view3d { position: relative; }
+.bof-panes-labels { position: absolute; overflow: hidden; pointer-events: none; z-index: 1; }
+.bof-panes-label {
+  position: absolute; left: 0; top: 0; max-width: 220px; padding: 1px 5px; box-sizing: border-box;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; user-select: none;
+  font-size: 11px; line-height: 1.35; border-radius: 4px;
+  color: var(--bof-panes-fg, #1f2430); border: 1px solid var(--bof-panes-border, #d7dbe0);
+  background: var(--bof-panes-bg, #ffffff);
+  background: color-mix(in srgb, var(--bof-panes-bg, #ffffff) 88%, transparent);
+}
+.bof-panes-label[hidden] { display: none; }
 .bof-panes-form-buttons { display: flex; gap: 6px; }
 .bof-panes-form button, .bof-panes-edit-open {
   padding: 4px 9px; cursor: pointer; font: inherit;

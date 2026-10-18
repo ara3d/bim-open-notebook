@@ -32,6 +32,25 @@ canvas. Scene/color/mapping logic is pure and viewer-free
     "and N more" row (`src/instanceLegend.ts`).
   - `model` may carry `path`, the graph's own path for the model; Edit
     property uses it for the write-back paths.
+- Labels: an instances table that also carries `label` (Text, null for no
+  label) and `labelX`, `labelY`, `labelZ` (Number, model coordinates in the
+  frame of the table's `minX`..`maxZ` bounds) draws one text chip per row with a
+  non-null label, at that anchor, in an overlay above the canvas
+  (`src/sceneLabels.ts`). The `view3d.label` node produces the columns; the pane
+  reads only these four and never derives an anchor. A row whose text is empty or
+  whose coordinates are missing or not numbers gets no label. Each chip is
+  placed after every drawn frame through `ViewerRig.project` and
+  `ViewerRig.onFrame`, and is hidden while its point is behind the camera, outside
+  the near and far planes, or off the canvas (`src/projection.ts`; the real rig
+  wraps the viewer's renderer to see the view state and aspect each frame was
+  drawn with). At most 300 labels are drawn, the first 300 rows; the status line
+  then reads `300 of 512 labels shown`. Chips use the pane's theme variables
+  (`--bof-panes-bg`, `--bof-panes-fg`, `--bof-panes-border`) and take no pointer
+  events, so a click on a label picks the element under it. A later instances
+  input replaces the labels (one without the four columns removes them), loading
+  a model clears them, and `destroy` removes the overlay. A notebook's 3D embed
+  feeds its recorded instance rows through the same path, so recorded labels draw
+  with no host.
 - Selection: a plain click replaces the selection, shift-click or ctrl-click
   adds the element or removes it if already picked, and a click in empty space
   clears it. The picked elements are highlighted in the viewer

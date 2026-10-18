@@ -41,7 +41,7 @@ describe("view3dPane", () => {
     const feed = io({ "data/duplex.ifc": "duplex.ifc" });
     await view3dPane.feed(pane, shown({ modelPath: "data/duplex.ifc" }), feed);
     expect(updates).toEqual([
-      { kind: "model", url: "model:duplex.ifc", format: "bos" },
+      { kind: "model", url: "model:duplex.ifc", format: "bos", path: "data/duplex.ifc" },
       { kind: "instances", data: slice },
     ]);
     // a data refresh re-feeds the table but does not reload the model
@@ -59,7 +59,7 @@ describe("view3dPane", () => {
     const { pane, updates } = recorder();
     const live = { kind: "ready" as const, data: slice };
     await view3dPane.feed(pane, shown({ modelPath: "m", live, state: undefined, pending: true }), io({ m: "m" }, "view"));
-    expect(updates).toEqual([{ kind: "model", url: "model:m", format: "bos" }, { kind: "view", data: slice }]);
+    expect(updates).toEqual([{ kind: "model", url: "model:m", format: "bos", path: "m" }, { kind: "view", data: slice }]);
   });
 
   it("keeps the pane across recipe branches of one model only", () => {

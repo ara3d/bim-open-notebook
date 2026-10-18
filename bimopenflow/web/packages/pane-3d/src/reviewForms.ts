@@ -15,7 +15,6 @@ export function openForm<K extends string>(host: HTMLElement, spec: FormSpec<K>,
   const doc = host.ownerDocument;
   const form = doc.createElement("form");
   form.className = className;
-  form.style.cssText = "display:flex;flex-direction:column;gap:4px;padding:4px 8px;";
   const inputs = new Map<K, HTMLInputElement>();
   for (const field of spec.fields) {
     const label = doc.createElement("label");
@@ -23,7 +22,6 @@ export function openForm<K extends string>(host: HTMLElement, spec: FormSpec<K>,
     const input = doc.createElement("input");
     input.type = "text";
     input.name = field.name;
-    input.style.cssText = "display:block;width:100%;box-sizing:border-box;";
     label.append(input);
     form.append(label);
     inputs.set(field.name, input);
@@ -35,7 +33,7 @@ export function openForm<K extends string>(host: HTMLElement, spec: FormSpec<K>,
   cancel.type = "button";
   cancel.textContent = "Cancel";
   const buttons = doc.createElement("div");
-  buttons.style.cssText = "display:flex;gap:6px;";
+  buttons.className = "bof-panes-form-buttons";
   buttons.append(submit, cancel);
   form.append(buttons);
   const close = () => form.remove();

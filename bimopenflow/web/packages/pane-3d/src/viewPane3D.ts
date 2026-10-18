@@ -21,6 +21,7 @@ import {
 import { defaultView3DDeps, type PickInfo, type View3DDeps } from "./viewerDeps";
 import { parseViewRecipe } from "./viewRecipe";
 import { openForm } from "./reviewForms";
+import { ensureReviewStyles } from "./reviewStyles";
 import { commentPlan, editPropertyPlan, selectionPlan } from "./reviewPlans";
 
 export interface ViewPane3DOptions {
@@ -67,7 +68,13 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     status.setAttribute("role", "status");
     status.textContent = "Choose a model or view recipe.";
     const commentHost = root.ownerDocument.createElement("div");
-    root.append(toolbar, commentHost, status);
+    // One header holds the toolbar, the comment form and the status, stacked, so a long
+    // toolbar never runs under the status (see reviewStyles.ts).
+    const header = root.ownerDocument.createElement("div");
+    header.className = "bof-panes-hud";
+    header.append(toolbar, commentHost, status);
+    root.append(header);
+    ensureReviewStyles(root.ownerDocument);
     const properties = root.ownerDocument.createElement("div");
     properties.className = "bof-panes-props";
     properties.setAttribute("aria-label", "Selected element properties");
@@ -336,6 +343,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
           },
         }, "bof-panes-form bof-panes-edit");
       });
+      open.className = "bof-panes-edit-open";
       open.disabled = !ctx.addNodes;
       bar.append(open, host);
       return bar;

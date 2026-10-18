@@ -85,6 +85,27 @@ describe("path and time helpers", () => {
   });
 });
 
+describe("pane header", () => {
+  it("stacks the toolbar, the comment form area and the status in one header, and adds the stylesheet once", async () => {
+    const a = await setup();
+    const b = await setup();
+    const header = a.host.querySelector(".bof-panes-hud") as HTMLElement;
+    expect(header.parentElement?.classList.contains("bof-panes-view3d")).toBe(true);
+    expect([...header.children].map((e) => e.className)).toEqual(["bof-panes-toolbar", "", "bof-panes-viewstatus"]);
+    expect(document.querySelectorAll("style#bof-pane3d-styles").length).toBe(1);
+    a.pane.destroy();
+    b.pane.destroy();
+  });
+
+  it("opens the comment form inside the header, between the toolbar and the status", async () => {
+    const s = await setup();
+    s.button("Comment").click(); await settle();
+    const header = s.host.querySelector(".bof-panes-hud") as HTMLElement;
+    expect(header.children[1].querySelector("form.bof-panes-form")).not.toBeNull();
+    s.pane.destroy();
+  });
+});
+
 describe("review controls", () => {
   it("disables the buttons without addNodes, without a model, and Use selection without a selection", async () => {
     const none = await setup({ ctx: { addNodes: undefined } });

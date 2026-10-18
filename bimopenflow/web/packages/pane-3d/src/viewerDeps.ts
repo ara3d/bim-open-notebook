@@ -9,7 +9,8 @@ import { parseViewRecipe } from "./viewRecipe";
 import { visibleSource, restoreSourceColors } from "./toolkitSource";
 import { startupTrace } from "./startupTrace";
 import { entityKeyOf, entityKeysByObjectId } from "./entityKeys";
-import { objectKey, type ObjectKey } from "@bim-open-viewer/model";
+import { objectKey, type ObjectKey, type ViewState } from "@bim-open-viewer/model";
+import { projectToCanvas, type CanvasPoint } from "./projection";
 
 type Triple = [number, number, number];
 /** The first view's pose, as a review control saves it. `orthographic` marks a view whose fov is the 60 degree stand-in. */
@@ -31,6 +32,10 @@ export interface ViewerRig {
   select?(entityIds: readonly number[]): void;
   /** The first view's pose, or undefined before a view exists. */
   camera?(): RigCamera | undefined;
+  /** Where a model point lands on the canvas in CSS pixels, as of the last drawn frame; undefined when it is behind the camera or off the canvas. */
+  project?(point: Triple): CanvasPoint | undefined;
+  /** Calls `listener` after every drawn frame (camera move, resize, restyle); the returned function stops it. */
+  onFrame?(listener: () => void): () => void;
   dispose(): void;
 }
 export interface View3DDeps {
@@ -43,14 +48,25 @@ export const defaultView3DDeps: View3DDeps = {
     const trace = startupTrace();
     let presented = false;
     let recipeApplied = false;
+    // The renderer is wrapped to learn what each frame was drawn with (the view state after the
+    // depth planes were cut, and the aspect) and to tell label listeners a frame was drawn.
+    const frameListeners = new Set<() => void>();
+    let drawn: { view: ViewState; aspect: number } | undefined;
+    let drawnId: string | undefined;
     const viewer = trace.span("viewer-create", () => createViewer({ canvas, features: [...defaultFeatures(), ...recipeFeatures], selectOnClick: false, fitOnOpen: false,
-      ...(trace.enabled ? { renderer: () => {
+      renderer: (_canvas, id) => {
         const renderer = webglRenderer(canvas);
-        return { ...renderer, renderFrame: () => {
-          trace.span("render-submit", () => renderer.renderFrame());
-          if (recipeApplied && !presented) { presented = true; performance.mark("bimflow:first-model-frame-submitted"); }
-        } };
-      } } : {}),
+        return { ...renderer,
+          setView: (view, aspect) => {
+            renderer.setView(view, aspect);
+            if (drawnId === undefined || drawnId === id) { drawnId = id; drawn = { view, aspect }; }
+          },
+          renderFrame: () => {
+            trace.span("render-submit", () => renderer.renderFrame());
+            if (recipeApplied && !presented) { presented = true; performance.mark("bimflow:first-model-frame-submitted"); }
+            for (const listener of [...frameListeners]) listener();
+          } };
+      },
     }));
     const startup = viewer.diagnostics().filter(d => d.severity === "error");
     if (startup.length) {
@@ -187,6 +203,11 @@ export const defaultView3DDeps: View3DDeps = {
           ...(perspective ? {} : { orthographic: true as const }),
         };
       },
+      project: point => drawn && projectToCanvas(drawn.view, drawn.aspect, canvas.clientWidth, canvas.clientHeight, point),
+      onFrame(listener) {
+        frameListeners.add(listener);
+        return () => { frameListeners.delete(listener); };
+      },
       reset: () => recipe?.reset(),
       legend: () => recipe?.legend() ?? [],
       async capture() {
@@ -211,6 +232,7 @@ export const defaultView3DDeps: View3DDeps = {
         generation++;
         abort?.abort();
         listeners.abort();
+        frameListeners.clear();
         recipe?.dispose();
         clearBoxes();
         viewer.dispose();

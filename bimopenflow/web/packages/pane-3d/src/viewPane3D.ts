@@ -20,6 +20,8 @@ import {
 } from "@bimopenflow/panes";
 import { defaultView3DDeps, type PickInfo, type View3DDeps } from "./viewerDeps";
 import { parseViewRecipe } from "./viewRecipe";
+import { openForm } from "./reviewForms";
+import { commentPlan, editPropertyPlan, selectionPlan } from "./reviewPlans";
 
 export interface ViewPane3DOptions {
   /** The graph owns presentation; do not offer temporary overrides of it. */
@@ -64,7 +66,8 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     status.className = "bof-panes-viewstatus";
     status.setAttribute("role", "status");
     status.textContent = "Choose a model or view recipe.";
-    root.append(toolbar, status);
+    const commentHost = root.ownerDocument.createElement("div");
+    root.append(toolbar, commentHost, status);
     const properties = root.ownerDocument.createElement("div");
     properties.className = "bof-panes-props";
     properties.setAttribute("aria-label", "Selected element properties");
@@ -120,6 +123,11 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     /** GlobalIds learned for the loaded model, kept so a re-pick carries its GlobalId at once. */
     const globalIds = new Map<number, string>();
     let lastPicked: number | null = null;
+    /** The graph's own path for the loaded model, when the editor gave one. */
+    let modelPath: string | undefined;
+    /** The bim.selection node this pane added, so Use selection updates it. */
+    let selectionNodeId: string | undefined;
+    const knownGlobalIds = (): string[] => [...selected.values()].filter((id): id is string => !!id);
     /** The selection event: entity ids as text, then the GlobalIds known so far. */
     const emitSelection = () => emit({
       kind: "selection",
@@ -138,6 +146,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     };
     const selectionChanged = () => {
       rig.select?.([...selected.keys()]);
+      updateControls();
       status.textContent = selected.size === 0 ? "Nothing selected." : `${selected.size} selected`;
       emitSelection();
     };
@@ -181,9 +190,15 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
               emitSelection();
             }
           }
-          if (current()) renderEntityProperties(properties, props);
+          if (!current()) return;
+          renderEntityProperties(properties, props);
+          properties.append(editControls(entityId));
         },
-        error => { if (current()) renderEntityMessage(properties, `No properties for entity ${entityId} (${error})`); },
+        error => {
+          if (!current()) return;
+          renderEntityMessage(properties, `No properties for entity ${entityId} (${error})`);
+          properties.append(editControls(entityId));
+        },
       );
     };
     let recipeFrame: number | null = null;
@@ -240,6 +255,92 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
     });
     retry.hidden = true;
 
+    // Review controls: each adds nodes through the editor (one edit path) and
+    // writes nothing itself; the nodes' Run does.
+    const note = (text: string) => { status.setAttribute("role", "status"); status.textContent = text; };
+    const errorText = (error: unknown): string => error instanceof Error ? error.message : String(error);
+    const reviewButton = (label: string, act: () => void | Promise<void>): HTMLButtonElement => {
+      const control = root.ownerDocument.createElement("button");
+      control.type = "button";
+      control.textContent = label;
+      control.addEventListener("click", () => {
+        Promise.resolve().then(act).catch(error => { if (!disposed) note(errorText(error)); });
+      });
+      return control;
+    };
+    const missingGlobalIds = (): string => {
+      const missing = selected.size - knownGlobalIds().length;
+      return missing > 0 ? ` ${missing} of ${selected.size} selected elements have no GlobalId yet.` : "";
+    };
+    const addNodes = async (plan: Parameters<NonNullable<typeof ctx.addNodes>>[0]): Promise<string[]> => {
+      if (!ctx.addNodes) throw new Error("This editor cannot add nodes from the 3D pane.");
+      return ctx.addNodes(plan);
+    };
+    const useSelection = async () => {
+      const globalIds = knownGlobalIds();
+      if (globalIds.length === 0) { note("No GlobalId is known for the selected elements yet."); return; }
+      const plan = selectionPlan(globalIds);
+      if (selectionNodeId && ctx.setParams) {
+        try {
+          await ctx.setParams(selectionNodeId, plan.params!);
+          note(`Updated ${selectionNodeId}.${missingGlobalIds()}`);
+          return;
+        } catch { selectionNodeId = undefined; }
+      }
+      const [id] = await addNodes([plan]);
+      selectionNodeId = id;
+      note(`Added ${id}.${missingGlobalIds()}`);
+    };
+    const useSelectionButton = reviewButton("Use selection", useSelection);
+    const commentButton = reviewButton("Comment", () => {
+      openForm(commentHost, {
+        fields: [
+          { name: "title", label: "Title", required: true },
+          { name: "comment", label: "Comment", required: true },
+          { name: "author", label: "Author" },
+        ],
+        onSubmit: async form => {
+          const camera = rig.camera?.();
+          try {
+            const ids = await addNodes(commentPlan(form, camera, knownGlobalIds(), new Date()));
+            note(`Added ${ids.join(" and ")}.${missingGlobalIds()}${camera?.orthographic
+              ? " The view is orthographic; the camera was saved with a 60 degree field of view." : ""}`);
+          } catch (error) { note(errorText(error)); throw error; }
+        },
+      }, "bof-panes-form bof-panes-comment");
+    });
+    toolbar.append(useSelectionButton, commentButton);
+    /** Buttons that cannot act are disabled, not hidden, so the controls stay findable. */
+    const updateControls = () => {
+      const canEdit = !!ctx.addNodes && lastModel !== null && !loading;
+      useSelectionButton.disabled = !canEdit || selected.size === 0;
+      commentButton.disabled = !canEdit;
+    };
+    updateControls();
+    /** The property panel's Edit property control for one picked element. */
+    const editControls = (entityId: number): HTMLElement => {
+      const bar = root.ownerDocument.createElement("div");
+      const host = root.ownerDocument.createElement("div");
+      const open = reviewButton("Edit property", () => {
+        openForm(host, {
+          fields: [
+            { name: "psetName", label: "Property set", required: true },
+            { name: "paramName", label: "Property", required: true },
+            { name: "paramValue", label: "Value", required: true },
+          ],
+          onSubmit: async form => {
+            try {
+              const ids = await addNodes(editPropertyPlan(form, entityId, modelPath));
+              note(`Added ${ids.join(" and ")}.`);
+            } catch (error) { note(errorText(error)); throw error; }
+          },
+        }, "bof-panes-form bof-panes-edit");
+      });
+      open.disabled = !ctx.addNodes;
+      bar.append(open, host);
+      return bar;
+    };
+
     const applyInstances = (slice: TableSlice): void => {
       const plan = planFromSlice(slice);
       const applyOffsets = plan.offsets !== null || offsetsApplied;
@@ -269,6 +370,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       hideProperties();
       globalIds.clear();
       lastPicked = null;
+      selectionNodeId = undefined;
       if (selected.size > 0) { selected.clear(); emitSelection(); }
       const token = ++loadToken;
       maps = [];
@@ -276,12 +378,14 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       status.setAttribute("role", "status");
       status.textContent = "Loading model…";
       retry.hidden = true;
+      updateControls();
       rig.load(ctx.resolveAsset(url), format, () => {
         if (!disposed && token === loadToken) status.textContent = "Coarse preview · loading full detail…";
       }).then(loaded => {
         if (disposed || token !== loadToken) return;
         maps = loaded;
         loading = false;
+        updateControls();
         baseColors = loaded.map(m => m.group.colors.slice());
         baseTransforms = loaded.map(m => m.group.transforms?.slice() ?? null);
         offsetsApplied = false;
@@ -294,6 +398,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
       }).catch(error => {
         if (disposed || token !== loadToken) return;
         loading = false;
+        updateControls();
         retry.hidden = false;
         status.textContent = String(error);
         status.setAttribute("role", "alert");
@@ -309,6 +414,7 @@ export const createViewPane3D = (options?: ViewPane3DOptions): Pane =>
             pendingBoxes = null;
             pendingView = null;
           }
+          modelPath = input.path;
           load(input.url, input.format ?? inferFormat(input.url));
         } else if (input.kind === "instances") {
           pending = input.data;

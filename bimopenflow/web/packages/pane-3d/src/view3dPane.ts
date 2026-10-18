@@ -35,7 +35,7 @@ async function feedModel(pane: Pane, shown: ShownNode, io: PaneFeedIo): Promise<
   loadedModel.set(pane, url);
   // The model-bytes endpoint always serves BOS; the id in the url may keep
   // a source extension (.ifc), so the format cannot be inferred from it.
-  pane.update({ kind: "model", url, format: "bos" });
+  pane.update({ kind: "model", url, format: "bos", path });
 }
 
 async function feed3d(pane: Pane, shown: ShownNode, io: PaneFeedIo): Promise<void> {
